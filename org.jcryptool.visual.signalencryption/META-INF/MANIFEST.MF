@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
-Bundle-SymbolicName: org.jcryptool.visual.signal;singleton:=true
+Bundle-SymbolicName: org.jcryptool.visual.signalencryption;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.jcryptool.visual.signal.Activator
 Require-Bundle: org.eclipse.ui,

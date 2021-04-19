@@ -17,6 +17,5 @@ Import-Package: org.bouncycastle.crypto.digests,
  org.eclipse.wb.swt,
  org.jcryptool.analysis.graphtools,
  org.jcryptool.core.logging.utils,
- org.jcryptool.core.util.fonts,
- org.jcryptool.visual.merkletree.algorithm,
+ org.jcryptool.core.util.fonts
 Bundle-Vendor: %Bundle-Vendor.0

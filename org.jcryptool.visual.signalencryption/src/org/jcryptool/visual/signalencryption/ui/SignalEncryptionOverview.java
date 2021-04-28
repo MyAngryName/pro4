@@ -33,10 +33,10 @@ import org.eclipse.swt.widgets.Composite;
 
 public class SignalEncryptionOverview extends Composite {
 
-    SignalEncryptionOverview() {
-        super();
+    SignalEncryptionOverview(Composite parent) {
+        super(parent, SWT.None);
         // TODO Auto-generated constructor stub
-    }
+   }
     
     
 

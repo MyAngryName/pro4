@@ -26,7 +26,6 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.graphics.Point;
 
 
-public class SignalEncryptionOverview {
     
     private static int ARROW_WIDTH = 10;
     private static int ARROW_HEAD_WIDTH = 20;

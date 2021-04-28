@@ -28,6 +28,112 @@ import org.eclipse.swt.graphics.Point;
 
 public class SignalEncryptionOverview {
     
+    private static int ARROW_WIDTH = 10;
+    private static int ARROW_HEAD_WIDTH = 20;
+
+    /**
+     * A simple state machine based on enum and enum methods.
+     *
+     * Use {@link STATE#next(SignalEncryptionOverview)} and {@link STATE#back(SignalEncryptionOverview)} to switch states.
+     */
+    private enum STATE {
+        STEP_1 {
+            @Override
+            protected void switchState(SignalEncryptionOverview parent) {
+                System.out.println("Switching to state 1");
+            parent.stepTwoDescription.setVisible(false);
+            parent.arrowCanvas.setVisible(false);
+            parent.back.setEnabled(false);
+            parent.next.setEnabled(true);
+            }
+
+            @Override
+            STATE next(SignalEncryptionOverview parent) {
+                STEP_2.switchState(parent);
+                return STEP_2;
+            }
+
+            @Override
+            STATE back(SignalEncryptionOverview parent) {
+                return STEP_1;
+            }
+        }, STEP_2 {
+            @Override
+            protected void switchState(SignalEncryptionOverview parent) {
+                System.out.println("Switching to state 2");
+                parent.stepTwoDescription.setVisible(true);
+                parent.arrowCanvas.setVisible(true);
+                parent.next.setEnabled(false);
+                parent.back.setEnabled(true);
+            }
+
+            @Override
+            STATE next(SignalEncryptionOverview parent) {
+                return STEP_1;
+            }
+
+            @Override
+            STATE back(SignalEncryptionOverview parent) {
+                STEP_1.switchState(parent);
+                return STEP_1;
+            }
+        };
+        
+        protected abstract void switchState(SignalEncryptionOverview parent);
+        abstract STATE next(SignalEncryptionOverview parent);
+        abstract STATE back(SignalEncryptionOverview parent);
+        
+        public STATE setInitialState(SignalEncryptionOverview parent) {
+            STEP_1.switchState(parent);
+            return STEP_1;
+        }
+        
+        };
+    private STATE currentState = STATE.STEP_1;
+    
+    private Label stepOneDescription;
+    private Label stepTwoDescription;
+    
+    private Canvas arrowCanvas;
+
+    private Button back;
+    private Button next;
+
+    /*
+     * Create GridData object and give it a widthHint (how large the component would like to be).
+     */
+    private GridData gridDataWidth(int horizonalAlignment, int verticalAlignment, boolean grabExcessHorizontal, boolean grabExcessVertical, int horizontalSpan, int verticalSpan, int width) {
+        var gridData = new GridData(horizonalAlignment, verticalAlignment, grabExcessHorizontal, grabExcessVertical, horizontalSpan, verticalSpan);
+        gridData.widthHint = width;
+        return gridData;
+    }
+
+    /*
+     * Draw an arrow on the canvas (from left to right)
+     */
+    static Path drawArrow(Canvas canvas) {
+        Path resultPath = new Path(canvas.getDisplay());
+        int width = canvas.getBounds().width;
+        int height = canvas.getBounds().height;
+        float baseLength = width - 0.2f * width;
+        
+        float lowerLineY = (height / 2) - (ARROW_WIDTH / 2);
+        float upperLineY = (height / 2) + (ARROW_WIDTH / 2);
+
+        float lowerArrowHeadY = (height / 2) - (ARROW_HEAD_WIDTH / 2);
+        float upperArrowHeadY = (height / 2) + (ARROW_HEAD_WIDTH / 2);
+
+
+        resultPath.moveTo(0, lowerLineY);
+        resultPath.lineTo(0, upperLineY);
+        resultPath.lineTo(baseLength, upperLineY);
+        resultPath.lineTo(baseLength, upperArrowHeadY);
+        resultPath.lineTo(width, height / 2);
+        resultPath.lineTo(baseLength, lowerArrowHeadY);
+        resultPath.lineTo(baseLength, lowerLineY);
+        resultPath.lineTo(0, lowerLineY);
+        return resultPath;
+    }
     
     public SignalEncryptionOverview() {
         final Display display = new Display();
@@ -35,23 +141,9 @@ public class SignalEncryptionOverview {
         shell.setLayout(new FillLayout());
         
         createChildren(shell);
+        currentState = STATE.STEP_1.setInitialState(this);
         
         shell.pack();
-        
-        Composite composite = new Composite(shell, SWT.NONE);
-        composite.setSize(new Point(600, 600));
-        composite.setLayout(new RowLayout(SWT.HORIZONTAL));
-        
-        Label lblNewLabel = new Label(composite, SWT.BORDER);
-        lblNewLabel.setAlignment(SWT.CENTER);
-        lblNewLabel.setLocation(new Point(30, 50));
-        lblNewLabel.setLayoutData(new RowData(68, 23));
-        lblNewLabel.setText("Other Key");
-        
-        Label lblNewLabel_1 = new Label(composite, SWT.BORDER);
-        lblNewLabel_1.setAlignment(SWT.CENTER);
-        lblNewLabel_1.setLayoutData(new RowData(59, 19));
-        lblNewLabel_1.setText("Root Key");
         shell.open();
 
         while (!shell.isDisposed()) {
@@ -63,6 +155,70 @@ public class SignalEncryptionOverview {
 
     
     private void createChildren(Shell parent) {
+        var simpleComposite = new Composite(parent, SWT.NONE);
+        simpleComposite.setLayout(new GridLayout(3, true));
         SignalEncryptionOverview instance = this;
+        stepOneDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        stepOneDescription.setText("Step 1");
+        stepOneDescription.setLayoutData(gridDataWidth(SWT.FILL, SWT.CENTER, false, false, 1, 1, 100));
+
+        arrowCanvas.addPaintListener(new PaintListener() {
+            @Override
+            public void paintControl(PaintEvent event) {
+                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+                Path path = drawArrow(arrowCanvas);
+                event.gc.fillPath(path);
+                path.dispose();
+            }
+        });
+
+        stepTwoDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        stepTwoDescription.setText("Step 2");
+        
+        
+        back = new Button(simpleComposite, SWT.PUSH);
+        new Label(simpleComposite, SWT.NONE);
+        next = new Button(simpleComposite, SWT.PUSH);
+        
+        back.setText("Back");
+        next.setText("Next");
+        
+        next.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseUp(MouseEvent e) {
+                currentState = currentState.next(instance);
+            }
+            
+            @Override
+            public void mouseDown(MouseEvent e) {
+                // nothing here
+            }
+            
+            @Override
+            public void mouseDoubleClick(MouseEvent e) {
+                // nothing here
+                
+            }
+        });
+        
+        back.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseUp(MouseEvent e) {
+                currentState = currentState.back(instance);
+            }
+            
+            @Override
+            public void mouseDown(MouseEvent e) {
+                // nothing here
+            }
+            
+            @Override
+            public void mouseDoubleClick(MouseEvent e) {
+                // nothing here
+                
+            }
+        });
     }
 }

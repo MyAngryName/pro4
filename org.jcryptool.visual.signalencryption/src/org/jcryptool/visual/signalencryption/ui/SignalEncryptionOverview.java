@@ -27,6 +27,8 @@ import org.eclipse.swt.graphics.Point;
 
 
     
+public class SignalEncryptionOverview {
+    
     private static int ARROW_WIDTH = 10;
     private static int ARROW_HEAD_WIDTH = 20;
 
@@ -161,6 +163,7 @@ import org.eclipse.swt.graphics.Point;
         stepOneDescription.setText("Step 1");
         stepOneDescription.setLayoutData(gridDataWidth(SWT.FILL, SWT.CENTER, false, false, 1, 1, 100));
 
+        arrowCanvas = new Canvas(simpleComposite, SWT.DOUBLE_BUFFERED);
         arrowCanvas.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {

@@ -27,7 +27,7 @@ import org.eclipse.swt.graphics.Point;
 
 
     
-public class SignalEncryptionOverview {
+public class SignalEncryptionOverview extends{
     
     private static int ARROW_WIDTH = 10;
     private static int ARROW_HEAD_WIDTH = 20;
@@ -43,9 +43,6 @@ public class SignalEncryptionOverview {
             protected void switchState(SignalEncryptionOverview parent) {
                 System.out.println("Switching to state 1");
             parent.stepTwoDescription.setVisible(false);
-            parent.arrowCanvas.setVisible(false);
-            parent.back.setEnabled(false);
-            parent.next.setEnabled(true);
             }
 
             @Override
@@ -92,21 +89,24 @@ public class SignalEncryptionOverview {
         };
     private STATE currentState = STATE.STEP_1;
     
-    private Label stepOneDescription;
-    private Label stepTwoDescription;
-    
-    private Canvas arrowCanvas;
-
-    private Button back;
-    private Button next;
+    private Label masterSecretKeyName;
+    private Label masterSecretKeyDescription;
+    private Label secondKeyName;
+    private Label secondKeyDescription;
+    private Label thirdKeyName;
+    private Label thirdKeyDescription;
+    private Label fourthKeyName;
+    private Label fourthKeyDescription;
+    private Label fifthKeyName;
+    private Label fifthKeyDescription;
 
     /*
      * Create GridData object and give it a widthHint (how large the component would like to be).
      */
     private GridData gridDataWidth(int horizonalAlignment, int verticalAlignment, boolean grabExcessHorizontal, boolean grabExcessVertical, int horizontalSpan, int verticalSpan, int width) {
-        var gridData = new GridData(horizonalAlignment, verticalAlignment, grabExcessHorizontal, grabExcessVertical, horizontalSpan, verticalSpan);
-        gridData.widthHint = width;
-        return gridData;
+        var gd_masterSecretKeyName = new GridData(horizonalAlignment, verticalAlignment, grabExcessHorizontal, grabExcessVertical, horizontalSpan, verticalSpan);
+        gd_masterSecretKeyName.widthHint = width;
+        return gd_masterSecretKeyName;
     }
 
     /*
@@ -139,12 +139,15 @@ public class SignalEncryptionOverview {
     public SignalEncryptionOverview() {
         final Display display = new Display();
         final Shell shell = new Shell(display);
+        shell.setSize(538, 327);
         shell.setLayout(new FillLayout());
         
         createChildren(shell);
         currentState = STATE.STEP_1.setInitialState(this);
         
         shell.pack();
+        
+        
         shell.open();
 
         while (!shell.isDisposed()) {
@@ -157,70 +160,30 @@ public class SignalEncryptionOverview {
     
     private void createChildren(Shell parent) {
         var simpleComposite = new Composite(parent, SWT.NONE);
-        simpleComposite.setLayout(new GridLayout(3, true));
+        simpleComposite.setLayout(new GridLayout(2, true));
         SignalEncryptionOverview instance = this;
-        stepOneDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
-        stepOneDescription.setText("Step 1");
-        stepOneDescription.setLayoutData(gridDataWidth(SWT.FILL, SWT.CENTER, false, false, 1, 1, 100));
+        masterSecretKeyName = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        masterSecretKeyName.setText("Step 1");
+        masterSecretKeyName.setLayoutData(gridDataWidth(SWT.FILL, SWT.CENTER, false, false, 1, 1, 100));
 
-        arrowCanvas = new Canvas(simpleComposite, SWT.DOUBLE_BUFFERED);
-        arrowCanvas.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = drawArrow(arrowCanvas);
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+        masterSecretKeyDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        masterSecretKeyDescription.setText("Step 2");
+        
+        secondKeyName = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        secondKeyName.setText("Step 1");
 
-        stepTwoDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
-        stepTwoDescription.setText("Step 2");
+        secondKeyDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        secondKeyDescription.setText("Step 2");
+
+        thirdKeyName = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        thirdKeyName.setText("Step 1");
+
+        fourthKeyDescription = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        fourthKeyDescription.setText("Step 2");
         
-        
-        back = new Button(simpleComposite, SWT.PUSH);
+        fifthKeyName = new Label(simpleComposite, SWT.BORDER | SWT.CENTER);
+        fifthKeyName.setText("Step 1");
+
         new Label(simpleComposite, SWT.NONE);
-        next = new Button(simpleComposite, SWT.PUSH);
-        
-        back.setText("Back");
-        next.setText("Next");
-        
-        next.addMouseListener(new MouseListener() {
-            
-            @Override
-            public void mouseUp(MouseEvent e) {
-                currentState = currentState.next(instance);
-            }
-            
-            @Override
-            public void mouseDown(MouseEvent e) {
-                // nothing here
-            }
-            
-            @Override
-            public void mouseDoubleClick(MouseEvent e) {
-                // nothing here
-                
-            }
-        });
-        
-        back.addMouseListener(new MouseListener() {
-            
-            @Override
-            public void mouseUp(MouseEvent e) {
-                currentState = currentState.back(instance);
-            }
-            
-            @Override
-            public void mouseDown(MouseEvent e) {
-                // nothing here
-            }
-            
-            @Override
-            public void mouseDoubleClick(MouseEvent e) {
-                // nothing here
-                
-            }
-        });
     }
 }

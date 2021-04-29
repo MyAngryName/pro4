@@ -40,7 +40,6 @@ public class SignalEncryptionOverview extends Composite {
     private GridLayout parameterCompositeLayout;
 
     private Group parameterGroup;
-    // private Group publicKeyGroup;
 
     private Text label_a;
     private Text label_b;
@@ -99,7 +98,6 @@ public class SignalEncryptionOverview extends Composite {
     	parameterGroup.setLayoutData(gd_parameterGroup);
         parameterGroup.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
         parameterGroup.setLayout(new GridLayout(2, false));
-        GridData gd_parameterGroup = new GridData(SWT.FILL, SWT.FILL, true, true);
         
         label_a = new Text(parameterGroup, SWT.READ_ONLY | SWT.CURSOR_ARROW);
         label_a.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));

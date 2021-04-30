@@ -9,7 +9,8 @@ Then they need to be added into their respective directory
 1. Download protoc at http://code.google.com/p/protobuf/downloads/list
 1. Extract the archive
 1. Execute following:
- 1. .\protoc.exe --java_out="pathToSignalEncryptionDirectory"\src\ -I "pathToSignalEncryptionDirectory"\protobuf\ "pathToSignalEncryptionDirectory"\protobuf\*.proto
+```.\protoc.exe --java_out="pathToSignalEncryptionDirectory"\src\ -I "pathToSignalEncryptionDirectory"\protobuf\ "pathToSignalEncryptionDirectory"\protobuf\*.proto
+```
 
 
 

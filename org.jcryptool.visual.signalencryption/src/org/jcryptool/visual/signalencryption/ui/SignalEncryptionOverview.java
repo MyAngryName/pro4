@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -47,18 +48,21 @@ public class SignalEncryptionOverview extends Composite {
     private Text label_d;
     private Text label_e;
     private Text label_f;
+    private Text label_g;
     private Text text_a;
     private Text text_b;
     private Text text_c;
     private Text text_d;
     private Text text_e;
     private Text text_f;
+    private Text text_g;
 	
 	public SignalEncryptionOverview (final Composite parent, final int style) {
 		super(parent,SWT.NONE);
 		createBody();
 	}
-    private void createBody() {
+    
+	private void createBody() {
         setLayout(new GridLayout(1, false));
         final Composite bodyComposite = new Composite(this, SWT.NONE);
         GridLayout gl_bodyComposite = new GridLayout();
@@ -80,7 +84,7 @@ public class SignalEncryptionOverview extends Composite {
         parameterCompositeLayout.marginWidth = 0;
         parameterCompositeLayout.marginHeight = 0;
         parameterComposite.setLayout(parameterCompositeLayout);
-        GridData gd_parameterComposite = new GridData(SWT.NONE, SWT.TOP, true, false);
+        GridData gd_parameterComposite = new GridData(SWT.FILL, SWT.TOP, true, false);
         gd_parameterComposite.widthHint = 832;
         parameterComposite.setLayoutData(gd_parameterComposite);
 
@@ -124,7 +128,7 @@ public class SignalEncryptionOverview extends Composite {
 
         text_c = new Text(parameterGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_c.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        text_c.setText("Geheimer Schlüssel der von den Kommunikationspartnern mittels einem vereinbarten Schlüsselaustausch erstellt wird. Dieser Schlüssel dient als erster Schlüssel");
+        text_c.setText("Geheimer Schlüssel der von den Kommunikationspartnern mittels einem vereinbarten Schlüsselaustausch erstellt wird. Dieser Schlüssel dient als erster Root Key.");
         
         label_d = new Text(parameterGroup, SWT.READ_ONLY | SWT.CURSOR_ARROW);
         label_d.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -133,7 +137,7 @@ public class SignalEncryptionOverview extends Composite {
 
         text_d = new Text(parameterGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_d.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        text_d.setText("");
+        text_d.setText("Der Root Chain Key dient als Schlüssel für die Root Chain.");
         
         label_e = new Text(parameterGroup, SWT.READ_ONLY);
         label_e.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -142,7 +146,7 @@ public class SignalEncryptionOverview extends Composite {
 
         text_e = new Text(parameterGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_e.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        text_e.setText("");
+        text_e.setText("Der Sending Chain Key wird verwendet um einen Message Key zu generieren.");
         
         label_f = new Text(parameterGroup, SWT.READ_ONLY | SWT.CURSOR_ARROW);
         label_f.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -151,6 +155,15 @@ public class SignalEncryptionOverview extends Composite {
 
         text_f = new Text(parameterGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_f.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        text_f.setText("");
+        text_f.setText("Der Sending Chain Key wird verwendet um einen Message Key zu generieren.");
+        
+        label_g = new Text(parameterGroup, SWT.READ_ONLY | SWT.CURSOR_ARROW);
+        label_g.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+        label_g.setText("Message Key");
+        new Label(parameterGroup, SWT.NONE);
+
+        text_g = new Text(parameterGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        text_g.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        text_g.setText("Der Message Key ist ein Output aus der Sending Chain bzw. der Receiving Chain und wird verwendet um eine Nachricht zu ver- oder entschlüsseln.");
     }
 }

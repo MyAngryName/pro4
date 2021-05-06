@@ -20,3 +20,4 @@ Import-Package: org.bouncycastle.crypto.digests,
  org.jcryptool.core.logging.utils,
  org.jcryptool.core.util.fonts
 Bundle-Vendor: %Bundle-Vendor.0
+Bundle-Activator: org.jcryptool.visual.signalencryption.SignalEncryptionPlugin

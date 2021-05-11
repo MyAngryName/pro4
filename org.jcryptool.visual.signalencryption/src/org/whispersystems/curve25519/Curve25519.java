@@ -174,7 +174,7 @@ public class Curve25519 {
 
   private static Curve25519Provider constructClass(String name, SecureRandomProvider random) throws NoSuchProviderException {
     try {
-      Curve25519Provider provider =  (Curve25519Provider)Class.forName("org.whispersystems.curve25519." + name).newInstance();
+    Curve25519Provider provider = (Curve25519Provider)Class.forName("org.whispersystems.curve25519." + name).newInstance();
 
       if (random != null) {
         provider.setRandomProvider(random);

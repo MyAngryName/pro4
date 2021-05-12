@@ -17,8 +17,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 
 
-public class SignalEncryptionArrows {  
- /*   
+public class SignalEncryptionArrows extends Canvas {  
+    
+ public SignalEncryptionArrows(Composite parent, int style) {
+        super(parent, style);
+    }
+
+    /*   
     public void setArrowData(int arrowWidth, int arrowHeadWidth) {
         this.arrowWidth = arrowWidth;
         this.arrowHeadWidth = arrowHeadWidth;

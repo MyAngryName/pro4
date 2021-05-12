@@ -172,7 +172,7 @@ public class SphincsKeyGenerationView extends Composite {
 		informationOutputLayout.minimumHeight = 15;
 
 		informationOutput.setLayoutData(informationOutputLayout);
-
+		System.out.println("test");
 	}
 
 	/**

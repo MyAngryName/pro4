@@ -160,10 +160,10 @@ public class SphincsPlusParameterView extends Composite {
      * Creates the Head of the Tab, including Title and description.
      */
     private void createHead() {
-    	TitleAndDescriptionComposite tadComposite = new TitleAndDescriptionComposite(this);
-    	tadComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    	tadComposite.setTitle(Messages.SphincsPlusParameterView_headLabel);
-    	tadComposite.setDescription(Messages.SphincsPlusParameterView_headDescription);
+        TitleAndDescriptionComposite tadComposite = new TitleAndDescriptionComposite(this);
+        tadComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+        tadComposite.setTitle(Messages.SphincsPlusParameterView_headLabel);
+        tadComposite.setDescription(Messages.SphincsPlusParameterView_headDescription);
     }
 
     /**
@@ -312,8 +312,9 @@ public class SphincsPlusParameterView extends Composite {
         combo_randomize.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         combo_randomize.add(Messages.SphincsPlusParameterView_combo_randomize_yes);
         combo_randomize.add(Messages.SphincsPlusParameterView_combo_randomize_no);
-        
-        //Dirty but fast. A spacer that forces the btnCheckButton_parameter to start in the second column.
+
+        // Dirty but fast. A spacer that forces the btnCheckButton_parameter to start in the second
+        // column.
         new Label(parameterGroup, SWT.NONE);
 
         btnCheckButton_parameter = new Button(parameterGroup, SWT.CHECK);
@@ -689,7 +690,8 @@ public class SphincsPlusParameterView extends Composite {
                     }
 
                     MessageBox messageBoxx = new MessageBox(getShell(), SWT.ICON_INFORMATION | SWT.OK);
-                    messageBoxx.setMessage(Messages.SphincsPlusParameterView_messageBox_continue_in_second_tab_message_2);
+                    messageBoxx
+                            .setMessage(Messages.SphincsPlusParameterView_messageBox_continue_in_second_tab_message_2);
                     messageBoxx.setText(Messages.SphincsPlusParameterView_messageBox_continue_in_second_tab_info);
                     messageBoxx.open();
                 }

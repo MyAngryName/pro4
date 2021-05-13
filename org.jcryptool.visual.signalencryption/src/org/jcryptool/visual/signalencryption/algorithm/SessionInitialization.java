@@ -11,8 +11,7 @@ import org.whispersystems.libsignal.state.SessionStore;
 import org.whispersystems.libsignal.state.SignedPreKeyStore;
 
 public class SessionInitialization {
-    
-    
+
     
     private PreSessionParameter signalSession;
     private SessionBuilder session;
@@ -23,6 +22,7 @@ public class SessionInitialization {
     
     private SignedPreKeyStore signedPreKeyStore;
     private PreKeyStore preKeyStore;
+    
     
     public SessionInitialization(PreSessionParameter signalSession, 
             PreKeyBundle remotePreKeyBundle) {
@@ -56,13 +56,14 @@ public class SessionInitialization {
         }
     
     
-    public SessionStore getBobSession() {
-        return bob.getSessionStore();
+    public SessionStore getSessionStore() {
+        return signalSession.getSessionStore();
     }
     
-    public SessionStore getAliceSession() {
-        return alice.getSessionStore();
+    public SignalProtocolAddress getRemoteAddress() {
+        return remoteAddress;
     }
+    
     
     
 

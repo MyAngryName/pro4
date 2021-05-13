@@ -4,13 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.UnsupportedEncodingException;
 
-import org.jcryptool.visual.signalencryption.algorithm.SessionInitialization;
-import org.jcryptool.visual.signalencryption.algorithm.SignalSessionBuilder;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Order;
+import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
@@ -25,11 +19,9 @@ import org.whispersystems.libsignal.protocol.CiphertextMessage;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.protocol.SignalMessage;
 
+
 public class SignalEncryptionTests {
     
-    private SignalSessionBuilder session;
-    private SessionInitialization sessionInitialization;
-    private SignalMessage message;
     
     private CiphertextMessage aliceEncryptedMessage;
     private PreKeySignalMessage alicePreKeySignalMessage;
@@ -37,21 +29,26 @@ public class SignalEncryptionTests {
     private CiphertextMessage encryptedMessageBob;
     private SignalMessage preKeySignalMessageBob;
     
+    private AliceBobSessionBuilder sessionBuilder;
     
+    private SessionCipher alice;
+    private SessionCipher bob;
+
 
     @Test
     void TestMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
         
-        sessionInitialization = new SessionInitialization();
+        sessionBuilder = new AliceBobSessionBuilder();
         
-        SessionCipher alice = sessionInitialization.aliceBuildSession();
-        SessionCipher bob = sessionInitialization.bobBuildSession();
+        sessionBuilder.createSession();
+        alice = sessionBuilder.getAliceSessionCipher();
+        bob = sessionBuilder.getBobSessionCipher();
         
         
         aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
         alicePreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.serialize());
         
-        
+        System.out.println(aliceEncryptedMessage.serialize());
         String string = new String(bob.decrypt(alicePreKeySignalMessage));
         System.out.println(string);
         
@@ -61,16 +58,21 @@ public class SignalEncryptionTests {
         
         
         string = new String(alice.decrypt(preKeySignalMessageBob));
-        System.out.println(string);
+        
+        aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
+        preKeySignalMessageBob = new SignalMessage(aliceEncryptedMessage.serialize());
 
+        System.out.println(aliceEncryptedMessage.serialize());
+        string = new String(bob.decrypt(preKeySignalMessageBob));
+        System.out.println(string);
         
-        //message = new SignalMessage(encryptedMessage.serialize());
-        
-                
-        
-        
-        
-        
+        aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
+        preKeySignalMessageBob = new SignalMessage(aliceEncryptedMessage.serialize());
+
+        System.out.println(aliceEncryptedMessage.serialize());
+        System.out.println(aliceEncryptedMessage);
+        string = new String(bob.decrypt(preKeySignalMessageBob));
+        System.out.println(string);
         
     }
         

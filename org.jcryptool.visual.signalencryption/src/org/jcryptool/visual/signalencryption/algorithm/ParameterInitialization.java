@@ -10,7 +10,7 @@ import org.whispersystems.libsignal.state.PreKeyRecord;
 import org.whispersystems.libsignal.state.SignedPreKeyRecord;
 import org.whispersystems.libsignal.util.KeyHelper;
 
-public class SignalEncryptionParameterInitialization {
+public class ParameterInitialization {
 
     private IdentityKeyPair    identityKeyPair;
     private int                registrationId;
@@ -21,7 +21,7 @@ public class SignalEncryptionParameterInitialization {
     private final int ID = 0;
     
     
-    public SignalEncryptionParameterInitialization() throws InvalidKeyException {
+    public ParameterInitialization() throws InvalidKeyException {
         this.identityKeyPair = KeyHelper.generateIdentityKeyPair();
         this.registrationId  = KeyHelper.generateRegistrationId(true);
         this.preKeys         = KeyHelper.generatePreKeys(ID, MAX_ID);

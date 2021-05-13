@@ -2,7 +2,6 @@ package org.jcryptool.visual.signalencryption.algorithm;
 
 import java.util.List;
 
-import org.whispersystems.libsignal.InvalidKeyException;
 import org.whispersystems.libsignal.SessionBuilder;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
@@ -16,7 +15,7 @@ import org.whispersystems.libsignal.state.impl.*;
 
 
 
-public class SignalSessionBuilder {
+public class PreSessionParameter {
     
     
     private SessionStore sessionStore;
@@ -24,7 +23,7 @@ public class SignalSessionBuilder {
     private SignedPreKeyStore signedPreKeyStore;
     private IdentityKeyStore  identityStore;
     
-    private SignalEncryptionParameterInitialization person;
+    private ParameterInitialization person;
     
     private SessionBuilder sessionBuilder;
     
@@ -32,16 +31,15 @@ public class SignalSessionBuilder {
     private PreKeyBundle preKeyBundle;
     
     private ECPublicKey preKeyRecord;
+    
+    private final SignalProtocolAddress remoteAddress;
 
     
-    public SignalSessionBuilder(SignalProtocolAddress remoteAddress, int deviceId){
+    public PreSessionParameter(SignalProtocolAddress remoteAddress, 
+            int deviceId, ParameterInitialization person){
 
-        try {
-            this.person = new SignalEncryptionParameterInitialization();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        
+        this.person = person;
+        this.remoteAddress = remoteAddress;
         this.sessionStore      = new InMemorySessionStore();
         this.preKeyStore       = new InMemoryPreKeyStore();
         this.signedPreKeyStore = new InMemorySignedPreKeyStore();
@@ -86,11 +84,14 @@ public class SignalSessionBuilder {
     public SignalProtocolAddress getAddress() {
         return address;
     }
-    public SignalEncryptionParameterInitialization getParameter() {
+    public ParameterInitialization getParameter() {
         return person;
     }
     public PreKeyRecord getPreKeyRecord() {
         return person.getPreKeys().get(person.getPreKeyID());
+    }
+    public SignalProtocolAddress getRemoteAddress() {
+        return remoteAddress;
     }
     
     

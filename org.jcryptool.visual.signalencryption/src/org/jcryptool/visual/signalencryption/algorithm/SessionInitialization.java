@@ -6,7 +6,6 @@ import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.UntrustedIdentityException;
 import org.whispersystems.libsignal.state.PreKeyBundle;
-import org.whispersystems.libsignal.state.PreKeyRecord;
 import org.whispersystems.libsignal.state.PreKeyStore;
 import org.whispersystems.libsignal.state.SignedPreKeyStore;
 
@@ -14,89 +13,47 @@ public class SessionInitialization {
     
     
     
-    private SignalSessionBuilder alice;
-    private SignalSessionBuilder bob;
+    private PreSessionParameter signalSession;
+    private SessionBuilder session;
     
-    private SessionBuilder aliceSession;
-    private SessionBuilder bobSession;
-
+    private PreKeyBundle remotePreKeyBundle;
     
-    private PreKeyBundle bobPreKeyBundle;
-    private PreKeyBundle alicePreKeyBundle;
-    
-    
-    private final int aliceDeviceId;
-    private final int bobDeviceId;
-    
-    private final SignalProtocolAddress aliceAddress;
-    private final SignalProtocolAddress bobAddress;
+    private final SignalProtocolAddress remoteAddress;
     
     private SignedPreKeyStore signedPreKeyStore;
     private PreKeyStore preKeyStore;
-
-
     
-    public SessionInitialization() {
-        
-        
-        this.aliceDeviceId = 42;
-        this.bobDeviceId = 43;
-        this.aliceAddress = new SignalProtocolAddress("Alice", aliceDeviceId);
-        this.bobAddress = new SignalProtocolAddress("Bob", bobDeviceId);
-        this.alice = new SignalSessionBuilder(bobAddress, aliceDeviceId);
-        this.bob = new SignalSessionBuilder(aliceAddress, bobDeviceId);
-        this.bobPreKeyBundle = bob.getPreKeyBundle();
-        this.alicePreKeyBundle = alice.getPreKeyBundle();   
+    public SessionInitialization(PreSessionParameter signalSession, 
+            PreKeyBundle remotePreKeyBundle) {
+        this.remotePreKeyBundle = remotePreKeyBundle;
+        this.signalSession = signalSession;
+        this.remoteAddress = signalSession.getRemoteAddress();
     }
     
-    public SessionCipher aliceBuildSession() {
+    public SessionCipher buildSessionCipher() {
         
+        session = signalSession.getSession();
         
-        aliceSession = alice.getSession();
+        signedPreKeyStore = signalSession.getSignedPreKeyStore();
+        preKeyStore = signalSession.getPreKeyStore();
         
-        signedPreKeyStore = alice.getSignedPreKeyStore();
-        preKeyStore = alice.getPreKeyStore();
-        
-        signedPreKeyStore.storeSignedPreKey(alice.getParameter().getSignedPreKeyID(), alice.getParameter().getSignedPreKeyRecord());
-        preKeyStore.storePreKey(alice.getParameter().getPreKeyID(), alice.getPreKeyRecord());
-        
+        signedPreKeyStore.storeSignedPreKey(signalSession.getParameter().getSignedPreKeyID(), signalSession.getParameter().getSignedPreKeyRecord());
+        preKeyStore.storePreKey(signalSession.getParameter().getPreKeyID(), signalSession.getPreKeyRecord());
         
         try {
-            aliceSession.process(bobPreKeyBundle);
+            session.process(remotePreKeyBundle);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
         } catch (UntrustedIdentityException e) {
             e.printStackTrace();
         }
-        SessionCipher sessionCipher = new SessionCipher(alice.getSessionStore(), 
-                alice.getPreKeyStore(), alice.getSignedPreKeyStore(), 
-                alice.getIdentityKeyStore(), bobAddress);
+        SessionCipher sessionCipher = new SessionCipher(signalSession.getSessionStore(), 
+                signalSession.getPreKeyStore(), signalSession.getSignedPreKeyStore(), 
+                signalSession.getIdentityKeyStore(), remoteAddress);
         
         return sessionCipher;
         }
     
-    public SessionCipher bobBuildSession() {
-        
-        bobSession = bob.getSession();
-        
-        signedPreKeyStore = bob.getSignedPreKeyStore();
-        preKeyStore = bob.getPreKeyStore();
-        
-        signedPreKeyStore.storeSignedPreKey(bob.getParameter().getSignedPreKeyID(), bob.getParameter().getSignedPreKeyRecord());
-        preKeyStore.storePreKey(bob.getParameter().getPreKeyID(), bob.getPreKeyRecord());
-        
-        try {
-            bobSession.process(alicePreKeyBundle);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UntrustedIdentityException e) {
-            e.printStackTrace();
-        }
-        SessionCipher sessionCipher = new SessionCipher(bob.getSessionStore(), 
-                bob.getPreKeyStore(), bob.getSignedPreKeyStore(), 
-                bob.getIdentityKeyStore(), aliceAddress);
-        return sessionCipher;
-        }
     
     
 

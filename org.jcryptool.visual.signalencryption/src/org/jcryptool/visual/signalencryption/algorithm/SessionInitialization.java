@@ -7,6 +7,7 @@ import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.UntrustedIdentityException;
 import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.PreKeyStore;
+import org.whispersystems.libsignal.state.SessionStore;
 import org.whispersystems.libsignal.state.SignedPreKeyStore;
 
 public class SessionInitialization {
@@ -54,6 +55,14 @@ public class SessionInitialization {
         return sessionCipher;
         }
     
+    
+    public SessionStore getBobSession() {
+        return bob.getSessionStore();
+    }
+    
+    public SessionStore getAliceSession() {
+        return alice.getSessionStore();
+    }
     
     
 

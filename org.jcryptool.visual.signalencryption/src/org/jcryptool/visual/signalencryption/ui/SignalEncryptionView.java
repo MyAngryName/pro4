@@ -9,44 +9,16 @@
 //-----END DISCLAIMER-----
 package org.jcryptool.visual.signalencryption.ui;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.jcryptool.core.logging.utils.LogUtil;
-import org.jcryptool.core.util.colors.ColorService;
 import org.jcryptool.core.util.fonts.FontService;
-import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
 import org.jcryptool.core.util.ui.auto.SmoothScroller;
 
 
@@ -75,7 +47,8 @@ public class SignalEncryptionView extends ViewPart {
 	
 	// Tab-Handling
     private int previousTab = 0;
-	private SignalEncryptionViewOverview overViewTab;
+	private SignalEncryptionViewOverview overViewTabComposite;
+	private SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite;
 	
 	
 	public SignalEncryptionView() {
@@ -117,8 +90,8 @@ public class SignalEncryptionView extends ViewPart {
 		});
 		
 		//init first tab
-		overViewTab = new SignalEncryptionViewOverview(tabFolder, SWT.NONE);	
-		tbtmOverview.setControl(overViewTab);
+		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE);	
+		tbtmOverview.setControl(overViewTabComposite);
 		                     
 		
         scrolledComposite.setContent(tabFolder);
@@ -131,14 +104,19 @@ public class SignalEncryptionView extends ViewPart {
 	}
 	
 
+	// sets the selected tab as current content of the view
+	// 0 = overviewTab
+	// 1 = doubleRatchetTab
+	
 	public void setTab(int tab) { 
         switch (tab) {
          case 0:         
-           tbtmOverview.setControl(overViewTab);
+           tbtmOverview.setControl(overViewTabComposite);
            previousTab = 0;
            break; 
          case 1:   
-//           tbtmDoubleRatchet.setControl(DoubleRatchetTab);
+             doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE);
+             tbtmDoubleRatchet.setControl(doubleRatchetTabComposite);
            previousTab = 1;
         default:
             break;

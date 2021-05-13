@@ -13,11 +13,18 @@ import org.whispersystems.libsignal.InvalidMessageException;
 import org.whispersystems.libsignal.InvalidVersionException;
 import org.whispersystems.libsignal.LegacyMessageException;
 import org.whispersystems.libsignal.NoSessionException;
+import org.whispersystems.libsignal.SessionBuilder;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.UntrustedIdentityException;
+import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.protocol.CiphertextMessage;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.protocol.SignalMessage;
+import org.whispersystems.libsignal.ratchet.ChainKey;
+import org.whispersystems.libsignal.ratchet.MessageKeys;
+import org.whispersystems.libsignal.state.SessionRecord;
+import org.whispersystems.libsignal.state.SessionState;
+import org.whispersystems.libsignal.state.SessionStore;
 
 
 public class SignalEncryptionTests {

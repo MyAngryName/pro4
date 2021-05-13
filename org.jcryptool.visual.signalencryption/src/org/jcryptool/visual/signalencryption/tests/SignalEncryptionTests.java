@@ -41,13 +41,13 @@ public class SignalEncryptionTests {
     private SessionCipher alice;
     private SessionCipher bob;
 
-
+    
     @Test
     void TestMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
         
         sessionBuilder = new AliceBobSessionBuilder();
         
-        sessionBuilder.createSession();
+        sessionBuilder.createSessionBoth();
         alice = sessionBuilder.getAliceSessionCipher();
         bob = sessionBuilder.getBobSessionCipher();
         

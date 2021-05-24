@@ -51,7 +51,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private String AlgorithmGroupDescription = "Algorithmus";
     private String stepGroupDescription = "Aktueller Schritt";
-    private String DiffieHellmanGroupDescription = "Diffie Hellman Schl�sselaustausch (DH)";
+    private String DiffieHellmanGroupDescription = "Diffie Hellman Schlüsselaustausch (DH)";
     private String RootChainDescription = "Root Chain";
     private String SendingChainDescription = "Sending Chain";
     private String ReceivingChainDescription = "Receiving Chain";
@@ -108,6 +108,17 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Label lb_aliceReceivingChain2;
     private Label lb_aliceReceivingChain3;
     private Label lb_aliceReceivingChain4;
+    private Label lb_bobRootChain1;
+    private Label lb_bobRootChain2;
+    private Label lb_bobRootChain3;
+    private Label lb_bobSendingChain1;
+    private Label lb_bobSendingChain2;
+    private Label lb_bobSendingChain3;
+    private Label lb_bobSendingChain4;
+    private Label lb_bobReceivingChain1;
+    private Label lb_bobReceivingChain2;
+    private Label lb_bobReceivingChain3;
+    private Label lb_bobReceivingChain4;
 
     private String aliceDiffieHellmanLabel1 = "Bob's DH öffentlicher Schlüssel";
     private String aliceDiffieHellmanLabel2 = "DH Schlüsselaustausch";
@@ -126,6 +137,17 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String aliceReceivingChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
     private String aliceReceivingChainLabel3 = "Receiving Key";
     private String aliceReceivingChainLabel4 = "Neuer Receiving Chain Schlüssel";
+    private String bobRootChainLabel1 = "Root Chain Schlüssel";
+    private String bobRootChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
+    private String bobRootChainLabel3 = "Neuer Root Chain Schlüssel";
+    private String bobSendingChainLabel1 = "Sending Chain Schlüssel";
+    private String bobSendingChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
+    private String bobSendingChainLabel3 = "Sending Key";
+    private String bobSendingChainLabel4 = "Neuer Sending Chain Schlüssel";
+    private String bobReceivingChainLabel1 = "Receiving Chain Schlüssel";
+    private String bobReceivingChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
+    private String bobReceivingChainLabel3 = "Receiving Key";
+    private String bobReceivingChainLabel4 = "Neuer Receiving Chain Schlüssel";
 
 
 //    private String aliceStep1 = ""
@@ -276,18 +298,75 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobAlgorithm.setLayout(gl_bobAlgorithm);
         grp_bobAlgorithm.setLayoutData(gd_bobAlgorithm);
 
+        
+        //
+        // Sending Chain
+        //
+        
         grp_bobSendingChain.setText(SendingChainDescription);
         grp_bobSendingChain.setLayout(gl_bobSendingChain);
         grp_bobSendingChain.setLayoutData(gd_bobSendingChain);
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE);    
+        
+        lb_bobSendingChain1 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain1.setLayoutData(gd_algorithmLabels);
+        lb_bobSendingChain1.setText(bobSendingChainLabel1);
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE); 
+        
+        lb_bobSendingChain1 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain1.setLayoutData(gd_algorithmLabels);
+        lb_bobSendingChain1.setText(bobSendingChainLabel1);
 
+
+        lb_bobSendingChain2 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain2.setLayoutData(gd_algorithmLabels);
+        lb_bobSendingChain2.setText(bobSendingChainLabel2);
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE); 
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE);
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE);
+
+        lb_bobSendingChain3 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain3.setLayoutData(gd_algorithmLabels);
+        lb_bobSendingChain3.setText(bobSendingChainLabel3);
+        
+        // empty label for filling space
+        new Label(grp_bobSendingChain, SWT.NONE); 
+        
+        lb_bobSendingChain4 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain4.setLayoutData(gd_algorithmLabels);
+        lb_bobSendingChain4.setText(bobSendingChainLabel4);
+
+        
+        //
+        // Receiving Chain
+        //
+        
         grp_bobReceivingChain.setText(ReceivingChainDescription);
         grp_bobReceivingChain.setLayout(gl_bobReceivingChain);
         grp_bobReceivingChain.setLayoutData(gd_bobReceivingChain);
 
+        //
+        // Root Chain
+        //
+        
         grp_bobRootChain.setText(RootChainDescription);
         grp_bobRootChain.setLayout(gl_bobRootChain);
         grp_bobRootChain.setLayoutData(gd_bobRootChain);
 
+        //
+        // Diffie Hellman Chain
+        //
+        
         grp_bobDiffieHellman.setText(DiffieHellmanGroupDescription);
         grp_bobDiffieHellman.setLayout(gl_bobDiffieHellman);
         grp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellman);

@@ -49,12 +49,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Composite cmp_bobReceivingChain;
     private Composite cmp_bobRootChain;
 
-    private String AlgorithmGroupDescription = "Algorithmus";
-    private String stepGroupDescription = "Aktueller Schritt";
-    private String DiffieHellmanGroupDescription = "Diffie Hellman Schlüsselaustausch (DH)";
-    private String RootChainDescription = "Root Chain";
-    private String SendingChainDescription = "Sending Chain";
-    private String ReceivingChainDescription = "Receiving Chain";
+    private String AlgorithmGroupDescription = Messages.SignalEncryption_AlgorithmGroupDescription;
+    private String stepGroupDescription = Messages.SignalEncryption_stepGroupDescription;
+    private String DiffieHellmanGroupDescription = Messages.SignalEncryption_DiffieHellmanGroupDescription;
+    private String RootChainDescription = Messages.SignalEncryption_RootChainDescription;
+    private String SendingChainDescription = Messages.SignalEncryption_SendingChainDescription;
+    private String ReceivingChainDescription = Messages.SignalEncryption_ReceivingChainDescription;
 
     private GridLayout gl_parent;
     private GridLayout gl_aliceDiffieHellman;
@@ -162,6 +162,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Group grp_bobDiffieHellman;
 
 
+    private String aliceDiffieHellmanLabel1 = Messages.SignalEncryption_aliceDiffieHellmanLabel1;
+    private String aliceDiffieHellmanLabel2 = Messages.SignalEncryption_aliceDiffieHellmanLabel2;
+    private String aliceDiffieHellmanLabel3 = Messages.SignalEncryption_aliceDiffieHellmanLabel3;
+    private String bobDiffieHellmanLabel1 = Messages.SignalEncryption_bobDiffieHellmanLabel1;
+    private String bobDiffieHellmanLabel2 = Messages.SignalEncryption_bobDiffieHellmanLabel2;
+    private String bobDiffieHellmanLabel3 = Messages.SignalEncryption_bobDiffieHellmanLabel3;
 //    private String aliceStep1 = ""
 
 
@@ -215,8 +221,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         gd_btnAlice = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnAlice.widthHint = 150;
-        btn_alice.setLayoutData(gd_btnAlice);
-        btn_alice.setText("Alice");
+        btn_Alice.setLayoutData(gd_btnAlice);
+        btn_Alice.setText(Messages.SignalEncryption_btnName_Alice);
 
         btn_alice.addSelectionListener(new SelectionAdapter() {
 
@@ -231,8 +237,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         btn_bob.setAlignment(SWT.CENTER);
         gd_btnBob = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         gd_btnBob.widthHint = 150;
-        btn_bob.setLayoutData(gd_btnBob);
-        btn_bob.setText("Bob");
+        btn_Bob.setLayoutData(gd_btnBob);
+        btn_Bob.setText(Messages.SignalEncryption_btnName_Bob);
 
         btn_bob.addSelectionListener(new SelectionAdapter() {
 

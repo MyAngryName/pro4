@@ -57,39 +57,39 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String ReceivingChainDescription = Messages.SignalEncryption_ReceivingChainDescription;
 
     private GridLayout gl_parent;
-    private GridLayout gl_aliceDiffieHellman;
+    private GridLayout gl_aliceDiffieHellmanComposite;
     private GridLayout gl_aliceComposite;
     private GridLayout gl_bobComposite;
-    private GridLayout gl_aliceAlgorithm;
-    private GridLayout gl_aliceRootChain;
-    private GridLayout gl_aliceSendingChain;
-    private GridLayout gl_aliceReceivingChain;
-    private GridLayout gl_bobAlgorithm;
-    private GridLayout gl_bobRootChain;
-    private GridLayout gl_bobReceivingChain;
-    private GridLayout gl_bobDiffieHellman;
-    private GridLayout gl_bobSendingChain;
-    private RowLayout rl_aliceSteps;
-    private RowLayout rl_bobSteps;
+    private GridLayout gl_aliceAlgorithmComposite;
+    private GridLayout gl_aliceRootChainComposite;
+    private GridLayout gl_aliceSendingChainComposite;
+    private GridLayout gl_aliceReceivingChainComposite;
+    private GridLayout gl_bobAlgorithmComposite;
+    private GridLayout gl_bobRootChainComposite;
+    private GridLayout gl_bobReceivingChainComposite;
+    private GridLayout gl_bobDiffieHellmanComposite;
+    private GridLayout gl_bobSendingChainComposite;
+    private GridLayout gl_aliceStepsComposite;
+    private GridLayout gl_bobStepsComposite;
 
-    private GridData gd_aliceAlgorithm;
-    private GridData gd_aliceSteps;
+    private GridData gd_aliceAlgorithmComposite;
+    private GridData gd_aliceStepsComposite;
 
-    private GridData gd_bobAlgorithm;
-    private GridData gd_bobSteps;
+    private GridData gd_bobAlgorithmComposite;
+    private GridData gd_bobStepsComposite;
     private GridData gd_btnAlice;
     private GridData gd_btnBob; 
     private GridData gd_btnNext;
     private GridData gd_btnPrev;
-    private GridData gd_aliceDiffieHellman;
-    private GridData gd_aliceRootChain;
-    private GridData gd_aliceSendingChain;
-    private GridData gd_aliceReceivingChain;
+    private GridData gd_aliceDiffieHellmanComposite;
+    private GridData gd_aliceRootChainComposite;
+    private GridData gd_aliceSendingChainComposite;
+    private GridData gd_aliceReceivingChainComposite;
     private GridData gd_algorithmLabels;
-    private GridData gd_bobDiffieHellman;
-    private GridData gd_bobRootChain;
-    private GridData gd_bobSendingChain;
-    private GridData gd_bobReceivingChain;
+    private GridData gd_bobDiffieHellmanComposite;
+    private GridData gd_bobRootChainComposite;
+    private GridData gd_bobSendingChainComposite;
+    private GridData gd_bobReceivingChainComposite;
 
     private Label lb_aliceDiffieHellman1;
     private Label lb_aliceDiffieHellman2;
@@ -120,12 +120,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Label lb_bobReceivingChain3;
     private Label lb_bobReceivingChain4;
 
-    private String aliceDiffieHellmanLabel1 = "Bob's DH öffentlicher Schlüssel";
-    private String aliceDiffieHellmanLabel2 = "DH Schlüsselaustausch";
-    private String aliceDiffieHellmanLabel3 = "Alice' DH Schlüsselpaar";
-    private String bobDiffieHellmanLabel1 = "Alice' DH öffentlicher Schlüssel";
-    private String bobDiffieHellmanLabel2 = "DH Schlüsselaustausch";
-    private String bobDiffieHellmanLabel3 = "Bob's DH Schlüsselpaar";
+    private String aliceDiffieHellmanLabel1 = Messages.SignalEncryption_aliceDiffieHellmanLabel1;
+    private String aliceDiffieHellmanLabel2 = Messages.SignalEncryption_aliceDiffieHellmanLabel2;
+    private String aliceDiffieHellmanLabel3 = Messages.SignalEncryption_aliceDiffieHellmanLabel3;
+    private String bobDiffieHellmanLabel1 = Messages.SignalEncryption_bobDiffieHellmanLabel1;
+    private String bobDiffieHellmanLabel2 = Messages.SignalEncryption_bobDiffieHellmanLabel2;
+    private String bobDiffieHellmanLabel3 = Messages.SignalEncryption_bobDiffieHellmanLabel3;
     private String aliceRootChainLabel1 = "Root Chain Schlüssel";
     private String aliceRootChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
     private String aliceRootChainLabel3 = "Neuer Root Chain Schlüssel";
@@ -161,13 +161,54 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private Group grp_bobDiffieHellman;
 
+    private GridData gd_bobAlgorithmGroup;
 
-    private String aliceDiffieHellmanLabel1 = Messages.SignalEncryption_aliceDiffieHellmanLabel1;
-    private String aliceDiffieHellmanLabel2 = Messages.SignalEncryption_aliceDiffieHellmanLabel2;
-    private String aliceDiffieHellmanLabel3 = Messages.SignalEncryption_aliceDiffieHellmanLabel3;
-    private String bobDiffieHellmanLabel1 = Messages.SignalEncryption_bobDiffieHellmanLabel1;
-    private String bobDiffieHellmanLabel2 = Messages.SignalEncryption_bobDiffieHellmanLabel2;
-    private String bobDiffieHellmanLabel3 = Messages.SignalEncryption_bobDiffieHellmanLabel3;
+    private GridData gd_bobStepsGroup;
+
+    private GridData gd_bobDiffieHellmanGroup;
+
+    private GridData gd_bobRootChainGroupe;
+
+    private GridData gd_bobSendingChainGroup;
+
+    private GridData gd_bobReceivingChainGroup;
+
+    private GridLayout gl_bobAlgorithmGroup;
+
+    private GridLayout gl_bobStepsGroup;
+
+    private GridLayout gl_bobDiffieHellmanGroup;
+
+    private GridLayout gl_bobRootChainGroup;
+
+    private GridLayout gl_bobSendingChainGroup;
+
+    private GridLayout gl_bobReceivingChainGroup;
+
+    private Group grp_aliceDiffieHellman;
+
+    private Group grp_aliceRootChain;
+
+    private Group grp_aliceSendingChain;
+
+    private Group grp_aliceReceivingChain;
+
+    private Composite cmp_aliceAlgorithm;
+
+    private Composite cmp_aliceSteps;
+
+    private GridLayout gl_aliceAlgorithmGroup;
+
+    private GridLayout gl_aliceStepsGroup;
+
+    private GridLayout gl_aliceDiffieHellmanGroup;
+
+    private GridLayout gl_aliceRootChainGroup;
+
+    private GridLayout gl_aliceSendingChainGroup;
+
+    private GridLayout gl_aliceReceivingChainGroup;
+
 //    private String aliceStep1 = ""
 
 
@@ -221,8 +262,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         gd_btnAlice = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnAlice.widthHint = 150;
-        btn_Alice.setLayoutData(gd_btnAlice);
-        btn_Alice.setText(Messages.SignalEncryption_btnName_Alice);
+        btn_alice.setLayoutData(gd_btnAlice);
+        btn_alice.setText(Messages.SignalEncryption_btnName_Alice);
 
         btn_alice.addSelectionListener(new SelectionAdapter() {
 
@@ -237,8 +278,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         btn_bob.setAlignment(SWT.CENTER);
         gd_btnBob = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         gd_btnBob.widthHint = 150;
-        btn_Bob.setLayoutData(gd_btnBob);
-        btn_Bob.setText(Messages.SignalEncryption_btnName_Bob);
+        btn_bob.setLayoutData(gd_btnBob);
+        btn_bob.setText(Messages.SignalEncryption_btnName_Bob);
 
         btn_bob.addSelectionListener(new SelectionAdapter() {
 
@@ -288,49 +329,57 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobSteps = new Group(cmp_bob, SWT.CENTER);
         grp_bobAlgorithm = new Group(cmp_bob, SWT.CENTER);
         
-        cmp_bobSteps = new Composite(cmp_bob, SWT.CENTER);
-        cmp_bobAlgorithm = new Composite(cmp_bob, SWT.CENTER);
+        cmp_bobSteps = new Composite(grp_bobSteps, SWT.CENTER);
+        cmp_bobAlgorithm = new Composite(grp_bobAlgorithm, SWT.CENTER);
         
         grp_bobSendingChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
         grp_bobReceivingChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
         grp_bobRootChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
         grp_bobDiffieHellman = new Group(cmp_bobAlgorithm, SWT.CENTER);
         
-        cmp_bobSendingChain = new Composite(grp_bobSendingChain, SWT.CENTER);
-        cmp_bobReceivingChain = new Composite(grp_bobReceivingChain, SWT.CENTER);
-        cmp_bobRootChain = new Composite(grp_bobRootChain, SWT.CENTER);
-        cmp_bobDiffieHellman = new Composite(grp_bobDiffieHellman, SWT.CENTER);
+        cmp_bobSendingChain = new Composite(grp_bobSendingChain, SWT.CENTER | SWT.BORDER);
+        cmp_bobReceivingChain = new Composite(grp_bobReceivingChain, SWT.CENTER | SWT.BORDER);
+        cmp_bobRootChain = new Composite(grp_bobRootChain, SWT.CENTER | SWT.BORDER);
+        cmp_bobDiffieHellman = new Composite(grp_bobDiffieHellman, SWT.CENTER | SWT.BORDER);
 
         gl_bobComposite = new GridLayout(2, false);
-        gl_bobAlgorithm = new GridLayout(4, false);
-        rl_bobSteps = new RowLayout(SWT.HORIZONTAL);
-        gl_bobDiffieHellman = new GridLayout(2, false);
-        gl_bobRootChain = new GridLayout(2, false);
-        gl_bobSendingChain = new GridLayout(3, false);
-        gl_bobReceivingChain = new GridLayout(3, false);
+        
+        gl_bobAlgorithmGroup = new GridLayout(1, false);
+        gl_bobStepsGroup = new GridLayout(1, false);
+        gl_bobDiffieHellmanGroup = new GridLayout(1, false);
+        gl_bobRootChainGroup = new GridLayout(1, false);
+        gl_bobSendingChainGroup = new GridLayout(1, false);
+        gl_bobReceivingChainGroup = new GridLayout(1, false);
+        
+        gl_bobAlgorithmComposite = new GridLayout(4, false);
+        gl_bobStepsComposite = new GridLayout(1, false);
+        gl_bobDiffieHellmanComposite = new GridLayout(2, false);
+        gl_bobRootChainComposite = new GridLayout(2, false);
+        gl_bobSendingChainComposite = new GridLayout(3, false);
+        gl_bobReceivingChainComposite = new GridLayout(3, false);
 
-        gd_bobAlgorithm = new GridData(SWT.RIGHT, SWT.TOP, true, true, 1, 1);
-        gd_bobSteps = new GridData(SWT.LEFT, SWT.TOP, false, true, 1, 1);
-        gd_bobDiffieHellman = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_bobRootChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_bobSendingChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_bobReceivingChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_bobAlgorithmComposite = new GridData(SWT.RIGHT, SWT.TOP, true, true, 1, 1);
+        gd_bobStepsComposite = new GridData(SWT.LEFT, SWT.TOP, false, true, 1, 1);
+        gd_bobDiffieHellmanComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_bobRootChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_bobSendingChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_bobReceivingChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
 
         cmp_bob.setLayout(gl_bobComposite);
 
         grp_bobSteps.setText(stepGroupDescription);
-        grp_bobSteps.setLayout(rl_bobSteps);
-        grp_bobSteps.setLayoutData(gd_bobSteps);
+        grp_bobSteps.setLayout(gl_bobStepsComposite);
+        grp_bobSteps.setLayoutData(gd_bobStepsComposite);
         
-        cmp_bobSteps.setLayout(rl_bobSteps);
-        cmp_bobSteps.setLayoutData(gd_bobSteps);
+        cmp_bobSteps.setLayout(gl_bobStepsComposite);
+        cmp_bobSteps.setLayoutData(gd_bobStepsComposite);
 
         grp_bobAlgorithm.setText(AlgorithmGroupDescription);
-        grp_bobAlgorithm.setLayout(gl_bobAlgorithm);
-        grp_bobAlgorithm.setLayoutData(gd_bobAlgorithm);
+        grp_bobAlgorithm.setLayout(gl_bobAlgorithmComposite);
+        grp_bobAlgorithm.setLayoutData(gd_bobAlgorithmComposite);
         
-        cmp_bobAlgorithm.setLayout(gl_bobAlgorithm);
-        cmp_bobAlgorithm.setLayoutData(gd_bobAlgorithm);
+        cmp_bobAlgorithm.setLayout(gl_bobAlgorithmComposite);
+        cmp_bobAlgorithm.setLayoutData(gd_bobAlgorithmComposite);
 
         
         //
@@ -338,11 +387,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         
         grp_bobSendingChain.setText(SendingChainDescription);
-        grp_bobSendingChain.setLayout(gl_bobSendingChain);
-        grp_bobSendingChain.setLayoutData(gd_bobSendingChain);
+        grp_bobSendingChain.setLayout(gl_bobSendingChainComposite);
+        grp_bobSendingChain.setLayoutData(gd_bobSendingChainComposite);
         
-        cmp_bobSendingChain.setLayout(gl_bobSendingChain);
-        cmp_bobSendingChain.setLayoutData(gd_bobSendingChain);
+        cmp_bobSendingChain.setLayout(gl_bobSendingChainComposite);
+        cmp_bobSendingChain.setLayoutData(gd_bobSendingChainComposite);
         
         // empty label for filling space
         new Label(cmp_bobSendingChain, SWT.NONE);    
@@ -392,11 +441,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         
         grp_bobReceivingChain.setText(ReceivingChainDescription);
-        grp_bobReceivingChain.setLayout(gl_bobReceivingChain);
-        grp_bobReceivingChain.setLayoutData(gd_bobReceivingChain);
+        grp_bobReceivingChain.setLayout(gl_bobReceivingChainComposite);
+        grp_bobReceivingChain.setLayoutData(gd_bobReceivingChainComposite);
         
-        cmp_bobReceivingChain.setLayout(gl_bobReceivingChain);
-        cmp_bobReceivingChain.setLayoutData(gd_bobReceivingChain);
+        cmp_bobReceivingChain.setLayout(gl_bobReceivingChainComposite);
+        cmp_bobReceivingChain.setLayoutData(gd_bobReceivingChainComposite);
         
         // empty label for filling space
         new Label(cmp_bobReceivingChain, SWT.NONE);    
@@ -445,11 +494,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         
         grp_bobRootChain.setText(RootChainDescription);
-        grp_bobRootChain.setLayout(gl_bobRootChain);
-        grp_bobRootChain.setLayoutData(gd_bobRootChain);
+        grp_bobRootChain.setLayout(gl_bobRootChainComposite);
+        grp_bobRootChain.setLayoutData(gd_bobRootChainComposite);
         
-        cmp_bobRootChain.setLayout(gl_bobRootChain);
-        cmp_bobRootChain.setLayoutData(gd_bobRootChain);
+        cmp_bobRootChain.setLayout(gl_bobRootChainComposite);
+        cmp_bobRootChain.setLayoutData(gd_bobRootChainComposite);
         
         lb_bobRootChain1 = new Label(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobRootChain1.setLayoutData(gd_algorithmLabels);
@@ -474,11 +523,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         
         grp_bobDiffieHellman.setText(DiffieHellmanGroupDescription);
-        grp_bobDiffieHellman.setLayout(gl_bobDiffieHellman);
-        grp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellman);
+        grp_bobDiffieHellman.setLayout(gl_bobDiffieHellmanComposite);
+        grp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellmanComposite);
         
-        cmp_bobDiffieHellman.setLayout(gl_bobDiffieHellman);
-        cmp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellman);
+        cmp_bobDiffieHellman.setLayout(gl_bobDiffieHellmanComposite);
+        cmp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellmanComposite);
 
         lb_bobDiffieHellman1 = new Label(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobDiffieHellman1.setLayoutData(gd_algorithmLabels);
@@ -507,44 +556,72 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         // Init of the widgets, layouts and data needed
         cmp_alice = new Composite(cmp_main, SWT.NONE);
+
         grp_aliceAlgorithm = new Group(cmp_alice, SWT.CENTER);
         grp_aliceSteps = new Group(cmp_alice, SWT.CENTER);
-        cmp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceSendingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceReceivingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+
+        cmp_aliceAlgorithm = new Composite(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceSteps = new Composite(grp_aliceSteps, SWT.CENTER);
+
+        grp_aliceDiffieHellman = new Group(cmp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceRootChain = new Group(cmp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceSendingChain = new Group(cmp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceReceivingChain = new Group(cmp_aliceAlgorithm, SWT.CENTER);
+
+        cmp_aliceDiffieHellman = new Composite(grp_aliceDiffieHellman, SWT.CENTER | SWT.BORDER);
+        cmp_aliceRootChain = new Composite(grp_aliceRootChain, SWT.CENTER | SWT.BORDER);
+        cmp_aliceSendingChain = new Composite(grp_aliceSendingChain, SWT.CENTER | SWT.BORDER);
+        cmp_aliceReceivingChain = new Composite(grp_aliceReceivingChain, SWT.CENTER | SWT.BORDER);
 
         gl_aliceComposite = new GridLayout(2, false);
-        gl_aliceAlgorithm = new GridLayout(4, false);
-        rl_aliceSteps = new RowLayout(SWT.HORIZONTAL);
-        gl_aliceDiffieHellman = new GridLayout(2, false);
-        gl_aliceRootChain = new GridLayout(2, false);
-        gl_aliceSendingChain = new GridLayout(3, true);
-        gl_aliceReceivingChain = new GridLayout(3, false);
+        
+        gl_aliceAlgorithmGroup = new GridLayout(1, false);
+        gl_aliceStepsGroup = new GridLayout(1, false);
+        gl_aliceDiffieHellmanGroup = new GridLayout(1, false);
+        gl_aliceRootChainGroup = new GridLayout(1, false);
+        gl_aliceSendingChainGroup = new GridLayout(1, false);
+        gl_aliceReceivingChainGroup = new GridLayout(1, false);
+        
+        gl_aliceAlgorithmComposite = new GridLayout(4, false);
+        gl_aliceStepsComposite = new GridLayout(1, false);
+        gl_aliceDiffieHellmanComposite = new GridLayout(2, false);
+        gl_aliceRootChainComposite = new GridLayout(2, false);
+        gl_aliceSendingChainComposite = new GridLayout(3, false);
+        gl_aliceReceivingChainComposite = new GridLayout(3, false);
 
-        gd_aliceAlgorithm = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_aliceSteps = new GridData(SWT.LEFT, SWT.TOP, false, true, 1, 1);
-        gd_aliceDiffieHellman = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_aliceRootChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_aliceSendingChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
-        gd_aliceReceivingChain = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_aliceAlgorithmComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_aliceStepsComposite = new GridData(SWT.LEFT, SWT.TOP, false, true, 1, 1);
+        gd_aliceDiffieHellmanComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_aliceRootChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_aliceSendingChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
+        gd_aliceReceivingChainComposite = new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1);
 
         cmp_alice.setLayout(gl_aliceComposite);
 
+
+        grp_aliceAlgorithm.setText(AlgorithmGroupDescription);
+        grp_aliceAlgorithm.setLayout(gl_aliceAlgorithmComposite);
+        grp_aliceAlgorithm.setLayoutData(gd_aliceAlgorithmComposite);
+
+        grp_aliceSteps.setText(stepGroupDescription);
+        grp_aliceSteps.setLayout(gl_aliceStepsComposite);
+        grp_aliceSteps.setLayoutData(gd_aliceStepsComposite);
+        
+        cmp_aliceAlgorithm.setLayout(gl_aliceAlgorithmComposite);
+        cmp_aliceAlgorithm.setLayoutData(gd_aliceAlgorithmComposite);
+        
+        cmp_aliceSteps.setLayout(gl_aliceStepsComposite);
+        cmp_aliceSteps.setLayoutData(gd_aliceStepsComposite);
+        
         //
         // DH Chain
         //
-        grp_aliceAlgorithm.setText(AlgorithmGroupDescription);
-        grp_aliceAlgorithm.setLayout(gl_aliceAlgorithm);
-        grp_aliceAlgorithm.setLayoutData(gd_aliceAlgorithm);
-
-        grp_aliceSteps.setText(stepGroupDescription);
-        grp_aliceSteps.setLayout(rl_aliceSteps);
-        grp_aliceSteps.setLayoutData(gd_aliceSteps);
-
-        cmp_aliceDiffieHellman.setText(DiffieHellmanGroupDescription);
-        cmp_aliceDiffieHellman.setLayout(gl_aliceDiffieHellman);
-        cmp_aliceDiffieHellman.setLayoutData(gd_aliceDiffieHellman);
+        grp_aliceDiffieHellman.setText(DiffieHellmanGroupDescription);
+        grp_aliceDiffieHellman.setLayout(gl_aliceDiffieHellmanComposite);
+        grp_aliceDiffieHellman.setLayoutData(gd_aliceDiffieHellmanComposite);
+        
+        cmp_aliceDiffieHellman.setLayout(gl_aliceDiffieHellmanComposite);
+        cmp_aliceDiffieHellman.setLayoutData(gd_aliceDiffieHellmanComposite);
 
         lb_aliceDiffieHellman1 = new Label(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceDiffieHellman1.setLayoutData(gd_algorithmLabels);
@@ -567,9 +644,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         // Root Chain
         //
-        cmp_aliceRootChain.setText(RootChainDescription);
-        cmp_aliceRootChain.setLayout(gl_aliceRootChain);
-        cmp_aliceRootChain.setLayoutData(gd_aliceRootChain);
+        grp_aliceRootChain.setText(RootChainDescription);
+        grp_aliceRootChain.setLayout(gl_aliceRootChainComposite);
+        grp_aliceRootChain.setLayoutData(gd_aliceRootChainComposite);
+        
+        cmp_aliceRootChain.setLayout(gl_aliceRootChainComposite);
+        cmp_aliceRootChain.setLayoutData(gd_aliceRootChainComposite);
         
         lb_aliceRootChain1 = new Label(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceRootChain1.setLayoutData(gd_algorithmLabels);
@@ -592,9 +672,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         //
         // Sending Chain
         //
-        cmp_aliceSendingChain.setText(SendingChainDescription);
-        cmp_aliceSendingChain.setLayout(gl_aliceSendingChain);
-        cmp_aliceSendingChain.setLayoutData(gd_aliceSendingChain);
+        grp_aliceSendingChain.setText(SendingChainDescription);
+        grp_aliceSendingChain.setLayout(gl_aliceSendingChainComposite);
+        grp_aliceSendingChain.setLayoutData(gd_aliceSendingChainComposite);
+        
+        cmp_aliceSendingChain.setLayout(gl_aliceSendingChainComposite);
+        cmp_aliceSendingChain.setLayoutData(gd_aliceSendingChainComposite);
         
         // empty label for filling space
         new Label(cmp_aliceSendingChain, SWT.NONE);    
@@ -636,9 +719,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         lb_aliceSendingChain4.setText(aliceSendingChainLabel4);
         
         // Receiving Chain
-        cmp_aliceReceivingChain.setText(ReceivingChainDescription);
-        cmp_aliceReceivingChain.setLayout(gl_aliceReceivingChain);
-        cmp_aliceReceivingChain.setLayoutData(gd_aliceReceivingChain);
+        grp_aliceReceivingChain.setText(ReceivingChainDescription);
+        grp_aliceReceivingChain.setLayout(gl_aliceReceivingChainComposite);
+        grp_aliceReceivingChain.setLayoutData(gd_aliceReceivingChainComposite);
+        
+        cmp_aliceReceivingChain.setLayout(gl_aliceReceivingChainComposite);
+        cmp_aliceReceivingChain.setLayoutData(gd_aliceReceivingChainComposite);
         
         // empty label for filling space
         new Label(cmp_aliceReceivingChain, SWT.NONE);    

@@ -2,6 +2,7 @@ package org.jcryptool.visual.signalencryption.algorithm;
 
 import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithm.STATE;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.ecc.ECPrivateKey;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.ratchet.ChainKey;
 import org.whispersystems.libsignal.ratchet.MessageKeys;
@@ -22,6 +23,8 @@ public class Keys {
     private int           previousCounter;
     private int           sessionVersion;
     private RootKey       rootKey;
+    private ECPublicKey   ratchetPublicKey;
+    private ECPrivateKey  ratchetPrivateKey;
     
     private SessionStore sessionStore;
     private SignalProtocolAddress remoteAddress;
@@ -38,13 +41,14 @@ public class Keys {
         }else {
             this.receivingChainKey = sessionState.getReceiverChainKey(senderEphemeral);
         }
-        this.previousCounter = sessionState.getPreviousCounter();
+        this.ratchetPublicKey = sessionState.getSenderRatchetKey();
+        this.ratchetPrivateKey = sessionState.getSenderRatchetKeyPair().getPrivateKey();
         }
+    
     public Keys(Keys keys) {
         this.sessionStore = keys.sessionStore;
         this.remoteAddress = keys.remoteAddress;
     }
-    
     public ChainKey getChainKey() {
         return sendingChainKey;
     }
@@ -56,6 +60,15 @@ public class Keys {
     }
     public ChainKey getReceivingChainKey() {
         return receivingChainKey;
+    }
+    public MessageKeys getMessageKeys() {
+        return messageKeys;
+    }
+    public ECPublicKey getRatchetPublicKey() {
+        return ratchetPublicKey;
+    }
+    public ECPrivateKey getRatchetPrivateKey() {
+        return ratchetPrivateKey;
     }
     
 }

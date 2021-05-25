@@ -4,6 +4,7 @@ import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
 import org.jcryptool.visual.signalencryption.algorithm.Keys;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.SessionStore;
 
 
@@ -41,7 +42,6 @@ public class SignalEncryptionAlgorithm {
 
         this.aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
         this.bobKeys = new Keys(bobSessionStore, aliceAddress, currentState);
-        this.keys = new Keys(aliceKeys);
     }
     
     public enum STATE {
@@ -81,8 +81,7 @@ public class SignalEncryptionAlgorithm {
             return PARAMETER;
         }
     }
-    
-    
+
     public Keys getAliceKeys() {
         return aliceKeys;
     }
@@ -92,7 +91,12 @@ public class SignalEncryptionAlgorithm {
     public STATE getCurrentState() {
         return currentState;
     }
-    
+    public PreKeyBundle getAlicePreKeyBundle() {
+        return session.getAlicePreKeyBundle();
+    }
+    public PreKeyBundle getBobPreKeyBundle() {
+        return session.getBobPreKeyBundle();
+    }
     public void generateBoth() {
         session.createSessionBoth();
         bobSessionCipher = session.getBobSessionCipher();

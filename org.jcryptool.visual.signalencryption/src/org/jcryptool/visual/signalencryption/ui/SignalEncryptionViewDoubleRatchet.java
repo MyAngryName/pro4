@@ -38,16 +38,16 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private Group grp_aliceSteps;
     private Group grp_aliceAlgorithm;
-    private Group grp_bobAlgorithm;
-    private Group grp_bobSteps;
-    private Group grp_aliceDiffieHellman;
-    private Group grp_aliceRootChain;
-    private Group grp_aliceReceivingChain;
-    private Group grp_aliceSendingChain;
-    private Group grp_bobDiffieHellman;
-    private Group grp_bobSendingChain;
-    private Group grp_bobReceivingChain;
-    private Group grp_bobRootChain;
+    private Composite cmp_bobAlgorithm;
+    private Composite cmp_bobSteps;
+    private Composite cmp_aliceDiffieHellman;
+    private Composite cmp_aliceRootChain;
+    private Composite cmp_aliceReceivingChain;
+    private Composite cmp_aliceSendingChain;
+    private Composite cmp_bobDiffieHellman;
+    private Composite cmp_bobSendingChain;
+    private Composite cmp_bobReceivingChain;
+    private Composite cmp_bobRootChain;
 
     private String AlgorithmGroupDescription = "Algorithmus";
     private String stepGroupDescription = "Aktueller Schritt";
@@ -148,6 +148,18 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String bobReceivingChainLabel2 = "Schlüsselableitungs-Funktion (KDF)";
     private String bobReceivingChainLabel3 = "Receiving Key";
     private String bobReceivingChainLabel4 = "Neuer Receiving Chain Schlüssel";
+
+    private Group grp_bobSteps;
+
+    private Group grp_bobAlgorithm;
+
+    private Group grp_bobSendingChain;
+
+    private Group grp_bobReceivingChain;
+
+    private Group grp_bobRootChain;
+
+    private Group grp_bobDiffieHellman;
 
 
 //    private String aliceStep1 = ""
@@ -266,18 +278,28 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         // Init of the layouts and data needed
         cmp_bob = new Composite(cmp_main, SWT.NONE);
+        
         grp_bobSteps = new Group(cmp_bob, SWT.CENTER);
         grp_bobAlgorithm = new Group(cmp_bob, SWT.CENTER);
-        grp_bobSendingChain = new Group(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobReceivingChain = new Group(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobRootChain = new Group(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobDiffieHellman = new Group(grp_bobAlgorithm, SWT.CENTER);
+        
+        cmp_bobSteps = new Composite(cmp_bob, SWT.CENTER);
+        cmp_bobAlgorithm = new Composite(cmp_bob, SWT.CENTER);
+        
+        grp_bobSendingChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
+        grp_bobReceivingChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
+        grp_bobRootChain = new Group(cmp_bobAlgorithm, SWT.CENTER);
+        grp_bobDiffieHellman = new Group(cmp_bobAlgorithm, SWT.CENTER);
+        
+        cmp_bobSendingChain = new Composite(grp_bobSendingChain, SWT.CENTER);
+        cmp_bobReceivingChain = new Composite(grp_bobReceivingChain, SWT.CENTER);
+        cmp_bobRootChain = new Composite(grp_bobRootChain, SWT.CENTER);
+        cmp_bobDiffieHellman = new Composite(grp_bobDiffieHellman, SWT.CENTER);
 
         gl_bobComposite = new GridLayout(2, false);
         gl_bobAlgorithm = new GridLayout(4, false);
         rl_bobSteps = new RowLayout(SWT.HORIZONTAL);
-        gl_bobDiffieHellman = new GridLayout(3, false);
-        gl_bobRootChain = new GridLayout(3, false);
+        gl_bobDiffieHellman = new GridLayout(2, false);
+        gl_bobRootChain = new GridLayout(2, false);
         gl_bobSendingChain = new GridLayout(3, false);
         gl_bobReceivingChain = new GridLayout(3, false);
 
@@ -293,10 +315,16 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobSteps.setText(stepGroupDescription);
         grp_bobSteps.setLayout(rl_bobSteps);
         grp_bobSteps.setLayoutData(gd_bobSteps);
+        
+        cmp_bobSteps.setLayout(rl_bobSteps);
+        cmp_bobSteps.setLayoutData(gd_bobSteps);
 
         grp_bobAlgorithm.setText(AlgorithmGroupDescription);
         grp_bobAlgorithm.setLayout(gl_bobAlgorithm);
         grp_bobAlgorithm.setLayoutData(gd_bobAlgorithm);
+        
+        cmp_bobAlgorithm.setLayout(gl_bobAlgorithm);
+        cmp_bobAlgorithm.setLayoutData(gd_bobAlgorithm);
 
         
         //
@@ -307,44 +335,50 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobSendingChain.setLayout(gl_bobSendingChain);
         grp_bobSendingChain.setLayoutData(gd_bobSendingChain);
         
-        // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE);    
+        cmp_bobSendingChain.setLayout(gl_bobSendingChain);
+        cmp_bobSendingChain.setLayoutData(gd_bobSendingChain);
         
-        lb_bobSendingChain1 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        // empty label for filling space
+        new Label(cmp_bobSendingChain, SWT.NONE);    
+        
+        lb_bobSendingChain1 = new Label(cmp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobSendingChain1.setLayoutData(gd_algorithmLabels);
         lb_bobSendingChain1.setText(bobSendingChainLabel1);
         
         // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE); 
+        new Label(cmp_bobSendingChain, SWT.NONE); 
         
-        lb_bobSendingChain1 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        // empty label for filling space
+        new Label(cmp_bobSendingChain, SWT.NONE); 
+        
+        lb_bobSendingChain1 = new Label(cmp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobSendingChain1.setLayoutData(gd_algorithmLabels);
         lb_bobSendingChain1.setText(bobSendingChainLabel1);
 
 
-        lb_bobSendingChain2 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain2 = new Label(cmp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobSendingChain2.setLayoutData(gd_algorithmLabels);
         lb_bobSendingChain2.setText(bobSendingChainLabel2);
         
-        // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE); 
-        
-        // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE);
-        
-        // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE);
-
-        lb_bobSendingChain3 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobSendingChain3 = new Label(cmp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobSendingChain3.setLayoutData(gd_algorithmLabels);
         lb_bobSendingChain3.setText(bobSendingChainLabel3);
         
         // empty label for filling space
-        new Label(grp_bobSendingChain, SWT.NONE); 
+        new Label(cmp_bobSendingChain, SWT.NONE); 
         
-        lb_bobSendingChain4 = new Label(grp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        // empty label for filling space
+        new Label(cmp_bobSendingChain, SWT.NONE);
+        
+        // empty label for filling space
+        new Label(cmp_bobSendingChain, SWT.NONE);
+        
+        lb_bobSendingChain4 = new Label(cmp_bobSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobSendingChain4.setLayoutData(gd_algorithmLabels);
         lb_bobSendingChain4.setText(bobSendingChainLabel4);
+        
+        // empty label for filling space
+        new Label(cmp_bobSendingChain, SWT.NONE); 
 
         
         //
@@ -354,6 +388,51 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobReceivingChain.setText(ReceivingChainDescription);
         grp_bobReceivingChain.setLayout(gl_bobReceivingChain);
         grp_bobReceivingChain.setLayoutData(gd_bobReceivingChain);
+        
+        cmp_bobReceivingChain.setLayout(gl_bobReceivingChain);
+        cmp_bobReceivingChain.setLayoutData(gd_bobReceivingChain);
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE);    
+        
+        lb_bobReceivingChain1 = new Label(cmp_bobReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobReceivingChain1.setLayoutData(gd_algorithmLabels);
+        lb_bobReceivingChain1.setText(bobReceivingChainLabel1);
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE); 
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE); 
+        
+        lb_bobReceivingChain1 = new Label(cmp_bobReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobReceivingChain1.setLayoutData(gd_algorithmLabels);
+        lb_bobReceivingChain1.setText(bobReceivingChainLabel1);
+
+
+        lb_bobReceivingChain2 = new Label(cmp_bobReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobReceivingChain2.setLayoutData(gd_algorithmLabels);
+        lb_bobReceivingChain2.setText(bobReceivingChainLabel2);
+        
+        lb_bobReceivingChain3 = new Label(cmp_bobReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobReceivingChain3.setLayoutData(gd_algorithmLabels);
+        lb_bobReceivingChain3.setText(bobReceivingChainLabel3);
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE); 
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE);
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE);
+        
+        lb_bobReceivingChain4 = new Label(cmp_bobReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobReceivingChain4.setLayoutData(gd_algorithmLabels);
+        lb_bobReceivingChain4.setText(bobReceivingChainLabel4);
+        
+        // empty label for filling space
+        new Label(cmp_bobReceivingChain, SWT.NONE); 
 
         //
         // Root Chain
@@ -362,6 +441,27 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobRootChain.setText(RootChainDescription);
         grp_bobRootChain.setLayout(gl_bobRootChain);
         grp_bobRootChain.setLayoutData(gd_bobRootChain);
+        
+        cmp_bobRootChain.setLayout(gl_bobRootChain);
+        cmp_bobRootChain.setLayoutData(gd_bobRootChain);
+        
+        lb_bobRootChain1 = new Label(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobRootChain1.setLayoutData(gd_algorithmLabels);
+        lb_bobRootChain1.setText(bobRootChainLabel1);
+        
+        // empty label for filling space
+        new Label(cmp_bobRootChain, SWT.NONE);
+
+        lb_bobRootChain2 = new Label(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobRootChain2.setLayoutData(gd_algorithmLabels);
+        lb_bobRootChain2.setText(bobRootChainLabel2);
+        
+        // empty label for filling space
+        new Label(cmp_bobRootChain, SWT.NONE);
+
+        lb_bobRootChain3 = new Label(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobRootChain3.setLayoutData(gd_algorithmLabels);
+        lb_bobRootChain3.setText(bobRootChainLabel3);
 
         //
         // Diffie Hellman Chain
@@ -370,26 +470,27 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobDiffieHellman.setText(DiffieHellmanGroupDescription);
         grp_bobDiffieHellman.setLayout(gl_bobDiffieHellman);
         grp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellman);
+        
+        cmp_bobDiffieHellman.setLayout(gl_bobDiffieHellman);
+        cmp_bobDiffieHellman.setLayoutData(gd_bobDiffieHellman);
 
-        lb_bobDiffieHellman1 = new Label(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobDiffieHellman1 = new Label(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobDiffieHellman1.setLayoutData(gd_algorithmLabels);
         lb_bobDiffieHellman1.setText(bobDiffieHellmanLabel1);
         lb_bobDiffieHellman1.setLayoutData(gd_algorithmLabels);
         
         // empty label for filling space
-        new Label(grp_bobDiffieHellman, SWT.NONE);
-        new Label(grp_bobDiffieHellman, SWT.NONE);
+        new Label(cmp_bobDiffieHellman, SWT.NONE);
 
-        lb_bobDiffieHellman2 = new Label(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobDiffieHellman2 = new Label(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobDiffieHellman2.setLayoutData(gd_algorithmLabels);
         lb_bobDiffieHellman2.setText(bobDiffieHellmanLabel2);
         lb_bobDiffieHellman2.setLayoutData(gd_algorithmLabels);
         
         // empty label for filling space
-        new Label(grp_bobDiffieHellman, SWT.NONE);
-        new Label(grp_bobDiffieHellman, SWT.NONE);
+        new Label(cmp_bobDiffieHellman, SWT.NONE);
 
-        lb_bobDiffieHellman3 = new Label(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_bobDiffieHellman3 = new Label(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_bobDiffieHellman3.setLayoutData(gd_algorithmLabels);
         lb_bobDiffieHellman3.setText(bobDiffieHellmanLabel3);
         lb_bobDiffieHellman3.setLayoutData(gd_algorithmLabels);
@@ -402,10 +503,10 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_alice = new Composite(cmp_main, SWT.NONE);
         grp_aliceAlgorithm = new Group(cmp_alice, SWT.CENTER);
         grp_aliceSteps = new Group(cmp_alice, SWT.CENTER);
-        grp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceSendingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceReceivingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceSendingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceReceivingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
 
         gl_aliceComposite = new GridLayout(2, false);
         gl_aliceAlgorithm = new GridLayout(4, false);
@@ -435,140 +536,140 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_aliceSteps.setLayout(rl_aliceSteps);
         grp_aliceSteps.setLayoutData(gd_aliceSteps);
 
-        grp_aliceDiffieHellman.setText(DiffieHellmanGroupDescription);
-        grp_aliceDiffieHellman.setLayout(gl_aliceDiffieHellman);
-        grp_aliceDiffieHellman.setLayoutData(gd_aliceDiffieHellman);
+        cmp_aliceDiffieHellman.setText(DiffieHellmanGroupDescription);
+        cmp_aliceDiffieHellman.setLayout(gl_aliceDiffieHellman);
+        cmp_aliceDiffieHellman.setLayoutData(gd_aliceDiffieHellman);
 
-        lb_aliceDiffieHellman1 = new Label(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceDiffieHellman1 = new Label(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceDiffieHellman1.setLayoutData(gd_algorithmLabels);
         lb_aliceDiffieHellman1.setText(aliceDiffieHellmanLabel1);
         
         // empty label for filling space
-        new Label(grp_aliceDiffieHellman, SWT.NONE);
+        new Label(cmp_aliceDiffieHellman, SWT.NONE);
 
-        lb_aliceDiffieHellman2 = new Label(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceDiffieHellman2 = new Label(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceDiffieHellman2.setLayoutData(gd_algorithmLabels);
         lb_aliceDiffieHellman2.setText(aliceDiffieHellmanLabel2);
         
         // empty label for filling space
-        new Label(grp_aliceDiffieHellman, SWT.NONE);
+        new Label(cmp_aliceDiffieHellman, SWT.NONE);
 
-        lb_aliceDiffieHellman3 = new Label(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceDiffieHellman3 = new Label(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceDiffieHellman3.setLayoutData(gd_algorithmLabels);
         lb_aliceDiffieHellman3.setText(aliceDiffieHellmanLabel3);
 
         //
         // Root Chain
         //
-        grp_aliceRootChain.setText(RootChainDescription);
-        grp_aliceRootChain.setLayout(gl_aliceRootChain);
-        grp_aliceRootChain.setLayoutData(gd_aliceRootChain);
+        cmp_aliceRootChain.setText(RootChainDescription);
+        cmp_aliceRootChain.setLayout(gl_aliceRootChain);
+        cmp_aliceRootChain.setLayoutData(gd_aliceRootChain);
         
-        lb_aliceRootChain1 = new Label(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceRootChain1 = new Label(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceRootChain1.setLayoutData(gd_algorithmLabels);
         lb_aliceRootChain1.setText(aliceRootChainLabel1);
         
         // empty label for filling space
-        new Label(grp_aliceRootChain, SWT.NONE);
+        new Label(cmp_aliceRootChain, SWT.NONE);
 
-        lb_aliceRootChain2 = new Label(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceRootChain2 = new Label(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceRootChain2.setLayoutData(gd_algorithmLabels);
         lb_aliceRootChain2.setText(aliceRootChainLabel2);
         
         // empty label for filling space
-        new Label(grp_aliceRootChain, SWT.NONE);
+        new Label(cmp_aliceRootChain, SWT.NONE);
 
-        lb_aliceRootChain3 = new Label(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceRootChain3 = new Label(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceRootChain3.setLayoutData(gd_algorithmLabels);
         lb_aliceRootChain3.setText(aliceRootChainLabel3);
 
         //
         // Sending Chain
         //
-        grp_aliceSendingChain.setText(SendingChainDescription);
-        grp_aliceSendingChain.setLayout(gl_aliceSendingChain);
-        grp_aliceSendingChain.setLayoutData(gd_aliceSendingChain);
+        cmp_aliceSendingChain.setText(SendingChainDescription);
+        cmp_aliceSendingChain.setLayout(gl_aliceSendingChain);
+        cmp_aliceSendingChain.setLayoutData(gd_aliceSendingChain);
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE);    
+        new Label(cmp_aliceSendingChain, SWT.NONE);    
         
-        lb_aliceSendingChain1 = new Label(grp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceSendingChain1 = new Label(cmp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceSendingChain1.setLayoutData(gd_algorithmLabels);
         lb_aliceSendingChain1.setText(aliceSendingChainLabel1);
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE); 
+        new Label(cmp_aliceSendingChain, SWT.NONE); 
         
-        lb_aliceSendingChain1 = new Label(grp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceSendingChain1 = new Label(cmp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceSendingChain1.setLayoutData(gd_algorithmLabels);
         lb_aliceSendingChain1.setText(aliceSendingChainLabel1);
 
 
-        lb_aliceSendingChain2 = new Label(grp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceSendingChain2 = new Label(cmp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceSendingChain2.setLayoutData(gd_algorithmLabels);
         lb_aliceSendingChain2.setText(aliceSendingChainLabel2);
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE); 
+        new Label(cmp_aliceSendingChain, SWT.NONE); 
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE);
+        new Label(cmp_aliceSendingChain, SWT.NONE);
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE);
+        new Label(cmp_aliceSendingChain, SWT.NONE);
 
-        lb_aliceSendingChain3 = new Label(grp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceSendingChain3 = new Label(cmp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceSendingChain3.setLayoutData(gd_algorithmLabels);
         lb_aliceSendingChain3.setText(aliceSendingChainLabel3);
         
         // empty label for filling space
-        new Label(grp_aliceSendingChain, SWT.NONE); 
+        new Label(cmp_aliceSendingChain, SWT.NONE); 
         
-        lb_aliceSendingChain4 = new Label(grp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceSendingChain4 = new Label(cmp_aliceSendingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceSendingChain4.setLayoutData(gd_algorithmLabels);
         lb_aliceSendingChain4.setText(aliceSendingChainLabel4);
         
         // Receiving Chain
-        grp_aliceReceivingChain.setText(ReceivingChainDescription);
-        grp_aliceReceivingChain.setLayout(gl_aliceReceivingChain);
-        grp_aliceReceivingChain.setLayoutData(gd_aliceReceivingChain);
+        cmp_aliceReceivingChain.setText(ReceivingChainDescription);
+        cmp_aliceReceivingChain.setLayout(gl_aliceReceivingChain);
+        cmp_aliceReceivingChain.setLayoutData(gd_aliceReceivingChain);
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE);    
+        new Label(cmp_aliceReceivingChain, SWT.NONE);    
         
-        lb_aliceReceivingChain1 = new Label(grp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceReceivingChain1 = new Label(cmp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceReceivingChain1.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain1.setText(aliceReceivingChainLabel1);
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE); 
+        new Label(cmp_aliceReceivingChain, SWT.NONE); 
         
-        lb_aliceReceivingChain1 = new Label(grp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceReceivingChain1 = new Label(cmp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceReceivingChain1.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain1.setText(aliceReceivingChainLabel1);
 
 
-        lb_aliceReceivingChain2 = new Label(grp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceReceivingChain2 = new Label(cmp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceReceivingChain2.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain2.setText(aliceReceivingChainLabel2);
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE); 
+        new Label(cmp_aliceReceivingChain, SWT.NONE); 
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE);
+        new Label(cmp_aliceReceivingChain, SWT.NONE);
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE);
+        new Label(cmp_aliceReceivingChain, SWT.NONE);
 
-        lb_aliceReceivingChain3 = new Label(grp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceReceivingChain3 = new Label(cmp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceReceivingChain3.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain3.setText(aliceReceivingChainLabel3);
         
         // empty label for filling space
-        new Label(grp_aliceReceivingChain, SWT.NONE); 
+        new Label(cmp_aliceReceivingChain, SWT.NONE); 
         
-        lb_aliceReceivingChain4 = new Label(grp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        lb_aliceReceivingChain4 = new Label(cmp_aliceReceivingChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         lb_aliceReceivingChain4.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain4.setText(aliceReceivingChainLabel4);
     }

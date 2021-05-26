@@ -43,7 +43,8 @@ public class SignalEncryptionTests {
 
     
     @Test
-    void TestMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
+    void shouldEncryptAndDecrypMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, 
+    LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
         
         sessionBuilder = new AliceBobSessionBuilder();
         

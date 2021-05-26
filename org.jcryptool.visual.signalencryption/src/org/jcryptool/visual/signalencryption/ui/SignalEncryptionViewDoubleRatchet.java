@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -210,13 +211,17 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private GridLayout gl_aliceReceivingChainGroup;
 
 //    private String aliceStep1 = ""
-
-
     
+    private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
+    private SignalEncryptionState signalEncryptionState;
 
 
-    SignalEncryptionViewDoubleRatchet(Composite parent, int style) {
+    SignalEncryptionViewDoubleRatchet(Composite parent, int style, SignalEncryptionState signalEncryptionState) {
         super(parent, style);
+        
+        this.signalEncryptionState= signalEncryptionState;
+        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
+        
         gl_parent = new GridLayout(2, false);
         gl_parent.horizontalSpacing = 3;
         gl_parent.verticalSpacing = 0;
@@ -292,19 +297,35 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         
         
         // Steps Buttons
-        btn_prev = new Button(this, SWT.CENTER);
+        btn_prev = new Button(this, SWT.PUSH);
         btn_prev.setAlignment(SWT.CENTER);
         gd_btnPrev = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnPrev.widthHint = 150;
         btn_prev.setLayoutData(gd_btnPrev);
         btn_prev.setText("Previous");
+        btn_prev.addSelectionListener(new SelectionAdapter() {
+
+            
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                signalEncryptionState.currentStateBack(signalEncryptionState);                
+            }
+        });
         
-        btn_next = new Button(this, SWT.CENTER);
+        btn_next = new Button(this, SWT.PUSH);
         btn_next.setAlignment(SWT.CENTER);
         gd_btnNext = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
         btn_next.setText("Next");
+        btn_next.addSelectionListener(new SelectionAdapter() {
+
+            
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                signalEncryptionState.currenStateNext(signalEncryptionState);                
+            }
+        });
     }
 
     protected void showBobView() {
@@ -368,6 +389,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_bob.setLayout(gl_bobComposite);
 
         grp_bobSteps.setText(stepGroupDescription);
+
         grp_bobSteps.setLayout(gl_bobStepsComposite);
         grp_bobSteps.setLayoutData(gd_bobStepsComposite);
         
@@ -765,4 +787,5 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         lb_aliceReceivingChain4.setLayoutData(gd_algorithmLabels);
         lb_aliceReceivingChain4.setText(aliceReceivingChainLabel4);
     }
+    
 }

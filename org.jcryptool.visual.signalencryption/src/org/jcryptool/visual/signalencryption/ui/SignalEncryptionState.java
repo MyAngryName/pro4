@@ -140,15 +140,13 @@ public class SignalEncryptionState {
                 try {
                     aliceEncryptedMessage = signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8"));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
-                    e.printStackTrace();
+                    generate();
                 }
                 try {
                     alicePreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.serialize());
                 } catch (InvalidMessageException | InvalidVersionException e) {
-                    e.printStackTrace();
+                    generate();
                 }
-                
-                
                 generate();
                 
             }
@@ -185,7 +183,7 @@ public class SignalEncryptionState {
                     signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage);
                 } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
                         | InvalidKeyIdException | InvalidKeyException | UntrustedIdentityException e) {
-                    e.printStackTrace();
+                    generate();
                 }
                 preKeyAliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize());
                 preKeyAliceRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize());

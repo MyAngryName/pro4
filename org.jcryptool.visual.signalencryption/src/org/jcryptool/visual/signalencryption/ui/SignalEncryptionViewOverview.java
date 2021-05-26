@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithm.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.util.Hex;
@@ -98,6 +98,7 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_g_bob;
     
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
+    private SignalEncryptionState signalEncryptionState;
 
     private Button btn_regenerate;
     
@@ -128,10 +129,10 @@ public class SignalEncryptionViewOverview extends Composite {
     /**
      * 
      **/
-    public SignalEncryptionViewOverview(final Composite parent, int style, 
-            SignalEncryptionAlgorithm signalEncryptionAlgorithm) {
+    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionState signalEncryptionState) {
         super(parent, style);
-        this.signalEncryptionAlgorithm = signalEncryptionAlgorithm;
+        this.signalEncryptionState = signalEncryptionState;
+        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
 
         setLayout(new GridLayout());
 
@@ -356,17 +357,17 @@ public class SignalEncryptionViewOverview extends Composite {
 
     }
     public void generateBoth() {
-        signalEncryptionAlgorithm.generateBoth();
+        signalEncryptionState.generateBoth();
         parameter();
         textReset();
     }
     public void generateAlice() {
-        signalEncryptionAlgorithm.generateAlice();
+        signalEncryptionState.generateAlice();
         parameter();
         textReset();
     }
     public void generateBob() {
-        signalEncryptionAlgorithm.generateBob();
+        signalEncryptionState.generateBob();
         parameter();
         textReset();
     }
@@ -386,47 +387,21 @@ public class SignalEncryptionViewOverview extends Composite {
         value_g_bob.setText(bobSenderMsgKey);
     }
     public void parameter() {
-        aliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().
-                getRatchetPrivateKey().serialize());
-        aliceRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().
-                getRatchetPublicKey().serialize());
-        aliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().
-                getKeyBytes());
-        aliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().
-                getKey());
+        aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
+        aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
+        aliceRootKey = signalEncryptionState.getaliceRootKey();
+        aliceSendingChainKey = signalEncryptionState.getAliceSendingChainKey();
+        aliceSenderMsgKey = signalEncryptionState.getAliceSenderMsgKey();
+        aliceReceivingChainKey = signalEncryptionState.getAliceReceivingChainKey();
         
-        if(signalEncryptionAlgorithm.getCurrentState() == STATE.PARAMETER) {            
-            aliceReceivingChainKey = "No Session initialized";
-            aliceSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().
-                    getMessageKeys().getCipherKey().getEncoded());
-                    
-            bobRatchetPrivateKey = "No Session initialized";
-            bobRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getBobPreKeyBundle().
-                    getSignedPreKey().serialize());
-            bobRootKey = "No Session initialized";
-            bobSendingChainKey = "No Session initialized";
-            bobReceivingChainKey = "No Session initialized";
-            bobSenderMsgKey = "No Session initialized";
-            
-        } else {
-            aliceReceivingChainKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().
-                    getChainKey().getKey());
-                    
+        bobRatchetPrivateKey = signalEncryptionState.getBobRatchetPrivateKey();
+        bobRatchetPublicKey = signalEncryptionState.getBobRatchetPublicKey();
+        bobRootKey = signalEncryptionState.getBobRootKey();
+        bobSendingChainKey = signalEncryptionState.getBobReceivingChainKey();
+        bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
+        bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
+        
 
-            bobRootKey = signalEncryptionAlgorithm.getBobKeys().getRootKey().
-                                getKeyBytes().toString();
-            bobSendingChainKey = signalEncryptionAlgorithm.getBobKeys().getChainKey().
-                                getKey().toString();
-            bobReceivingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().
-                            getKey());
-            bobSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().
-                    getMessageKeys().getCipherKey().getEncoded());
-            
-            bobRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().
-                    getRatchetPrivateKey().serialize());
-            bobRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().
-                    getRatchetPublicKey().serialize());
-        }
         
     }
     

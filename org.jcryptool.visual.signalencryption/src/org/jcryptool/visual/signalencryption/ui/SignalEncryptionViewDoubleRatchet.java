@@ -997,8 +997,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 parent.txt_bobStep1.setVisible(true);
                 
                 // Hide these Elements
-                parent.grp_aliceDiffieHellman.setVisible(false);
-                parent.grp_aliceRootChain.setVisible(false);
                 parent.grp_aliceSendingChain.setVisible(false);
                 
                 parent.grp_bobReceivingChain.setVisible(false);

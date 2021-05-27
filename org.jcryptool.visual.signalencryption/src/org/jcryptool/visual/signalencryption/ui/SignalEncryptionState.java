@@ -100,8 +100,8 @@ public class SignalEncryptionState {
                 parameterAliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize());
                 parameterAliceRatchetPublicKey= ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize());
                 parameterAliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes());
-                parameterAliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey());
-                parameterAliceSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded());
+                parameterAliceSendingChainKey = "Keine Sitzung begonnen";
+                parameterAliceSenderMsgKey = "Keine Sitzung begonnen";
                 parameterAliceReceivingChainKey = "Keine Sitzung begonnen";
                 
                 parameterBobRatchetPrivateKey = "Keine Sitzung begonnen";
@@ -110,7 +110,7 @@ public class SignalEncryptionState {
                 parameterBobSendingChainKey = "Keine Sitzung begonnen";
                 parameterBobReceivingChainKey = "Keine Sitzung begonnen";
                 parameterBobSenderMsgKey = "Keine Sitzung begonnen";
-                generate();
+                updateText();
             }
             @Override
             protected void updateText() {

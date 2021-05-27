@@ -397,12 +397,29 @@ public class SignalEncryptionViewOverview extends Composite {
         bobRatchetPrivateKey = signalEncryptionState.getBobRatchetPrivateKey();
         bobRatchetPublicKey = signalEncryptionState.getBobRatchetPublicKey();
         bobRootKey = signalEncryptionState.getBobRootKey();
-        bobSendingChainKey = signalEncryptionState.getBobReceivingChainKey();
+        bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
         bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
         bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
         
 
         
     }
+    /*
+     *     public void textReset() {
+        value_b_alice_private.setText(signalEncryptionState.getAliceRatchetPrivateKey()); 
+        value_b_alice_public.setText(signalEncryptionState.getAliceRatchetPublicKey()); 
+        value_d_alice.setText(signalEncryptionState.getaliceRootKey());
+        value_e_alice.setText(signalEncryptionState.getAliceSendingChainKey());
+        value_f_alice.setText(signalEncryptionState.getAliceSenderMsgKey());
+        value_g_alice.setText(signalEncryptionState.getAliceReceivingChainKey());
+
+        value_b_bob_private.setText(signalEncryptionState.getBobRatchetPrivateKey()); 
+        value_b_bob_public.setText(signalEncryptionState.getBobRatchetPublicKey()); 
+        value_d_bob.setText(signalEncryptionState.getBobRootKey());
+        value_e_bob.setText(signalEncryptionState.getBobSendingChainKey());
+        value_f_bob.setText(signalEncryptionState.getBobReceivingChainKey());
+        value_g_bob.setText(signalEncryptionState.getBobSenderMsgKey());
+    }
+     */
     
 }

@@ -260,7 +260,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createBobComposite();
         showAliceView();
 
-        this.currentState = STATE.STEP_0.setInitialState(this);
+        currentState = STATE.STEP_0.setInitialState(this);
 
     }
 
@@ -958,14 +958,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.currentStateNext(parent.signalEncryptionState);
+                parent.signalEncryptionState.stepForward(parent.signalEncryptionState);
                 STEP_2.switchState(parent);
                 return STEP_2;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.currentStateBack(parent.signalEncryptionState);
+                parent.signalEncryptionState.stepBack(parent.signalEncryptionState);
                 STEP_0.switchState(parent);
                 return STEP_0;
             }
@@ -1019,14 +1019,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.currentStateNext(parent.signalEncryptionState);
+                parent.signalEncryptionState.stepForward(parent.signalEncryptionState);
                 STEP_3.switchState(parent);
                 return STEP_3;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.currentStateBack(parent.signalEncryptionState);
+                parent.signalEncryptionState.stepBack(parent.signalEncryptionState);
                 STEP_1.switchState(parent);
                 return STEP_1;
             }

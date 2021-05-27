@@ -99,14 +99,14 @@ public class SignalEncryptionState {
                 parameterAliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes());
                 parameterAliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey());
                 parameterAliceSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded());
-                parameterAliceReceivingChainKey = "No Session initialized";
+                parameterAliceReceivingChainKey = "Keine Sitzung begonnen";
                 
-                parameterBobRatchetPrivateKey = "No Session initialized";
+                parameterBobRatchetPrivateKey = "Keine Sitzung begonnen";
                 parameterBobRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize());
-                parameterBobRootKey = "No Session initialized";
-                parameterBobSendingChainKey = "No Session initialized";
-                parameterBobReceivingChainKey = "No Session initialized";
-                parameterBobSenderMsgKey = "No Session initialized";
+                parameterBobRootKey = "Keine Sitzung begonnen";
+                parameterBobSendingChainKey = "Keine Sitzung begonnen";
+                parameterBobReceivingChainKey = "Keine Sitzung begonnen";
+                parameterBobSenderMsgKey = "Keine Sitzung begonnen";
                 generate();
             }
             @Override

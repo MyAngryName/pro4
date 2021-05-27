@@ -1,9 +1,13 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
 import org.jcryptool.visual.signalencryption.algorithm.Keys;
+import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.SessionStore;
 
 
@@ -16,7 +20,12 @@ public class SignalEncryptionAlgorithm {
 
     private Keys aliceKeys;
     private Keys bobKeys;
-    private Keys keys;
+    private Keys aliceKeysParameter;
+    private Keys bobKeysParameter;
+    private Keys alicePreKeys;
+    private Keys bobPreKeys;
+    private Keys aliceCurrentKeys;
+    private Keys bobCurrentKeys;
     
     private SessionStore aliceSessionStore;
     private SessionStore bobSessionStore;
@@ -24,10 +33,10 @@ public class SignalEncryptionAlgorithm {
     private SignalProtocolAddress aliceAddress;
     private SignalProtocolAddress bobAddress;
     
-    private STATE currentState = STATE.PARAMETER;
+    private SignalEncryptionState signalEncryptionState;
 
     
-    public SignalEncryptionAlgorithm() {
+    public SignalEncryptionAlgorithm(STATE state) {
         this.session = new AliceBobSessionBuilder();
         session.createSessionBoth();
         this.bobSessionCipher = session.getBobSessionCipher();
@@ -38,62 +47,34 @@ public class SignalEncryptionAlgorithm {
         
         this.aliceAddress = session.getAliceAddress();
         this.bobAddress = session.getBobAddress();
-
-        this.aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
-        this.bobKeys = new Keys(bobSessionStore, aliceAddress, currentState);
-        this.keys = new Keys(aliceKeys);
-    }
-    
-    public enum STATE {
-        PARAMETER {
-            protected void switchState(SignalEncryptionAlgorithm parent) {
-                parent.keys = new Keys(parent.aliceKeys);
-            }
-            @Override
-            STATE alice(SignalEncryptionAlgorithm parent) {
-                return PARAMETER;
-            }
-            @Override 
-            STATE bob(SignalEncryptionAlgorithm parent) {
-                PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
-                return PRE_KEY_SIGNAL_MESSAGE;
-            }
-        }, PRE_KEY_SIGNAL_MESSAGE {
-            protected void switchState(SignalEncryptionAlgorithm parent) {
-                parent.keys = new Keys(parent.bobKeys);
-            }
-            @Override
-            STATE alice(SignalEncryptionAlgorithm parent) {
-                PARAMETER.switchState(parent);
-                return PARAMETER;
-            }
-            @Override 
-            STATE bob(SignalEncryptionAlgorithm parent) {
-                return PRE_KEY_SIGNAL_MESSAGE;
-            }
-        };
-        protected abstract void switchState(SignalEncryptionAlgorithm parent);
-        abstract STATE alice(SignalEncryptionAlgorithm parent);
-        abstract STATE bob(SignalEncryptionAlgorithm parent);
         
-        public STATE setInitialState(SignalEncryptionAlgorithm parent) {
-            PARAMETER.switchState(parent);
-            return PARAMETER;
-        }
+
+        this.aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
+        this.bobKeys = new Keys(bobSessionStore, aliceAddress, state);   
     }
-    
-    
+
     public Keys getAliceKeys() {
         return aliceKeys;
     }
     public Keys getBobKeys() {
         return bobKeys;
     }
-    public STATE getCurrentState() {
-        return currentState;
+    public PreKeyBundle getAlicePreKeyBundle() {
+        return session.getAlicePreKeyBundle();
     }
-    
-    public void generateBoth() {
+    public PreKeyBundle getBobPreKeyBundle() {
+        return session.getBobPreKeyBundle();
+    }
+    public AliceBobSessionBuilder getSession() {
+        return session;
+    }
+    public SessionCipher getBobSessionCipher() {
+        return bobSessionCipher;
+    }
+    public SessionCipher getAliceSessionCipher() {
+        return aliceSessionCipher;
+    }
+    public void generateBoth(STATE state) {
         session.createSessionBoth();
         bobSessionCipher = session.getBobSessionCipher();
         aliceSessionCipher = session.getAliceSessionCipher();
@@ -104,27 +85,26 @@ public class SignalEncryptionAlgorithm {
         aliceAddress = session.getAliceAddress();
         bobAddress = session.getBobAddress();
 
-        aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
-        bobKeys = new Keys(bobSessionStore, aliceAddress, currentState);
-        keys = new Keys(aliceKeys);
+        aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
+        bobKeys = new Keys(bobSessionStore, aliceAddress, state);
     }
     
-    public void generateAlice() {
+    public void generateAlice(STATE state) {
         session.createSessionAlice();
         
         aliceSessionCipher = session.getAliceSessionCipher();
         aliceSessionStore = session.getAliceSessionStore();
         aliceAddress = session.getAliceAddress();
-        aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
+        aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
     }
     
-    public void generateBob() {
+    public void generateBob(STATE state) {
         session.createSessionBob();
         
         bobSessionCipher = session.getBobSessionCipher();
         bobSessionStore = session.getBobSessionStore();
         bobAddress = session.getBobAddress();
-        bobKeys = new Keys(bobSessionStore, aliceAddress, currentState);
+        bobKeys = new Keys(bobSessionStore, aliceAddress, state);
     }
     
     

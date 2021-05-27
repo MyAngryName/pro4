@@ -52,8 +52,6 @@ public class SignalEncryptionAlgorithm {
         this.aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
         this.bobKeys = new Keys(bobSessionStore, aliceAddress, state);   
     }
-    
-    
 
     public Keys getAliceKeys() {
         return aliceKeys;
@@ -76,8 +74,6 @@ public class SignalEncryptionAlgorithm {
     public SessionCipher getAliceSessionCipher() {
         return aliceSessionCipher;
     }
-    
-    
     public void generateBoth(STATE state) {
         session.createSessionBoth();
         bobSessionCipher = session.getBobSessionCipher();

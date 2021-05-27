@@ -83,6 +83,50 @@ public class Messages extends NLS {
     public static String SignalEncryption_bobDiffieHellmanLabel1;
     public static String SignalEncryption_bobDiffieHellmanLabel2;
     public static String SignalEncryption_bobDiffieHellmanLabel3;
+    
+    public static String SignalEncryption_aliceRootChainLabel1;
+    public static String SignalEncryption_aliceRootChainLabel2;
+    public static String SignalEncryption_aliceRootChainLabel3;
+    public static String SignalEncryption_bobRootChainLabel1;
+    public static String SignalEncryption_bobRootChainLabel2;
+    public static String SignalEncryption_bobRootChainLabel3;
+    
+    public static String SignalEncryption_aliceSendingChainLabel1;
+    public static String SignalEncryption_aliceSendingChainLabel2;
+    public static String SignalEncryption_aliceSendingChainLabel3;
+    public static String SignalEncryption_aliceSendingChainLabel4;
+    public static String SignalEncryption_aliceSendingChainLabel5;
+    public static String SignalEncryption_bobSendingChainLabel1;
+    public static String SignalEncryption_bobSendingChainLabel2;
+    public static String SignalEncryption_bobSendingChainLabel3;
+    public static String SignalEncryption_bobSendingChainLabel4;
+    public static String SignalEncryption_bobSendingChainLabel5;
+    
+    public static String SignalEncryption_aliceReceivingChainLabel1;
+    public static String SignalEncryption_aliceReceivingChainLabel2;
+    public static String SignalEncryption_aliceReceivingChainLabel3;
+    public static String SignalEncryption_aliceReceivingChainLabel4;
+    public static String SignalEncryption_aliceReceivingChainLabel5;
+    public static String SignalEncryption_bobReceivingChainLabel1;
+    public static String SignalEncryption_bobReceivingChainLabel2;
+    public static String SignalEncryption_bobReceivingChainLabel3;
+    public static String SignalEncryption_bobReceivingChainLabel4;
+    public static String SignalEncryption_bobReceivingChainLabel5;
+
+    public static String SignalEncryption_aliceDescriptionText0;
+    public static String SignalEncryption_aliceDescriptionText1;
+    public static String SignalEncryption_aliceDescriptionText2;
+    public static String SignalEncryption_aliceDescriptionText3;
+    public static String SignalEncryption_aliceDescriptionText4;
+    public static String SignalEncryption_aliceDescriptionText5;
+    public static String SignalEncryption_bobDescriptionText0;
+    public static String SignalEncryption_bobDescriptionText1;
+    public static String SignalEncryption_bobDescriptionText2;
+    public static String SignalEncryption_bobDescriptionText3;
+    public static String SignalEncryption_bobDescriptionText4;
+    public static String SignalEncryption_bobDescriptionText5;
+    
+    
 
 //    /**
 //     * SphincsPlusView

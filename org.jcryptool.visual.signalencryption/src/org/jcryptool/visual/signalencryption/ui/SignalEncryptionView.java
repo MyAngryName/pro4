@@ -121,7 +121,7 @@ public class SignalEncryptionView extends ViewPart {
            previousTab = 0;
            break; 
          case 1:
-             doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
+             //doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
              tbtmDoubleRatchet.setControl(doubleRatchetTabComposite);
              previousTab = 1;
         default:

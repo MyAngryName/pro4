@@ -51,8 +51,6 @@ public class SignalEncryptionState {
     private static String parameterAliceRootKey;
     private static String parameterAliceSenderMsgKey;
     private static String parameterAliceReceivingChainKey;
-
-
     
     private static String parameterBobRatchetPrivateKey;
     private static String parameterBobRatchetPublicKey;
@@ -94,6 +92,11 @@ public class SignalEncryptionState {
             protected void switchState(SignalEncryptionState parent) {
                 signalEncryptionAlgorithm = new SignalEncryptionAlgorithm(STATE.PARAMETER);
                 
+                createText();
+                
+            }
+            @Override
+            protected void createText() {
                 parameterAliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize());
                 parameterAliceRatchetPublicKey= ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize());
                 parameterAliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes());
@@ -110,7 +113,7 @@ public class SignalEncryptionState {
                 generate();
             }
             @Override
-            protected void generate() {
+            protected void updateText() {
                 aliceRatchetPrivateKey = parameterAliceRatchetPrivateKey;
                 aliceRatchetPublicKey = parameterAliceRatchetPublicKey;
                 aliceRootKey = parameterAliceRootKey;
@@ -125,6 +128,8 @@ public class SignalEncryptionState {
                 bobReceivingChainKey = parameterBobReceivingChainKey;
                 bobSenderMsgKey = parameterBobSenderMsgKey;
             }
+            
+            
             @Override 
             STATE back(SignalEncryptionState parent) {
                 return PARAMETER;
@@ -140,18 +145,34 @@ public class SignalEncryptionState {
                 try {
                     aliceEncryptedMessage = signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8"));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
-                    generate();
+                    updateText();
                 }
                 try {
                     alicePreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.serialize());
                 } catch (InvalidMessageException | InvalidVersionException e) {
-                    generate();
+                    updateText();
                 }
-                generate();
-                
+                createText();
             }
             @Override
-            protected void generate() {
+            protected void createText() {
+                parameterAliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize());
+                parameterAliceRatchetPublicKey= ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize());
+                parameterAliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes());
+                parameterAliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey());
+                parameterAliceSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded());
+                parameterAliceReceivingChainKey = "No Session initialized";
+                
+                parameterBobRatchetPrivateKey = "No Session initialized";
+                parameterBobRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize());
+                parameterBobRootKey = "No Session initialized";
+                parameterBobSendingChainKey = "No Session initialized";
+                parameterBobReceivingChainKey = "No Session initialized";
+                parameterBobSenderMsgKey = "No Session initialized";
+                updateText();
+            }
+            @Override
+            protected void updateText() {
                 aliceRatchetPrivateKey = parameterAliceRatchetPrivateKey;
                 aliceRatchetPublicKey = parameterAliceRatchetPublicKey;
                 aliceRootKey = parameterAliceRootKey;
@@ -168,14 +189,15 @@ public class SignalEncryptionState {
             }
             @Override
             STATE back(SignalEncryptionState parent) {
-                PARAMETER.generate();
+                PARAMETER.updateText();
                 return PARAMETER;
             }
             @Override 
             STATE next(SignalEncryptionState parent) {
                 RECEIVE_PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
-            } 
+            }
+
         }, RECEIVE_PRE_KEY_SIGNAL_MESSAGE {
             @Override
             protected void switchState(SignalEncryptionState parent) {
@@ -183,8 +205,13 @@ public class SignalEncryptionState {
                     signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage);
                 } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
                         | InvalidKeyIdException | InvalidKeyException | UntrustedIdentityException e) {
-                    generate();
+                    updateText();
                 }
+                createText();
+
+            }
+            @Override
+            protected void createText() {
                 preKeyAliceRatchetPrivateKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize());
                 preKeyAliceRatchetPublicKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize());
                 preKeyAliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes());
@@ -198,10 +225,10 @@ public class SignalEncryptionState {
                 preKeyBobSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey());
                 preKeyBobReceivingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey());
                 preKeyBobSenderMsgKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded());
-                generate();
+                updateText();
             }
             @Override
-            protected void generate() {
+            protected void updateText() {
                 aliceRatchetPrivateKey = preKeyAliceRatchetPrivateKey;
                 aliceRatchetPublicKey = preKeyAliceRatchetPublicKey;
                 aliceRootKey = preKeyAliceRootKey;
@@ -219,7 +246,7 @@ public class SignalEncryptionState {
             }
             @Override
             STATE back(SignalEncryptionState parent) {
-                PRE_KEY_SIGNAL_MESSAGE.generate();
+                PRE_KEY_SIGNAL_MESSAGE.updateText();
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
             @Override 
@@ -228,7 +255,8 @@ public class SignalEncryptionState {
             }
         };
         protected abstract void switchState(SignalEncryptionState parent);
-        protected abstract void generate();
+        protected abstract void updateText();
+        protected abstract void createText();
         abstract STATE next(SignalEncryptionState parent);
         abstract STATE back(SignalEncryptionState parent);
         
@@ -243,7 +271,7 @@ public class SignalEncryptionState {
     public STATE getCurrentState() {
         return currentState;
     }
-    public void currenStateNext(SignalEncryptionState parent) {
+    public void currentStateNext(SignalEncryptionState parent) {
         currentState = currentState.next(parent);
     }
     public void currentStateBack(SignalEncryptionState parent) {
@@ -255,14 +283,13 @@ public class SignalEncryptionState {
     public void generateAlice() {
         if(currentState == STATE.PARAMETER) {
             signalEncryptionAlgorithm.generateAlice(currentState);
-            currentState.generate();
-        }
-
+            currentState.createText();  
+         }
     }
     public void generateBob() {
         if(currentState == STATE.PARAMETER) {
             signalEncryptionAlgorithm.generateBob(currentState);
-            currentState.generate();
+            currentState.createText();
         }
     }
     public SignalEncryptionAlgorithm getSignalEncryptionAlgorithm() {
@@ -272,45 +299,35 @@ public class SignalEncryptionState {
         return aliceRatchetPrivateKey;
     }
     public String getAliceRatchetPublicKey() {
-        return aliceRatchetPrivateKey;
+        return aliceRatchetPublicKey;
     }
-    
     public String getaliceRootKey() {
         return aliceRootKey;
     }
-    
     public String getAliceSendingChainKey() {
         return aliceSendingChainKey;
     }
-    
     public String getAliceSenderMsgKey() {
         return aliceSenderMsgKey;
     }
-    
     public String getAliceReceivingChainKey() {
         return aliceReceivingChainKey;
     }
-    
     public String getBobRatchetPrivateKey() {
         return bobRatchetPrivateKey;
     }
-    
     public String getBobRatchetPublicKey() {
         return bobRatchetPublicKey;
     }
-    
     public String getBobRootKey() {
         return bobRootKey;
     }
-    
     public String getBobSendingChainKey() {
         return bobSendingChainKey;
     }
-    
     public String getBobReceivingChainKey() {
         return bobReceivingChainKey;
     }
-    
     public String getBobSenderMsgKey() {
         return bobSenderMsgKey;
     }

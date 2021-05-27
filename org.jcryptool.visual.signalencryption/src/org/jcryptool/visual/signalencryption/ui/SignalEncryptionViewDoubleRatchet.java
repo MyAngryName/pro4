@@ -217,6 +217,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String bobStep4 = Messages.SignalEncryption_bobDescriptionText4;
     private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
     private String bobStep0 = Messages.SignalEncryption_bobDescriptionText0;
+    private String title = Messages.SignalEncryption_TabTitle2;
+    private String description = Messages.SignalEncryption_TabDesc2;
     
     private int currentState = 0;
 
@@ -332,8 +334,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         case 0: 
                     grp_aliceSteps.setVisible(true);
                     grp_bobSteps.setVisible(true);
-                    txt_aliceStep0.setVisible(true);
-                    txt_bobStep0.setVisible(true);
                     break;
                 
         case 1:     grp_aliceAlgorithm.setVisible(true);
@@ -522,8 +522,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-        titleAndDescription.setTitle("Title");
-        titleAndDescription.setDescription("Description");
+        titleAndDescription.setTitle(title);
+        titleAndDescription.setDescription(description);
     }
 
     private void createMainComposite() {
@@ -577,7 +577,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnPrev = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnPrev.widthHint = 150;
         btn_previous.setLayoutData(gd_btnPrev);
-        btn_previous.setText("Previous");
+        btn_previous.setText("Zurück");
         btn_previous.addSelectionListener(new SelectionAdapter() {
 
             
@@ -596,7 +596,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnNext = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
-        btn_next.setText("Next");
+        btn_next.setText("Weiter");
         btn_next.addSelectionListener(new SelectionAdapter() {
 
             

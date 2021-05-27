@@ -31,6 +31,8 @@ public class Messages extends NLS {
     //Top title
     public static String SignalEncryption_TabTitle;
     public static String SignalEncryption_TabDesc;
+    public static String SignalEncryption_TabTitle2;
+    public static String SignalEncryption_TabDesc2;
     
     //Table Titles
     public static String SignalEncryption_TblTitel_Key;

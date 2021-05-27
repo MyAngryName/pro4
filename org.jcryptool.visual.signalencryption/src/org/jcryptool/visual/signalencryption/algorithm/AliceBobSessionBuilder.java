@@ -3,6 +3,7 @@ package org.jcryptool.visual.signalencryption.algorithm;
 import org.whispersystems.libsignal.InvalidKeyException;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.SessionStore;
 
 
@@ -112,5 +113,10 @@ public class AliceBobSessionBuilder {
     public SignalProtocolAddress getAliceAddress() {
         return bobSession.getRemoteAddress();
     }
-
+    public PreKeyBundle getAlicePreKeyBundle() {
+        return aliceBuiltSession.getPreKeyBundle();
+    }
+    public PreKeyBundle getBobPreKeyBundle() {
+        return bobBuiltSession.getPreKeyBundle();
+    }
 }

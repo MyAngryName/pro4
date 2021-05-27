@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithm.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.util.Hex;
@@ -55,22 +55,14 @@ public class SignalEncryptionViewOverview extends Composite {
     private GridData gd_text;
     private GridData gd_value;
 
-    // Table
-//    private Table keyTable;
-
-    // TableColumn
-//    private TableColumn keyTableColumn;
-
-    // TableItems
-//    private TableItem keyTableItem;
-
     // TableLabels
     private Label label_column;
     private Label text_column;
     private Label value_column_alice;
     private Label value_column_bob;
 
-    private Label label_b;
+    private Label label_b_private;
+    private Label label_b_public;
     private Label label_c;
     private Label label_d;
     private Label label_e;
@@ -79,7 +71,8 @@ public class SignalEncryptionViewOverview extends Composite {
 
     // TableTexts
 
-    private Text text_b;
+    private Text text_b_private;
+    private Text text_b_public;
     private Text text_c;
     private Text text_d;
     private Text text_e;
@@ -87,7 +80,8 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text text_g;
 
     // TableValues
-    private Text value_b_alice;
+    private Text value_b_alice_private;
+    private Text value_b_alice_public;
     private Text value_c_alice;
     private Text value_d_alice;
     private Text value_e_alice;
@@ -95,7 +89,8 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_g_alice;
 
     // TableValues
-    private Text value_b_bob;
+    private Text value_b_bob_private;
+    private Text value_b_bob_public;
     private Text value_c_bob;
     private Text value_d_bob;
     private Text value_e_bob;
@@ -103,8 +98,19 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_g_bob;
     
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
+    private SignalEncryptionState signalEncryptionState;
 
     private Button btn_regenerate;
+    
+    //Variables for the used keys
+    private String aliceRatchetPublicKey;
+    private String aliceRatchetPrivateKey;
+    
+    private String bobRatchetPublicKey;
+    private String bobRatchetPrivateKey;
+    
+    private String aliceSharedKey;
+    private String bobSharedKey;
     
     private String aliceRootKey;
     private String bobRootKey;
@@ -114,16 +120,19 @@ public class SignalEncryptionViewOverview extends Composite {
     
     private String aliceReceivingChainKey;
     private String bobReceivingChainKey;
+    
+    private String aliceSenderMsgKey;
+    private String bobSenderMsgKey;
 
     private Button btn_prekeysignalmessage;
     
     /**
      * 
      **/
-    public SignalEncryptionViewOverview(final Composite parent, int style, 
-            SignalEncryptionAlgorithm signalEncryptionAlgorithm) {
+    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionState signalEncryptionState) {
         super(parent, style);
-        this.signalEncryptionAlgorithm = signalEncryptionAlgorithm;
+        this.signalEncryptionState = signalEncryptionState;
+        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
 
         setLayout(new GridLayout());
 
@@ -134,110 +143,90 @@ public class SignalEncryptionViewOverview extends Composite {
     }
 
     private void createDescriptionGroup() {
-
-//        descriptionGroup = new Group(overViewComposite, SWT.NONE);
         gl_descriptionGroup = new GridLayout(1, false);
         gd_descriptionGroup = new GridData(SWT.FILL, SWT.FILL, false, true);
-
-//        descriptionGroup.setLayout(gl_descriptionGroup);
-//        descriptionGroup.setText("Schl�ssel");
-//        descriptionGroup.setLayoutData(gd_descriptionGroup);
-
     }
 
     private void createTable() {
-
-        // Table Variante
-
-        // keyTable = new Table(parent, SWT.MULTI | SWT.BORDER);
-        // keyTable.setHeaderVisible(true);
-        //
-        // String[] titles = { "Schl�ssel", "Beschreibung", "Wert" };
-        //
-        // for (int i = 0; i < titles.length; i++) {
-        // keyTableColumn = new TableColumn(keyTable, SWT.NONE);
-        // keyTableColumn.setText(titles[i]);
-        // }
-        //
-        // // Loop that inserts inserts data into keyTable
-        // int count = 6;
-        // for (int i = 0; i < count; i++) {
-        // keyTableItem = new TableItem(keyTable, SWT.NONE);
-        // keyTableItem.setText(0, "Schl�sselName");
-        // keyTableItem.setText(1, "Schl�sselBeschreibung");
-        // keyTableItem.setText(2, "Schl�sselWert");
-        // }
-        // for (int i = 0; i < titles.length; i++) {
-        // keyTable.getColumn(i).pack();
-        // }
-        // keyTable.setSize(keyTable.computeSize(SWT.DEFAULT, 200));
-
-        // Label und Text Variante
-        
-
-
         
 
         gd_text = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
         gd_value = gd_text;
         gd_text.widthHint = 300;
 
+        //Title fields of the columns
         label_column = new Label(keyTableGroup, SWT.READ_ONLY | SWT.CENTER);
-        label_column.setText("Schl�ssel");
+        label_column.setText(Messages.SignalEncryption_TblTitel_Key);
 
         text_column = new Label(keyTableGroup, SWT.READ_ONLY | SWT.CENTER);
         text_column.setLayoutData(gd_text);
-        text_column.setText("Beschreibung");
+        text_column.setText(Messages.SignalEncryption_TblTitel_Description);
 
         value_column_alice = new Label(keyTableGroup, SWT.READ_ONLY | SWT.CENTER);
         value_column_alice.setLayoutData(gd_text);
-        value_column_alice.setText("Wert Alice");
+        value_column_alice.setText(Messages.SignalEncryption_TblTitel_ValuesAlice);
         
         value_column_bob = new Label(keyTableGroup, SWT.READ_ONLY | SWT.CENTER);
         value_column_bob.setLayoutData(gd_text);
-        value_column_bob.setText("Wert Bob");
+        value_column_bob.setText(Messages.SignalEncryption_TblTitel_ValuesBob);
 
-        label_b = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_b.setText("Diffie Hellman Key Pair");
+        //First line of the table - DH Private Key
+        label_b_private = new Label(keyTableGroup, SWT.READ_ONLY);
+        label_b_private.setText(Messages.SignalEncryption_KeyName_Diffie_Private);
 
-        text_b = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        text_b.setLayoutData(gd_text);
-        text_b.setText("Besteht aus einem �ffentlichen und privaten Teil.");
+        text_b_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        text_b_private.setLayoutData(gd_text);
+        text_b_private.setText(Messages.SignalEncryption_DescText_Diffie_Private);
 
-        value_b_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_b_alice.setLayoutData(gd_value);
-        value_b_alice.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
+        value_b_alice_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        value_b_alice_private.setLayoutData(gd_value);
+        value_b_alice_private.setText(aliceRatchetPrivateKey); 
         
-        value_b_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_b_bob.setLayoutData(gd_value);
-        value_b_bob.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
+        value_b_bob_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        value_b_bob_private.setLayoutData(gd_value);
+        value_b_bob_private.setText(bobRatchetPrivateKey);
+        
+        //First line of the table - DH Public Key
+        label_b_public = new Label(keyTableGroup, SWT.READ_ONLY);
+        label_b_public.setText(Messages.SignalEncryption_KeyName_Diffie_Public);
 
+        text_b_public = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        text_b_public.setLayoutData(gd_text);
+        text_b_public.setText(Messages.SignalEncryption_DescText_Diffie_Public);
+
+        value_b_alice_public = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        value_b_alice_public.setLayoutData(gd_value);
+        value_b_alice_public.setText(aliceRatchetPublicKey); 
+        
+        value_b_bob_public = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        value_b_bob_public.setLayoutData(gd_value);
+        value_b_bob_public.setText(bobRatchetPublicKey);
+        
+        //Second line of the table - Shared Secret Keys
+        /*
         label_c = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_c.setText("Shared Secret Key");
+        label_c.setText(Messages.SignalEncryption_KeyName_Shared);
 
         text_c = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_c.setLayoutData(gd_text);
-        text_c.setText("Geheimer Schl�ssel der von den Kommunikationspartnern mittels einem "
-                + "vereinbarten Schl�sselaustausch erstellt wird. Dieser Schl�ssel dient als erster Root" + "Key.");
-
+        text_c.setText(Messages.SignalEncryption_DescText_Shared);
+        		
         value_c_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_c_alice.setLayoutData(gd_value);
-        value_c_alice.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
+        value_c_alice.setText(aliceSharedKey);
         
         value_c_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_c_bob.setLayoutData(gd_value);
-        value_c_bob.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
-
+        value_c_bob.setText(bobSharedKey);
+        */
+        
+        //Third line of the table - Root Keys
         label_d = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_d.setText("Root Chain Key");
+        label_d.setText(Messages.SignalEncryption_KeyName_Root);
 
         text_d = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_d.setLayoutData(gd_text);
-        text_d.setText("Der Root Chain Key dient als Schl�ssel f�r die Root Chain.");
+        text_d.setText(Messages.SignalEncryption_DescText_Root);
 
         value_d_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_d_alice.setLayoutData(gd_value);
@@ -247,12 +236,13 @@ public class SignalEncryptionViewOverview extends Composite {
         value_d_bob.setLayoutData(gd_value);
         value_d_bob.setText(bobRootKey);
 
+        //Fourth line of the table - Sending Chain Key
         label_e = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_e.setText("Sending Chain Key");
+        label_e.setText(Messages.SignalEncryption_KeyName_Sending);
 
         text_e = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_e.setLayoutData(gd_text);
-        text_e.setText("Der Sending Chain Key wird verwendet um einen Message Key zu" + "generieren.");
+        text_e.setText(Messages.SignalEncryption_DescText_Sending);
 
         value_e_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_e_alice.setLayoutData(gd_value);
@@ -262,12 +252,13 @@ public class SignalEncryptionViewOverview extends Composite {
         value_e_bob.setLayoutData(gd_value);
         value_e_bob.setText(bobSendingChainKey);
 
+        //Fifth line of the table - Receiving Chain Keys
         label_f = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_f.setText("Receiving Chain Key");
+        label_f.setText(Messages.SignalEncryption_KeyName_Receiving);
 
         text_f = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_f.setLayoutData(gd_text);
-        text_f.setText("Der Receiving Chain Key wird verwendet um einen Message Key zu" + "generieren.");
+        text_f.setText(Messages.SignalEncryption_DescText_Receiving);
 
         value_f_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_f_alice.setLayoutData(gd_value);
@@ -277,46 +268,51 @@ public class SignalEncryptionViewOverview extends Composite {
         value_f_bob.setLayoutData(gd_value);
         value_f_bob.setText(bobReceivingChainKey);
 
+        //Sixt line of the table - Messages Keys
         label_g = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_g.setText("Message Key");
+        label_g.setText(Messages.SignalEncryption_KeyName_MsgKey);
 
         text_g = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         text_g.setLayoutData(gd_text);
-        text_g.setText("Der Message Key ist ein Output aus der Sending Chain bzw. der Receiving"
-                + "Chain und wird verwendet um eine Nachricht zu ver- oder entSchl�sseln.");
+        text_g.setText(Messages.SignalEncryption_DescText_MsgKey);
 
         value_g_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_g_alice.setLayoutData(gd_value);
-        value_g_alice.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
-    
+        value_g_alice.setText(aliceSenderMsgKey);
+        
         value_g_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_g_bob.setLayoutData(gd_value);
-        value_g_bob.setText(
-                "7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF");
+        value_g_bob.setText(bobSenderMsgKey);
         
+        //Button for generating all keys new
         btn_regenerate = new Button(keyTableGroup, SWT.PUSH);
-        btn_regenerate.setText("Generate Keys");
+        btn_regenerate.setText(Messages.SignalEncryption_btn_generateBoth);
         btn_regenerate.addSelectionListener(new SelectionAdapter() {
 
+        	
             @Override
             public void widgetSelected(SelectionEvent e) {
                 generateBoth();                
             }
         });
+        
+        //Button for generating new keys for Alice
         btn_regenerate = new Button(keyTableGroup, SWT.PUSH);
-        btn_regenerate.setText("Generate Alice");
+        btn_regenerate.setText(Messages.SignalEncryption_btn_generateAlice);
         btn_regenerate.addSelectionListener(new SelectionAdapter() {
 
+        	
             @Override
             public void widgetSelected(SelectionEvent e) {
                 generateAlice();                
             }
         });
+        
+        //Button for generation new keys for Bob
         btn_regenerate = new Button(keyTableGroup, SWT.PUSH);
-        btn_regenerate.setText("Generate Bob");
+        btn_regenerate.setText(Messages.SignalEncryption_btn_generateBob);
         btn_regenerate.addSelectionListener(new SelectionAdapter() {
-
+        	
             @Override
             public void widgetSelected(SelectionEvent e) {
                 generateBob();                
@@ -333,7 +329,7 @@ public class SignalEncryptionViewOverview extends Composite {
         gd_keyTableGroup.minimumWidth = 1000;
 
         keyTableGroup.setLayout(gl_keyTableGroup);
-        keyTableGroup.setText("Schl�ssel");
+        keyTableGroup.setText(Messages.SignalEncryption_TblTitel_Key);
         keyTableGroup.setLayoutData(gd_keyTableGroup);
 
         createTable();
@@ -344,8 +340,8 @@ public class SignalEncryptionViewOverview extends Composite {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-        titleAndDescription.setTitle("Title");
-        titleAndDescription.setDescription("Description");
+        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle);
+        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc);
     }
     
     private void createOverViewComposite() {
@@ -361,58 +357,69 @@ public class SignalEncryptionViewOverview extends Composite {
 
     }
     public void generateBoth() {
-        signalEncryptionAlgorithm.generateBoth();
+        signalEncryptionState.generateBoth();
         parameter();
         textReset();
     }
     public void generateAlice() {
-        signalEncryptionAlgorithm.generateAlice();
+        signalEncryptionState.generateAlice();
         parameter();
         textReset();
     }
     public void generateBob() {
-        signalEncryptionAlgorithm.generateBob();
+        signalEncryptionState.generateBob();
         parameter();
         textReset();
     }
     public void textReset() {
+        value_b_alice_private.setText(aliceRatchetPrivateKey); 
+        value_b_alice_public.setText(aliceRatchetPublicKey); 
         value_d_alice.setText(aliceRootKey);
         value_e_alice.setText(aliceSendingChainKey);
         value_f_alice.setText(aliceReceivingChainKey);
-        
+        value_g_alice.setText(aliceSenderMsgKey);
+
+        value_b_bob_private.setText(bobRatchetPrivateKey); 
+        value_b_bob_public.setText(bobRatchetPublicKey); 
         value_d_bob.setText(bobRootKey);
         value_e_bob.setText(bobSendingChainKey);
         value_f_bob.setText(bobReceivingChainKey);
+        value_g_bob.setText(bobSenderMsgKey);
     }
     public void parameter() {
-        if(signalEncryptionAlgorithm.getCurrentState() == STATE.PARAMETER) {
-            aliceRootKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().
-                    getKeyBytes());
-            aliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().
-                            getKey());
-            aliceReceivingChainKey = "No Key received";
-                    
+        aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
+        aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
+        aliceRootKey = signalEncryptionState.getaliceRootKey();
+        aliceSendingChainKey = signalEncryptionState.getAliceSendingChainKey();
+        aliceSenderMsgKey = signalEncryptionState.getAliceSenderMsgKey();
+        aliceReceivingChainKey = signalEncryptionState.getAliceReceivingChainKey();
+        
+        bobRatchetPrivateKey = signalEncryptionState.getBobRatchetPrivateKey();
+        bobRatchetPublicKey = signalEncryptionState.getBobRatchetPublicKey();
+        bobRootKey = signalEncryptionState.getBobRootKey();
+        bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
+        bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
+        bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
+        
 
-            bobRootKey = "No Session initialized";
-            bobSendingChainKey = "No Session initialized";
-            bobReceivingChainKey = "No Session initialized";
-        } else {
-            aliceRootKey = Hex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().
-                    getKeyBytes());
-            aliceSendingChainKey = ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().
-                            getKey());
-            aliceReceivingChainKey = ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().
-                            getKey());
-                    
-
-            bobRootKey = signalEncryptionAlgorithm.getBobKeys().getRootKey().
-                                getKeyBytes().toString();
-            bobSendingChainKey = signalEncryptionAlgorithm.getBobKeys().getChainKey().
-                                getKey().toString();
-            bobReceivingChainKey = signalEncryptionAlgorithm.getAliceKeys().getChainKey().
-                            getKey().toString();
-        }
         
     }
+    /*
+     *     public void textReset() {
+        value_b_alice_private.setText(signalEncryptionState.getAliceRatchetPrivateKey()); 
+        value_b_alice_public.setText(signalEncryptionState.getAliceRatchetPublicKey()); 
+        value_d_alice.setText(signalEncryptionState.getaliceRootKey());
+        value_e_alice.setText(signalEncryptionState.getAliceSendingChainKey());
+        value_f_alice.setText(signalEncryptionState.getAliceSenderMsgKey());
+        value_g_alice.setText(signalEncryptionState.getAliceReceivingChainKey());
+
+        value_b_bob_private.setText(signalEncryptionState.getBobRatchetPrivateKey()); 
+        value_b_bob_public.setText(signalEncryptionState.getBobRatchetPublicKey()); 
+        value_d_bob.setText(signalEncryptionState.getBobRootKey());
+        value_e_bob.setText(signalEncryptionState.getBobSendingChainKey());
+        value_f_bob.setText(signalEncryptionState.getBobReceivingChainKey());
+        value_g_bob.setText(signalEncryptionState.getBobSenderMsgKey());
+    }
+     */
     
 }

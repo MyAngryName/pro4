@@ -78,15 +78,14 @@ public class SignalEncryptionState {
     private static String varBobReceivingChainKey;
     private static String varBobSenderMsgKey;
     
-    private static int indexCounterKeys = 0;
-    private static int indexCounterEncryptedMsg = 0;
-    private static int indexCounterThird = 0;
+    private static int indexCounterKeys ;
+    private static int indexCounterEncryptedMsg ;
+    private static int indexCounterThird ;
+    private static int indexCounterMsg ;
     
     private static List<String> alicePlainTextMessages;
     private static List<String> bobPlainTextMessages;
 
-    
-    private static PreKeySignalMessage tmpPreKeySignalMessage;
     private static SignalMessage tmpSignalMessage;
         
     public SignalEncryptionState() {
@@ -128,6 +127,18 @@ public class SignalEncryptionState {
                 aliceMessage = new ArrayList<String>();
                 bobMessage = new  ArrayList<String>();
                 
+                indexCounterKeys = 0;
+                indexCounterEncryptedMsg = 0;
+                indexCounterThird = 0;
+                indexCounterMsg = 0;
+                
+                alicePlainTextMessages = new ArrayList<String>();
+                bobPlainTextMessages = new ArrayList<String>();
+
+                alicePlainTextMessages.add(indexCounterMsg, "Hello world!");
+                bobPlainTextMessages.add(indexCounterMsg, "Hello world!");
+
+
                 createText();
             }
             @Override
@@ -178,14 +189,13 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    aliceEncryptedMessage.add(indexCounterEncryptedMsg, signalEncryptionAlgorithm.getAliceSessionCipher().
+                    aliceEncryptedMessage.add(indexCounterMsg, signalEncryptionAlgorithm.getAliceSessionCipher().
                             encrypt(alicePlainTextMessages.get(indexCounterEncryptedMsg).getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
                 try {
-                    tmpPreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
-                    alicePreKeySignalMessage =  tmpPreKeySignalMessage;
+                    alicePreKeySignalMessage =  new PreKeySignalMessage(aliceEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
                 } catch (InvalidMessageException | InvalidVersionException e) {
                     updateText();
                 }
@@ -233,6 +243,7 @@ public class SignalEncryptionState {
             @Override 
             STATE next(SignalEncryptionState parent) {
                 indexCounterKeys++;
+                indexCounterMsg++;
                 RECEIVE_PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
             }
@@ -299,7 +310,8 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    bobEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getBobSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    bobEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getBobSessionCipher().
+                            encrypt(bobPlainTextMessages.get(indexCounterMsg).getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
@@ -362,7 +374,8 @@ public class SignalEncryptionState {
                 indexCounterKeys--;
                 indexCounterEncryptedMsg--;
                 indexCounterThird--;
-                if(indexCounterKeys == 2) {
+                indexCounterMsg--;
+                if(indexCounterKeys == 3) {
                     RECEIVE_PRE_KEY_SIGNAL_MESSAGE.updateText();
                     return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
                 } else {
@@ -442,7 +455,8 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    aliceEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    aliceEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getAliceSessionCipher().
+                            encrypt(alicePlainTextMessages.get(indexCounterEncryptedMsg).getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
@@ -494,6 +508,7 @@ public class SignalEncryptionState {
                 indexCounterKeys++;
                 indexCounterEncryptedMsg++;
                 indexCounterThird++;
+                indexCounterMsg++;
                 BOB_RCV_MSG.switchState(parent);
                 return BOB_RCV_MSG;
             }
@@ -568,6 +583,7 @@ public class SignalEncryptionState {
                 indexCounterKeys--;
                 indexCounterEncryptedMsg--;
                 indexCounterThird--;
+                indexCounterMsg--;
                 ALICE_SEND_MSG.updateText();
                 return ALICE_SEND_MSG;
             }
@@ -661,10 +677,10 @@ public class SignalEncryptionState {
         return ToHex.toString(aliceEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
     }
     public void storeAlicePlainTextMessage(String msg) {
-        alicePlainTextMessages.add(indexCounterEncryptedMsg, msg);
+        alicePlainTextMessages.set(indexCounterEncryptedMsg, msg);
     }
     public void storeBobPlainTextMessage(String msg) {
-        bobPlainTextMessages.add(indexCounterEncryptedMsg, msg);
+        bobPlainTextMessages.set(indexCounterEncryptedMsg, msg);
     }
     
 

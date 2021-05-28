@@ -409,7 +409,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         cmp_bob.setLayout(gl_bobComposite);
 
-        grp_bobSteps.setText(stepGroupDescription);
+        grp_bobSteps.setText(signalEncryptionState.getCurrentState().toString());
         grp_bobSteps.setLayout(gl_bobStepsComposite);
         grp_bobSteps.setLayoutData(gd_bobStepsComposite);
         
@@ -1171,6 +1171,26 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             STATE back(SignalEncryptionViewDoubleRatchet parent) {
                 STEP_4.switchState(parent);
                 return STEP_4;
+            }
+            
+        }, STEP_ENDLESS{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet parent) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet parent) {
+                // TODO Auto-generated method stub
+                return null;
             }
             
         };

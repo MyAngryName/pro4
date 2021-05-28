@@ -78,9 +78,12 @@ public class SignalEncryptionState {
     private static String varBobReceivingChainKey;
     private static String varBobSenderMsgKey;
     
-    private static int indexCounterFirst = 0;
-    private static int indexCounterSecond = 0;
+    private static int indexCounterKeys = 0;
+    private static int indexCounterEncryptedMsg = 0;
     private static int indexCounterThird = 0;
+    
+    private static List<String> alicePlainTextMessages;
+    private static List<String> bobPlainTextMessages;
 
     
     private static PreKeySignalMessage tmpPreKeySignalMessage;
@@ -129,36 +132,36 @@ public class SignalEncryptionState {
             }
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                aliceSenderMsgKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                aliceReceivingChainKey.add(indexCounterFirst,"Keine Sitzung begonnen");
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                aliceSenderMsgKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                aliceReceivingChainKey.add(indexCounterKeys,"Keine Sitzung begonnen");
                 
-                bobRatchetPrivateKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                bobRatchetPublicKey.add(indexCounterFirst,ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize()));
-                bobRootKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                bobSendingChainKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                bobReceivingChainKey.add(indexCounterFirst,"Keine Sitzung begonnen");
-                bobSenderMsgKey.add(indexCounterFirst,"Keine Sitzung begonnen");
+                bobRatchetPrivateKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                bobRatchetPublicKey.add(indexCounterKeys,ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize()));
+                bobRootKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                bobSendingChainKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                bobReceivingChainKey.add(indexCounterKeys,"Keine Sitzung begonnen");
+                bobSenderMsgKey.add(indexCounterKeys,"Keine Sitzung begonnen");
                 updateText();
             }
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);
             }
             
             @Override 
@@ -167,7 +170,7 @@ public class SignalEncryptionState {
             }            
             @Override
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
+                indexCounterKeys++;
                 PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
@@ -175,12 +178,13 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    aliceEncryptedMessage.add(signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    aliceEncryptedMessage.add(indexCounterEncryptedMsg, signalEncryptionAlgorithm.getAliceSessionCipher().
+                            encrypt(alicePlainTextMessages.get(indexCounterEncryptedMsg).getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
                 try {
-                    tmpPreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.get(indexCounterSecond).serialize());
+                    tmpPreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
                     alicePreKeySignalMessage =  tmpPreKeySignalMessage;
                 } catch (InvalidMessageException | InvalidVersionException e) {
                     updateText();
@@ -189,46 +193,46 @@ public class SignalEncryptionState {
             }
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, "No Session initialized");
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, "No Session initialized");
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, "No Session initialized");
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize()));
-                bobRootKey.add(indexCounterFirst, "No Session initialized");
-                bobSendingChainKey.add(indexCounterFirst, "No Session initialized");
-                bobReceivingChainKey.add(indexCounterFirst, "No Session initialized");
-                bobSenderMsgKey.add(indexCounterFirst, "No Session initialized");
+                bobRatchetPrivateKey.add(indexCounterKeys, "No Session initialized");
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getSession().getBobPreKeyBundle().getSignedPreKey().serialize()));
+                bobRootKey.add(indexCounterKeys, "No Session initialized");
+                bobSendingChainKey.add(indexCounterKeys, "No Session initialized");
+                bobReceivingChainKey.add(indexCounterKeys, "No Session initialized");
+                bobSenderMsgKey.add(indexCounterKeys, "No Session initialized");
                 updateText();
             }
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);
             }
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
+                indexCounterKeys--;
                 PARAMETER.updateText();
                 return PARAMETER;
             }
             @Override 
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
+                indexCounterKeys++;
                 RECEIVE_PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
             }
@@ -237,7 +241,7 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    bobMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage)));
+                    bobMessage.add(indexCounterEncryptedMsg, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage)));
                 } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
                         | InvalidKeyIdException | InvalidKeyException | UntrustedIdentityException e) {
                     updateText();
@@ -246,48 +250,48 @@ public class SignalEncryptionState {
             }
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
-                bobRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
-                bobSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
-                bobReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                bobSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));
+                bobRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
+                bobRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
+                bobSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                bobReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                bobSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));
                 updateText();
             }
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);
                 
             }
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
+                indexCounterKeys--;
                 PRE_KEY_SIGNAL_MESSAGE.updateText();
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
             @Override 
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
-                indexCounterSecond++;
+                indexCounterKeys++;
+                indexCounterEncryptedMsg++;
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
             }
         }, BOB_SEND_MSG{
@@ -295,13 +299,13 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    bobEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getBobSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    bobEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getBobSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
                 try {
-                    tmpSignalMessage = new SignalMessage(bobEncryptedMessage.get(indexCounterSecond).serialize());
-                    bobSignalMessage.add(indexCounterSecond, tmpSignalMessage);
+                    tmpSignalMessage = new SignalMessage(bobEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
+                    bobSignalMessage.add(indexCounterEncryptedMsg, tmpSignalMessage);
                 } catch (InvalidMessageException | LegacyMessageException e) {
                     updateText();
                 }
@@ -311,43 +315,43 @@ public class SignalEncryptionState {
             @Override
             protected void updateText() {
                 
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);
                 
             }
 
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
-                bobRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
-                bobSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
-                bobReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                bobSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));
+                bobRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
+                bobRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
+                bobSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                bobReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                bobSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));
             }
 
             @Override
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
-                indexCounterSecond++;
+                indexCounterKeys++;
+                indexCounterEncryptedMsg++;
                 indexCounterThird++;
                 ALICE_RCV_MSG.switchState(parent);
                 return ALICE_RCV_MSG;
@@ -355,10 +359,10 @@ public class SignalEncryptionState {
 
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
-                indexCounterSecond--;
+                indexCounterKeys--;
+                indexCounterEncryptedMsg--;
                 indexCounterThird--;
-                if(indexCounterFirst == 2) {
+                if(indexCounterKeys == 2) {
                     RECEIVE_PRE_KEY_SIGNAL_MESSAGE.updateText();
                     return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
                 } else {
@@ -373,7 +377,7 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    aliceMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getAliceSessionCipher().decrypt(bobSignalMessage.get(indexCounterThird))));
+                    aliceMessage.add(indexCounterEncryptedMsg, new String(signalEncryptionAlgorithm.getAliceSessionCipher().decrypt(bobSignalMessage.get(indexCounterThird))));
                 } catch (InvalidMessageException | DuplicateMessageException | LegacyMessageException
                         | NoSessionException | UntrustedIdentityException e) {
                     updateText();
@@ -383,42 +387,42 @@ public class SignalEncryptionState {
 
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);                
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);                
             }
 
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
-                bobRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
-                bobSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
-                bobReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                bobSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));             
+                bobRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
+                bobRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
+                bobSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                bobReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                bobSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));             
             }
 
             @Override
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
-                indexCounterSecond++;
+                indexCounterKeys++;
+                indexCounterEncryptedMsg++;
                 indexCounterThird++;
                 ALICE_SEND_MSG.switchState(parent);
                 return ALICE_SEND_MSG;
@@ -426,8 +430,8 @@ public class SignalEncryptionState {
 
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
-                indexCounterSecond--;
+                indexCounterKeys--;
+                indexCounterEncryptedMsg--;
                 indexCounterThird--;
                 BOB_SEND_MSG.updateText();
                 return BOB_SEND_MSG;
@@ -438,13 +442,13 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    aliceEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    aliceEncryptedMessage.add(indexCounterEncryptedMsg,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
                 try {
                     tmpSignalMessage = new SignalMessage(aliceEncryptedMessage.get(indexCounterThird).serialize());
-                    aliceSignalMessage.add(indexCounterSecond, tmpSignalMessage);
+                    aliceSignalMessage.add(indexCounterEncryptedMsg, tmpSignalMessage);
                 } catch (InvalidMessageException | LegacyMessageException e) {
                     updateText();
                 }
@@ -453,42 +457,42 @@ public class SignalEncryptionState {
 
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);                
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);                
             }
 
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
-                bobRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
-                bobSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
-                bobReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                bobSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));           
+                bobRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
+                bobRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
+                bobSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                bobReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                bobSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));           
             }
 
             @Override
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
-                indexCounterSecond++;
+                indexCounterKeys++;
+                indexCounterEncryptedMsg++;
                 indexCounterThird++;
                 BOB_RCV_MSG.switchState(parent);
                 return BOB_RCV_MSG;
@@ -496,8 +500,8 @@ public class SignalEncryptionState {
 
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
-                indexCounterSecond--;
+                indexCounterKeys--;
+                indexCounterEncryptedMsg--;
                 indexCounterThird--;
                 ALICE_RCV_MSG.updateText();
                 return ALICE_RCV_MSG;
@@ -508,7 +512,7 @@ public class SignalEncryptionState {
             @Override
             protected void switchState(SignalEncryptionState parent) {
                 try {
-                    bobMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(aliceSignalMessage.get(indexCounterThird))));
+                    bobMessage.add(indexCounterEncryptedMsg, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(aliceSignalMessage.get(indexCounterThird))));
                 } catch (InvalidMessageException | DuplicateMessageException | LegacyMessageException
                         | NoSessionException | UntrustedIdentityException e) {
                     updateText();
@@ -518,42 +522,42 @@ public class SignalEncryptionState {
 
             @Override
             protected void updateText() {
-                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterFirst);
-                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterFirst);
-                varAliceRootKey = aliceRootKey.get(indexCounterFirst);
-                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterFirst);
-                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterFirst);
-                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterFirst);
+                varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterKeys);
+                varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterKeys);
+                varAliceRootKey = aliceRootKey.get(indexCounterKeys);
+                varAliceSendingChainKey = aliceSendingChainKey.get(indexCounterKeys);
+                varAliceSenderMsgKey = aliceSenderMsgKey.get(indexCounterKeys);
+                varAliceReceivingChainKey = aliceReceivingChainKey.get(indexCounterKeys);
                 
-                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterFirst);
-                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterFirst);
-                varBobRootKey = bobRootKey.get(indexCounterFirst);
-                varBobSendingChainKey = bobSendingChainKey.get(indexCounterFirst);
-                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterFirst);
-                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);                
+                varBobRatchetPrivateKey = bobRatchetPrivateKey.get(indexCounterKeys);
+                varBobRatchetPublicKey = bobRatchetPublicKey.get(indexCounterKeys);
+                varBobRootKey = bobRootKey.get(indexCounterKeys);
+                varBobSendingChainKey = bobSendingChainKey.get(indexCounterKeys);
+                varBobReceivingChainKey = bobReceivingChainKey.get(indexCounterKeys);
+                varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterKeys);                
             }
 
             @Override
             protected void createText() {
-                aliceRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
-                aliceRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
-                aliceRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
-                aliceSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                aliceSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-                aliceReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                aliceRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
+                aliceRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
+                aliceRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
+                aliceSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                aliceSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getMessageKeys().getCipherKey().getEncoded()));
+                aliceReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
                 
-                bobRatchetPrivateKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
-                bobRatchetPublicKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
-                bobRootKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
-                bobSendingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
-                bobReceivingChainKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
-                bobSenderMsgKey.add(indexCounterFirst, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));             
+                bobRatchetPrivateKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPrivateKey().serialize()));
+                bobRatchetPublicKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRatchetPublicKey().serialize()));
+                bobRootKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getRootKey().getKeyBytes()));
+                bobSendingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getChainKey().getKey()));
+                bobReceivingChainKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getChainKey().getKey()));
+                bobSenderMsgKey.add(indexCounterKeys, ToHex.toString(signalEncryptionAlgorithm.getBobKeys().getMessageKeys().getCipherKey().getEncoded()));             
             }
 
             @Override
             STATE next(SignalEncryptionState parent) {
-                indexCounterFirst++;
-                indexCounterSecond++;
+                indexCounterKeys++;
+                indexCounterEncryptedMsg++;
                 indexCounterThird++;
                 BOB_SEND_MSG.switchState(parent);
                 return BOB_SEND_MSG;
@@ -561,8 +565,8 @@ public class SignalEncryptionState {
 
             @Override
             STATE back(SignalEncryptionState parent) {
-                indexCounterFirst--;
-                indexCounterSecond--;
+                indexCounterKeys--;
+                indexCounterEncryptedMsg--;
                 indexCounterThird--;
                 ALICE_SEND_MSG.updateText();
                 return ALICE_SEND_MSG;
@@ -645,16 +649,23 @@ public class SignalEncryptionState {
         return varBobSenderMsgKey;
     }
     public String getBobMessage() {
-        return bobMessage.get(indexCounterFirst);
+        return bobMessage.get(indexCounterKeys);
     }
     public String getAliceMessage() {
-        return aliceMessage.get(indexCounterFirst);
+        return aliceMessage.get(indexCounterKeys);
     }
     public String getBobEncryptedMessage() {
-        return ToHex.toString(bobEncryptedMessage.get(indexCounterSecond).serialize());
+        return ToHex.toString(bobEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
     }
     public String getAliceEncryptedMessage() {
-        return ToHex.toString(aliceEncryptedMessage.get(indexCounterSecond).serialize());
+        return ToHex.toString(aliceEncryptedMessage.get(indexCounterEncryptedMsg).serialize());
     }
+    public void storeAlicePlainTextMessage(String msg) {
+        alicePlainTextMessages.add(indexCounterEncryptedMsg, msg);
+    }
+    public void storeBobPlainTextMessage(String msg) {
+        bobPlainTextMessages.add(indexCounterEncryptedMsg, msg);
+    }
+    
 
 }

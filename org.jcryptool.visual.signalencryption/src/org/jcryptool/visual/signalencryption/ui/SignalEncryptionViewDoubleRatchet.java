@@ -125,8 +125,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private GridData gd_bobRootChainGroupe;
     private GridData gd_bobSendingChainGroup;
     private GridData gd_bobReceivingChainGroup;
+<<<<<<< HEAD
     
     private STATE currentState = STATE.STEP_0;
+=======
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
 
     private Label lb_aliceDiffieHellman1;
     private Label lb_aliceDiffieHellman2;
@@ -219,7 +222,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String bobStep4 = Messages.SignalEncryption_bobDescriptionText4;
     private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
     private String bobStep0 = Messages.SignalEncryption_bobDescriptionText0;
+<<<<<<< HEAD
+=======
+    private String title = Messages.SignalEncryption_TabTitle2;
+    private String description = Messages.SignalEncryption_TabDesc2;
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
     
+    private int currentState = 0;
+
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
     private SignalEncryptionState signalEncryptionState;
     
@@ -259,17 +269,276 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createAliceComposite();
         createBobComposite();
         showAliceView();
+<<<<<<< HEAD
+=======
+        switchState(currentState);
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
 
         currentState = STATE.STEP_0.setInitialState(this);
 
+    }
+
+    /*
+     * 
+     */
+    private void switchState(int state) {
+        
+        if(state >4) {
+            return;
+        }
+        grp_bobSteps.setVisible(false);
+        grp_bobAlgorithm.setVisible(false);
+        grp_bobSendingChain.setVisible(false);
+        grp_bobReceivingChain.setVisible(false);
+        grp_bobRootChain.setVisible(false);
+        grp_bobDiffieHellman.setVisible(false);
+        lb_bobSendingChain1.setVisible(false);
+        lb_bobSendingChain2.setVisible(false);
+        lb_bobSendingChain3.setVisible(false);
+        lb_bobSendingChain4.setVisible(false);
+        lb_bobSendingChain5.setVisible(false);
+        lb_bobReceivingChain1.setVisible(false);
+        lb_bobReceivingChain2.setVisible(false);
+        lb_bobReceivingChain3.setVisible(false);
+        lb_bobReceivingChain4.setVisible(false);
+        lb_bobReceivingChain5.setVisible(false);
+        lb_bobRootChain1.setVisible(false);
+        lb_bobRootChain2.setVisible(false);
+        lb_bobRootChain3.setVisible(false);
+        lb_bobDiffieHellman1.setVisible(false);
+        lb_bobDiffieHellman2.setVisible(false);
+        lb_bobDiffieHellman3.setVisible(false);
+        grp_aliceAlgorithm.setVisible(false);
+        grp_aliceSteps.setVisible(false);
+        grp_aliceDiffieHellman.setVisible(false);
+        grp_aliceRootChain.setVisible(false);
+        grp_aliceSendingChain.setVisible(false);
+        grp_aliceReceivingChain.setVisible(false);
+        lb_aliceDiffieHellman1.setVisible(false);
+        lb_aliceDiffieHellman2.setVisible(false);
+        lb_aliceDiffieHellman3.setVisible(false);
+        lb_aliceRootChain1.setVisible(false);
+        lb_aliceRootChain2.setVisible(false);
+        lb_aliceRootChain3.setVisible(false);
+        lb_aliceSendingChain1.setVisible(false);
+        lb_aliceSendingChain2.setVisible(false);
+        lb_aliceSendingChain3.setVisible(false);
+        lb_aliceSendingChain4.setVisible(false);
+        lb_aliceSendingChain5.setVisible(false);
+        lb_aliceReceivingChain1.setVisible(false);
+        lb_aliceReceivingChain2.setVisible(false);
+        lb_aliceReceivingChain3.setVisible(false);
+        lb_aliceReceivingChain4.setVisible(false);
+        lb_aliceReceivingChain5.setVisible(false);
+        txt_aliceStep1.setVisible(false);
+        txt_aliceStep2.setVisible(false);
+        txt_aliceStep3.setVisible(false);
+        txt_aliceStep4.setVisible(false);
+        txt_aliceStep5.setVisible(false);
+        txt_aliceStep0.setVisible(false);
+        txt_bobStep1.setVisible(false);
+        txt_bobStep2.setVisible(false);
+        txt_bobStep3.setVisible(false);
+        txt_bobStep4.setVisible(false);
+        txt_bobStep5.setVisible(false);
+        txt_bobStep0.setVisible(false);
+        
+        
+        switch(state) {
+        
+        case 0: 
+                    grp_aliceSteps.setVisible(true);
+                    grp_bobSteps.setVisible(true);
+                    break;
+                
+        case 1:     grp_aliceAlgorithm.setVisible(true);
+                    grp_aliceSteps.setVisible(true);
+                    grp_bobAlgorithm.setVisible(true);
+                    grp_bobSteps.setVisible(true);
+                    grp_aliceDiffieHellman.setVisible(true);
+                    grp_bobDiffieHellman.setVisible(true);
+                    grp_aliceRootChain.setVisible(true);
+                    grp_bobRootChain.setVisible(true);
+                    
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceRootChain1.setVisible(true);
+                    lb_aliceRootChain2.setVisible(true);
+                    lb_aliceRootChain3.setVisible(true);
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobRootChain1.setVisible(true);
+                    lb_bobRootChain2.setVisible(true);
+                    lb_bobRootChain3.setVisible(true);
+                    
+                    txt_aliceStep0.setVisible(true);
+                    txt_bobStep0.setVisible(true);
+                    txt_aliceStep1.setVisible(true);
+                    txt_bobStep1.setVisible(true);
+                    break;
+                    
+        case 2:     grp_aliceAlgorithm.setVisible(true);
+                    grp_aliceSteps.setVisible(true);
+                    grp_aliceDiffieHellman.setVisible(true);
+                    grp_aliceRootChain.setVisible(true);
+                    grp_aliceSendingChain.setVisible(true);
+                    
+                    grp_bobAlgorithm.setVisible(true);
+                    grp_bobSteps.setVisible(true);
+                    grp_bobDiffieHellman.setVisible(true);
+                    grp_bobRootChain.setVisible(true);
+                    grp_bobReceivingChain.setVisible(true);
+                    
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceRootChain1.setVisible(true);
+                    lb_aliceRootChain2.setVisible(true);
+                    lb_aliceRootChain3.setVisible(true);
+                    lb_aliceSendingChain1.setVisible(true);
+                    lb_aliceSendingChain2.setVisible(true);
+                    lb_aliceSendingChain3.setVisible(true);
+                    lb_aliceSendingChain4.setVisible(true);
+                    lb_aliceSendingChain5.setVisible(true);
+                    
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobRootChain1.setVisible(true);
+                    lb_bobRootChain2.setVisible(true);
+                    lb_bobRootChain3.setVisible(true);
+                    lb_bobReceivingChain1.setVisible(true);
+                    lb_bobReceivingChain2.setVisible(true);
+                    lb_bobReceivingChain3.setVisible(true);
+                    lb_bobReceivingChain4.setVisible(true);
+                    lb_bobReceivingChain5.setVisible(true);
+                    
+                    txt_aliceStep0.setVisible(true);
+                    txt_bobStep0.setVisible(true);
+                    txt_aliceStep1.setVisible(true);
+                    txt_bobStep1.setVisible(true);
+                    txt_aliceStep2.setVisible(true);
+                    txt_bobStep2.setVisible(true);
+                    
+                    break;
+                    
+        case 3:     grp_aliceAlgorithm.setVisible(true);
+                    grp_aliceSteps.setVisible(true);
+                    grp_aliceDiffieHellman.setVisible(true);
+                    grp_aliceRootChain.setVisible(true);
+                    grp_aliceSendingChain.setVisible(true);
+                    
+                    grp_bobAlgorithm.setVisible(true);
+                    grp_bobSteps.setVisible(true);
+                    grp_bobDiffieHellman.setVisible(true);
+                    grp_bobRootChain.setVisible(true);
+                    grp_bobReceivingChain.setVisible(true);
+                    
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceRootChain1.setVisible(true);
+                    lb_aliceRootChain2.setVisible(true);
+                    lb_aliceRootChain3.setVisible(true);
+                    lb_aliceSendingChain1.setVisible(true);
+                    lb_aliceSendingChain2.setVisible(true);
+                    lb_aliceSendingChain3.setVisible(true);
+                    lb_aliceSendingChain4.setVisible(true);
+                    lb_aliceSendingChain5.setVisible(true);
+                    lb_aliceDiffieHellman1.setVisible(true);
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceDiffieHellman3.setVisible(true);
+                    
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobRootChain1.setVisible(true);
+                    lb_bobRootChain2.setVisible(true);
+                    lb_bobRootChain3.setVisible(true);
+                    lb_bobReceivingChain1.setVisible(true);
+                    lb_bobReceivingChain2.setVisible(true);
+                    lb_bobReceivingChain3.setVisible(true);
+                    lb_bobReceivingChain4.setVisible(true);
+                    lb_bobReceivingChain5.setVisible(true);
+                    lb_bobDiffieHellman1.setVisible(true);
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobDiffieHellman3.setVisible(true);
+
+                    txt_aliceStep0.setVisible(true);
+                    txt_bobStep0.setVisible(true);
+                    txt_aliceStep1.setVisible(true);
+                    txt_bobStep1.setVisible(true);
+                    txt_aliceStep2.setVisible(true);
+                    txt_bobStep2.setVisible(true);
+                    txt_aliceStep3.setVisible(true);
+                    txt_bobStep3.setVisible(true);
+                    
+                    break;
+                    
+        case 4:     grp_aliceAlgorithm.setVisible(true);
+                    grp_aliceSteps.setVisible(true);
+                    grp_aliceDiffieHellman.setVisible(true);
+                    grp_aliceRootChain.setVisible(true);
+                    grp_aliceSendingChain.setVisible(true);
+                    grp_aliceReceivingChain.setVisible(true);
+                    
+                    grp_bobAlgorithm.setVisible(true);
+                    grp_bobSteps.setVisible(true);
+                    grp_bobDiffieHellman.setVisible(true);
+                    grp_bobRootChain.setVisible(true);
+                    grp_bobReceivingChain.setVisible(true);
+                    grp_bobSendingChain.setVisible(true);
+                    
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceRootChain1.setVisible(true);
+                    lb_aliceRootChain2.setVisible(true);
+                    lb_aliceRootChain3.setVisible(true);
+                    lb_aliceSendingChain1.setVisible(true);
+                    lb_aliceSendingChain2.setVisible(true);
+                    lb_aliceSendingChain3.setVisible(true);
+                    lb_aliceSendingChain4.setVisible(true);
+                    lb_aliceSendingChain5.setVisible(true);
+                    lb_aliceDiffieHellman1.setVisible(true);
+                    lb_aliceDiffieHellman2.setVisible(true);
+                    lb_aliceDiffieHellman3.setVisible(true);
+                    lb_aliceReceivingChain1.setVisible(true);
+                    lb_aliceReceivingChain2.setVisible(true);
+                    lb_aliceReceivingChain3.setVisible(true);
+                    lb_aliceReceivingChain4.setVisible(true);
+                    lb_aliceReceivingChain5.setVisible(true);
+                    
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobRootChain1.setVisible(true);
+                    lb_bobRootChain2.setVisible(true);
+                    lb_bobRootChain3.setVisible(true);
+                    lb_bobReceivingChain1.setVisible(true);
+                    lb_bobReceivingChain2.setVisible(true);
+                    lb_bobReceivingChain3.setVisible(true);
+                    lb_bobReceivingChain4.setVisible(true);
+                    lb_bobReceivingChain5.setVisible(true);
+                    lb_bobDiffieHellman1.setVisible(true);
+                    lb_bobDiffieHellman2.setVisible(true);
+                    lb_bobDiffieHellman3.setVisible(true);
+                    lb_bobSendingChain1.setVisible(true);
+                    lb_bobSendingChain2.setVisible(true);
+                    lb_bobSendingChain3.setVisible(true);
+                    lb_bobSendingChain4.setVisible(true);
+                    lb_bobSendingChain5.setVisible(true);
+
+                    txt_aliceStep0.setVisible(true);
+                    txt_bobStep0.setVisible(true);
+                    txt_aliceStep1.setVisible(true);
+                    txt_bobStep1.setVisible(true);
+                    txt_aliceStep2.setVisible(true);
+                    txt_bobStep2.setVisible(true);
+                    txt_aliceStep3.setVisible(true);
+                    txt_bobStep3.setVisible(true);
+                    txt_aliceStep4.setVisible(true);
+                    txt_bobStep4.setVisible(true);
+                    
+                    break;
+            
+        
+        }
+        
     }
 
     private void setTitleAndDescription() {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-        titleAndDescription.setTitle("Title");
-        titleAndDescription.setDescription("Description");
+        titleAndDescription.setTitle(title);
+        titleAndDescription.setDescription(description);
     }
 
     private void createMainComposite() {
@@ -300,7 +569,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         });
     }
     
+<<<<<<< HEAD
     private void createBobButton(){
+=======
+    protected void createBobButton(){
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         btn_bob = new Button(this, SWT.RIGHT);
         btn_bob.setAlignment(SWT.CENTER);
         gd_btnBob = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
@@ -317,39 +590,69 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
     }
+<<<<<<< HEAD
     private void createPreviousButton() {
+=======
+    protected void createPreviousButton() {
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         btn_previous = new Button(this, SWT.PUSH);
         btn_previous.setAlignment(SWT.CENTER);
         gd_btnPrev = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnPrev.widthHint = 150;
         btn_previous.setLayoutData(gd_btnPrev);
+<<<<<<< HEAD
         btn_previous.setText("Previous");
+=======
+        btn_previous.setText("Zurück");
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         btn_previous.addSelectionListener(new SelectionAdapter() {
 
             
             @Override
             public void widgetSelected(SelectionEvent e) {
+<<<<<<< HEAD
                 currentState = currentState.back(instance);
             }
         });        
     }
     private void createNextButton() {
+=======
+                signalEncryptionState.currentStateBack(signalEncryptionState);
+                if(currentState < 1)
+                    return;
+                switchState(--currentState);
+            }
+        });        
+    }
+    protected void createNextButton() {
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         btn_next = new Button(this, SWT.PUSH);
         btn_next.setAlignment(SWT.CENTER);
         gd_btnNext = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
-        btn_next.setText("Next");
+        btn_next.setText("Weiter");
         btn_next.addSelectionListener(new SelectionAdapter() {
 
             
             @Override
             public void widgetSelected(SelectionEvent e) {
+<<<<<<< HEAD
                 currentState = currentState.next(instance);
          }
         });    
     }
     private void showBobView() {
+=======
+                signalEncryptionState.currenStateNext(signalEncryptionState);
+                if(currentState > 3)
+                    return;
+                switchState(++currentState);
+            }
+        });    
+    }
+    protected void showBobView() {
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         StackLayout layout = (StackLayout) this.cmp_main.getLayout();
         layout.topControl = this.cmp_bob;
         this.cmp_main.layout();
@@ -409,7 +712,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         cmp_bob.setLayout(gl_bobComposite);
 
+<<<<<<< HEAD
         grp_bobSteps.setText(signalEncryptionState.getCurrentState().toString());
+=======
+        grp_bobSteps.setText(stepGroupDescription);
+>>>>>>> c9b4c7de1aa72188fcfa5e89afb35d5d0c51c91b
         grp_bobSteps.setLayout(gl_bobStepsComposite);
         grp_bobSteps.setLayoutData(gd_bobStepsComposite);
         

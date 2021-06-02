@@ -11,13 +11,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE;
 
 /**
  * 
@@ -30,149 +31,148 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private TitleAndDescriptionComposite titleAndDescription;
 
-    private Composite cmp_main;
-    private Composite cmp_alice;
-    private Composite cmp_bob;
+      Composite cmp_main;
+      Composite cmp_alice;
+      Composite cmp_bob;
 
-    private Button btn_alice;
-    private Button btn_bob;
-    private Button btn_next;
-    private Button btn_previous;
+      Button btn_alice;
+      Button btn_bob;
+      Button btn_next;
+      Button btn_previous;
 
-    private Group grp_aliceSteps;
-    private Group grp_aliceAlgorithm;
-    private Group grp_bobSteps;
-    private Group grp_bobAlgorithm;
-    private Group grp_bobSendingChain;
-    private Group grp_bobReceivingChain;
-    private Group grp_bobRootChain;
-    private Group grp_bobDiffieHellman;
-    private Group grp_aliceDiffieHellman;
-    private Group grp_aliceRootChain;
-    private Group grp_aliceSendingChain;
-    private Group grp_aliceReceivingChain;
+      Group grp_aliceSteps;
+      Group grp_aliceAlgorithm;
+      Group grp_bobSteps;
+      Group grp_bobAlgorithm;
+      Group grp_bobSendingChain;
+      Group grp_bobReceivingChain;
+      Group grp_bobRootChain;
+      Group grp_bobDiffieHellman;
+      Group grp_aliceDiffieHellman;
+      Group grp_aliceRootChain;
+      Group grp_aliceSendingChain;
+      Group grp_aliceReceivingChain;
     
-    private Composite cmp_bobAlgorithm;
-    private Composite cmp_bobSteps;
-    private Composite cmp_aliceDiffieHellman;
-    private Composite cmp_aliceRootChain;
-    private Composite cmp_aliceReceivingChain;
-    private Composite cmp_aliceSendingChain;
-    private Composite cmp_bobDiffieHellman;
-    private Composite cmp_bobSendingChain;
-    private Composite cmp_bobReceivingChain;
-    private Composite cmp_bobRootChain;
-    private Composite cmp_aliceAlgorithm;
-    private Composite cmp_aliceSteps;
+      Composite cmp_bobAlgorithm;
+      Composite cmp_bobSteps;
+      Composite cmp_aliceDiffieHellman;
+      Composite cmp_aliceRootChain;
+      Composite cmp_aliceReceivingChain;
+      Composite cmp_aliceSendingChain;
+      Composite cmp_bobDiffieHellman;
+      Composite cmp_bobSendingChain;
+      Composite cmp_bobReceivingChain;
+      Composite cmp_bobRootChain;
+      Composite cmp_aliceAlgorithm;
+      Composite cmp_aliceSteps;
 
-    private String AlgorithmGroupDescription = Messages.SignalEncryption_AlgorithmGroupDescription;
-    private String stepGroupDescription = Messages.SignalEncryption_stepGroupDescription;
-    private String DiffieHellmanGroupDescription = Messages.SignalEncryption_DiffieHellmanGroupDescription;
-    private String RootChainDescription = Messages.SignalEncryption_RootChainDescription;
-    private String SendingChainDescription = Messages.SignalEncryption_SendingChainDescription;
-    private String ReceivingChainDescription = Messages.SignalEncryption_ReceivingChainDescription;
+      String AlgorithmGroupDescription = Messages.SignalEncryption_AlgorithmGroupDescription;
+      String stepGroupDescription = Messages.SignalEncryption_stepGroupDescription;
+      String DiffieHellmanGroupDescription = Messages.SignalEncryption_DiffieHellmanGroupDescription;
+      String RootChainDescription = Messages.SignalEncryption_RootChainDescription;
+      String SendingChainDescription = Messages.SignalEncryption_SendingChainDescription;
+      String ReceivingChainDescription = Messages.SignalEncryption_ReceivingChainDescription;
 
-    private GridLayout gl_parent;
-    private GridLayout gl_aliceDiffieHellmanComposite;
-    private GridLayout gl_aliceComposite;
-    private GridLayout gl_bobComposite;
-    private GridLayout gl_aliceAlgorithmComposite;
-    private GridLayout gl_aliceRootChainComposite;
-    private GridLayout gl_aliceSendingChainComposite;
-    private GridLayout gl_aliceReceivingChainComposite;
-    private GridLayout gl_bobAlgorithmComposite;
-    private GridLayout gl_bobRootChainComposite;
-    private GridLayout gl_bobReceivingChainComposite;
-    private GridLayout gl_bobDiffieHellmanComposite;
-    private GridLayout gl_bobSendingChainComposite;
-    private GridLayout gl_aliceStepsComposite;
-    private GridLayout gl_bobStepsComposite;
-    private GridLayout gl_bobAlgorithmGroup;
-    private GridLayout gl_bobStepsGroup;
-    private GridLayout gl_bobDiffieHellmanGroup;
-    private GridLayout gl_bobRootChainGroup;
-    private GridLayout gl_bobSendingChainGroup;
-    private GridLayout gl_bobReceivingChainGroup;
-    private GridLayout gl_aliceAlgorithmGroup;
-    private GridLayout gl_aliceStepsGroup;
-    private GridLayout gl_aliceDiffieHellmanGroup;
-    private GridLayout gl_aliceRootChainGroup;
-    private GridLayout gl_aliceSendingChainGroup;
-    private GridLayout gl_aliceReceivingChainGroup;
+      GridLayout gl_parent;
+      GridLayout gl_aliceDiffieHellmanComposite;
+      GridLayout gl_aliceComposite;
+      GridLayout gl_bobComposite;
+      GridLayout gl_aliceAlgorithmComposite;
+      GridLayout gl_aliceRootChainComposite;
+      GridLayout gl_aliceSendingChainComposite;
+      GridLayout gl_aliceReceivingChainComposite;
+      GridLayout gl_bobAlgorithmComposite;
+      GridLayout gl_bobRootChainComposite;
+      GridLayout gl_bobReceivingChainComposite;
+      GridLayout gl_bobDiffieHellmanComposite;
+      GridLayout gl_bobSendingChainComposite;
+      GridLayout gl_aliceStepsComposite;
+      GridLayout gl_bobStepsComposite;
+      GridLayout gl_bobAlgorithmGroup;
+      GridLayout gl_bobStepsGroup;
+      GridLayout gl_bobDiffieHellmanGroup;
+      GridLayout gl_bobRootChainGroup;
+      GridLayout gl_bobSendingChainGroup;
+      GridLayout gl_bobReceivingChainGroup;
+      GridLayout gl_aliceAlgorithmGroup;
+      GridLayout gl_aliceStepsGroup;
+      GridLayout gl_aliceDiffieHellmanGroup;
+      GridLayout gl_aliceRootChainGroup;
+      GridLayout gl_aliceSendingChainGroup;
+      GridLayout gl_aliceReceivingChainGroup;
 
-    private GridData gd_aliceAlgorithmComposite;
-    private GridData gd_aliceStepsComposite;
+      GridData gd_aliceAlgorithmComposite;
+      GridData gd_aliceStepsComposite;
 
-    private GridData gd_bobAlgorithmComposite;
-    private GridData gd_bobStepsComposite;
-    private GridData gd_btnAlice;
-    private GridData gd_btnBob; 
-    private GridData gd_btnNext;
-    private GridData gd_btnPrev;
-    private GridData gd_aliceDiffieHellmanComposite;
-    private GridData gd_aliceRootChainComposite;
-    private GridData gd_aliceSendingChainComposite;
-    private GridData gd_aliceReceivingChainComposite;
-    private GridData gd_algorithmLabels;
-    private GridData gd_descriptionTexts;
-    private GridData gd_bobDiffieHellmanComposite;
-    private GridData gd_bobRootChainComposite;
-    private GridData gd_bobSendingChainComposite;
-    private GridData gd_bobReceivingChainComposite;
-    private GridData gd_bobAlgorithmGroup;
-    private GridData gd_bobStepsGroup;
-    private GridData gd_bobDiffieHellmanGroup;
-    private GridData gd_bobRootChainGroupe;
-    private GridData gd_bobSendingChainGroup;
-    private GridData gd_bobReceivingChainGroup;
+      GridData gd_bobAlgorithmComposite;
+      GridData gd_bobStepsComposite;
+      GridData gd_btnAlice;
+      GridData gd_btnBob; 
+      GridData gd_btnNext;
+      GridData gd_btnPrev;
+      GridData gd_aliceDiffieHellmanComposite;
+      GridData gd_aliceRootChainComposite;
+      GridData gd_aliceSendingChainComposite;
+      GridData gd_aliceReceivingChainComposite;
+      GridData gd_algorithmLabels;
+      GridData gd_descriptionTexts;
+      GridData gd_bobDiffieHellmanComposite;
+      GridData gd_bobRootChainComposite;
+      GridData gd_bobSendingChainComposite;
+      GridData gd_bobReceivingChainComposite;
+      GridData gd_bobAlgorithmGroup;
+      GridData gd_bobStepsGroup;
+      GridData gd_bobDiffieHellmanGroup;
+      GridData gd_bobRootChainGroupe;
+      GridData gd_bobSendingChainGroup;
+      GridData gd_bobReceivingChainGroup;
     
-    private STATE currentState = STATE.STEP_0;
 
-    private Label lb_aliceDiffieHellman1;
-    private Label lb_aliceDiffieHellman2;
-    private Label lb_aliceDiffieHellman3;
-    private Label lb_bobDiffieHellman1;
-    private Label lb_bobDiffieHellman2;
-    private Label lb_bobDiffieHellman3;
-    private Label lb_aliceRootChain1;
-    private Label lb_aliceRootChain2;
-    private Label lb_aliceRootChain3;
-    private Label lb_aliceSendingChain1;
-    private Label lb_aliceSendingChain2;
-    private Label lb_aliceSendingChain3;
-    private Label lb_aliceSendingChain4;
-    private Label lb_aliceSendingChain5;
-    private Label lb_aliceReceivingChain1;
-    private Label lb_aliceReceivingChain2;
-    private Label lb_aliceReceivingChain3;
-    private Label lb_aliceReceivingChain4;
-    private Label lb_aliceReceivingChain5;
-    private Label lb_bobRootChain1;
-    private Label lb_bobRootChain2;
-    private Label lb_bobRootChain3;
-    private Label lb_bobSendingChain1;
-    private Label lb_bobSendingChain2;
-    private Label lb_bobSendingChain3;
-    private Label lb_bobSendingChain4;
-    private Label lb_bobSendingChain5;
-    private Label lb_bobReceivingChain1;
-    private Label lb_bobReceivingChain2;
-    private Label lb_bobReceivingChain3;
-    private Label lb_bobReceivingChain4;
-    private Label lb_bobReceivingChain5;
+      Label lb_aliceDiffieHellman1;
+      Label lb_aliceDiffieHellman2;
+      Label lb_aliceDiffieHellman3;
+      Label lb_bobDiffieHellman1;
+      Label lb_bobDiffieHellman2;
+      Label lb_bobDiffieHellman3;
+      Label lb_aliceRootChain1;
+      Label lb_aliceRootChain2;
+      Label lb_aliceRootChain3;
+      Label lb_aliceSendingChain1;
+      Label lb_aliceSendingChain2;
+      Label lb_aliceSendingChain3;
+      Label lb_aliceSendingChain4;
+      Label lb_aliceSendingChain5;
+      Label lb_aliceReceivingChain1;
+      Label lb_aliceReceivingChain2;
+      Label lb_aliceReceivingChain3;
+      Label lb_aliceReceivingChain4;
+      Label lb_aliceReceivingChain5;
+      Label lb_bobRootChain1;
+      Label lb_bobRootChain2;
+      Label lb_bobRootChain3;
+      Label lb_bobSendingChain1;
+      Label lb_bobSendingChain2;
+      Label lb_bobSendingChain3;
+      Label lb_bobSendingChain4;
+      Label lb_bobSendingChain5;
+      Label lb_bobReceivingChain1;
+      Label lb_bobReceivingChain2;
+      Label lb_bobReceivingChain3;
+      Label lb_bobReceivingChain4;
+      Label lb_bobReceivingChain5;
     
-    private Text txt_aliceStep1;
-    private Text txt_aliceStep2;
-    private Text txt_aliceStep3;
-    private Text txt_aliceStep4;
-    private Text txt_aliceStep5;
-    private Text txt_aliceStep0;
-    private Text txt_bobStep1;
-    private Text txt_bobStep2;
-    private Text txt_bobStep3;
-    private Text txt_bobStep4;
-    private Text txt_bobStep5;
-    private Text txt_bobStep0;
+      Text txt_aliceStep1;
+      Text txt_aliceStep2;
+      Text txt_aliceStep3;
+      Text txt_aliceStep4;
+      Text txt_aliceStep5;
+      Text txt_aliceStep0;
+      Text txt_bobStep1;
+      Text txt_bobStep2;
+      Text txt_bobStep3;
+      Text txt_bobStep4;
+      Text txt_bobStep5;
+      Text txt_bobStep0;
     
 
     private String aliceDiffieHellmanLabel1 = Messages.SignalEncryption_aliceDiffieHellmanLabel1;
@@ -221,13 +221,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String bobStep0 = Messages.SignalEncryption_bobDescriptionText0;
     
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
-    private SignalEncryptionState signalEncryptionState;
+    SignalEncryptionAlgorithmState signalEncryptionState;
     
     private SignalEncryptionViewDoubleRatchet instance;
     
+    STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
 
 
-    SignalEncryptionViewDoubleRatchet(Composite parent, int style, SignalEncryptionState signalEncryptionState) {
+    SignalEncryptionViewDoubleRatchet(Composite parent, int style, SignalEncryptionAlgorithmState signalEncryptionState) {
         super(parent, style);
         
         this.signalEncryptionState= signalEncryptionState;
@@ -848,341 +849,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_aliceStep5.setText(aliceStep5);
         txt_aliceStep5.setLayoutData(gd_descriptionTexts);
     }
-    public enum STATE {
-        STEP_0{
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                
-                // Hide these Elements
-                parent.grp_bobSteps.setVisible(false);
-                parent.grp_bobAlgorithm.setVisible(false);
-                parent.grp_bobSendingChain.setVisible(false);
-                parent.grp_bobReceivingChain.setVisible(false);
-                parent.grp_bobRootChain.setVisible(false);
-                parent.grp_bobDiffieHellman.setVisible(false);
-                parent.lb_bobSendingChain1.setVisible(false);
-                parent.lb_bobSendingChain2.setVisible(false);
-                parent.lb_bobSendingChain3.setVisible(false);
-                parent.lb_bobSendingChain4.setVisible(false);
-                parent.lb_bobSendingChain5.setVisible(false);
-                parent.lb_bobReceivingChain1.setVisible(false);
-                parent.lb_bobReceivingChain2.setVisible(false);
-                parent.lb_bobReceivingChain3.setVisible(false);
-                parent.lb_bobReceivingChain4.setVisible(false);
-                parent.lb_bobReceivingChain5.setVisible(false);
-                parent.lb_bobRootChain1.setVisible(false);
-                parent.lb_bobRootChain2.setVisible(false);
-                parent.lb_bobRootChain3.setVisible(false);
-                parent.lb_bobDiffieHellman1.setVisible(false);
-                parent.lb_bobDiffieHellman2.setVisible(false);
-                parent.lb_bobDiffieHellman3.setVisible(false);
-                parent.grp_aliceAlgorithm.setVisible(false);
-                parent.grp_aliceSteps.setVisible(false);
-                parent.grp_aliceDiffieHellman.setVisible(false);
-                parent.grp_aliceRootChain.setVisible(false);
-                parent.grp_aliceSendingChain.setVisible(false);
-                parent.grp_aliceReceivingChain.setVisible(false);
-                parent.lb_aliceDiffieHellman1.setVisible(false);
-                parent.lb_aliceDiffieHellman2.setVisible(false);
-                parent.lb_aliceDiffieHellman3.setVisible(false);
-                parent.lb_aliceRootChain1.setVisible(false);
-                parent.lb_aliceRootChain2.setVisible(false);
-                parent.lb_aliceRootChain3.setVisible(false);
-                parent.lb_aliceSendingChain1.setVisible(false);
-                parent.lb_aliceSendingChain2.setVisible(false);
-                parent.lb_aliceSendingChain3.setVisible(false);
-                parent.lb_aliceSendingChain4.setVisible(false);
-                parent.lb_aliceSendingChain5.setVisible(false);
-                parent.lb_aliceReceivingChain1.setVisible(false);
-                parent.lb_aliceReceivingChain2.setVisible(false);
-                parent.lb_aliceReceivingChain3.setVisible(false);
-                parent.lb_aliceReceivingChain4.setVisible(false);
-                parent.lb_aliceReceivingChain5.setVisible(false);
-                parent.txt_aliceStep1.setVisible(false);
-                parent.txt_aliceStep2.setVisible(false);
-                parent.txt_aliceStep3.setVisible(false);
-                parent.txt_aliceStep4.setVisible(false);
-                parent.txt_aliceStep5.setVisible(false);
-                parent.txt_aliceStep0.setVisible(false);
-                parent.txt_bobStep1.setVisible(false);
-                parent.txt_bobStep2.setVisible(false);
-                parent.txt_bobStep3.setVisible(false);
-                parent.txt_bobStep4.setVisible(false);
-                parent.txt_bobStep5.setVisible(false);
-                parent.txt_bobStep0.setVisible(false);
-            }
 
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_1.switchState(parent);
-                return STEP_1;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                return STEP_0;
-            }
-            
-        }, STEP_1 {
-
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                // Show these labels
-                parent.grp_aliceSteps.setVisible(true);
-                parent.grp_bobSteps.setVisible(true);
-                
-                parent.txt_aliceStep0.setVisible(true);
-                parent.txt_bobStep0.setVisible(true);
-                
-                
-                // Hide these Elements
-                parent.grp_aliceAlgorithm.setVisible(false);
-                parent.grp_bobAlgorithm.setVisible(false);
-                parent.grp_aliceDiffieHellman.setVisible(false);
-                parent.grp_bobDiffieHellman.setVisible(false);
-                parent.grp_aliceRootChain.setVisible(false);
-                parent.grp_bobRootChain.setVisible(false);
-                
-                parent.lb_aliceDiffieHellman2.setVisible(false);
-                parent.lb_aliceRootChain1.setVisible(false);
-                parent.lb_aliceRootChain2.setVisible(false);
-                parent.lb_aliceRootChain3.setVisible(false);
-                parent.lb_bobDiffieHellman2.setVisible(false);
-                parent.lb_bobRootChain1.setVisible(false);
-                parent.lb_bobRootChain2.setVisible(false);
-                parent.lb_bobRootChain3.setVisible(false);
-                
-                parent.txt_aliceStep1.setVisible(false);
-                parent.txt_bobStep1.setVisible(false);
-            }
-
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.stepForward(parent.signalEncryptionState);
-                STEP_2.switchState(parent);
-                return STEP_2;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.stepBack(parent.signalEncryptionState);
-                STEP_0.switchState(parent);
-                return STEP_0;
-            }
-            
-        }, STEP_2 {
-
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                
-                // Show these labels
-                parent.grp_aliceAlgorithm.setVisible(true);
-                parent.grp_bobAlgorithm.setVisible(true);
-                parent.grp_aliceDiffieHellman.setVisible(true);
-                parent.grp_bobDiffieHellman.setVisible(true);
-                parent.grp_aliceRootChain.setVisible(true);
-                parent.grp_bobRootChain.setVisible(true);
-                
-                parent.lb_aliceDiffieHellman2.setVisible(true);
-                parent.lb_aliceRootChain1.setVisible(true);
-                parent.lb_aliceRootChain2.setVisible(true);
-                parent.lb_aliceRootChain3.setVisible(true);
-                parent.lb_bobDiffieHellman2.setVisible(true);
-                parent.lb_bobRootChain1.setVisible(true);
-                parent.lb_bobRootChain2.setVisible(true);
-                parent.lb_bobRootChain3.setVisible(true);
-                
-
-                parent.txt_aliceStep1.setVisible(true);
-                parent.txt_bobStep1.setVisible(true);
-                
-                // Hide these Elements
-                parent.grp_aliceSendingChain.setVisible(false);
-                
-                parent.grp_bobReceivingChain.setVisible(false);
-                
-                parent.lb_aliceSendingChain1.setVisible(false);
-                parent.lb_aliceSendingChain2.setVisible(false);
-                parent.lb_aliceSendingChain3.setVisible(false);
-                parent.lb_aliceSendingChain4.setVisible(false);
-                parent.lb_aliceSendingChain5.setVisible(false);
-                
-                parent.lb_bobReceivingChain1.setVisible(false);
-                parent.lb_bobReceivingChain2.setVisible(false);
-                parent.lb_bobReceivingChain3.setVisible(false);
-                parent.lb_bobReceivingChain4.setVisible(false);
-                parent.lb_bobReceivingChain5.setVisible(false);
-                
-                parent.txt_aliceStep2.setVisible(false);
-                parent.txt_bobStep2.setVisible(false);
-            }
-
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.stepForward(parent.signalEncryptionState);
-                STEP_3.switchState(parent);
-                return STEP_3;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                parent.signalEncryptionState.stepBack(parent.signalEncryptionState);
-                STEP_1.switchState(parent);
-                return STEP_1;
-            }
-            
-        }, STEP_3{
-
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                
-                // Show these labels
-                parent.grp_aliceDiffieHellman.setVisible(true);
-                parent.grp_aliceRootChain.setVisible(true);
-                parent.grp_aliceSendingChain.setVisible(true);
-                
-                parent.grp_bobReceivingChain.setVisible(true);
-                
-                parent.lb_aliceSendingChain1.setVisible(true);
-                parent.lb_aliceSendingChain2.setVisible(true);
-                parent.lb_aliceSendingChain3.setVisible(true);
-                parent.lb_aliceSendingChain4.setVisible(true);
-                parent.lb_aliceSendingChain5.setVisible(true);
-                
-                parent.lb_bobReceivingChain1.setVisible(true);
-                parent.lb_bobReceivingChain2.setVisible(true);
-                parent.lb_bobReceivingChain3.setVisible(true);
-                parent.lb_bobReceivingChain4.setVisible(true);
-                parent.lb_bobReceivingChain5.setVisible(true);
-                
-                parent.txt_aliceStep2.setVisible(true);
-                parent.txt_bobStep2.setVisible(true);
-                
-                
-                // Hide these Elements            
-                parent.lb_aliceDiffieHellman1.setVisible(false);
-                parent.lb_aliceDiffieHellman2.setVisible(false);
-                parent.lb_aliceDiffieHellman3.setVisible(false);
-                
-                parent.lb_bobDiffieHellman1.setVisible(false);
-                parent.lb_bobDiffieHellman2.setVisible(false);
-                parent.lb_bobDiffieHellman3.setVisible(false);
-
-                parent.txt_aliceStep3.setVisible(false);
-                parent.txt_bobStep3.setVisible(false);
-            }
-
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_4.switchState(parent);
-                return STEP_4;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_2.switchState(parent);
-                return STEP_2;
-            }
-            
-        }, STEP_4 {
-
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                
-                // Show these labels
-                parent.lb_aliceDiffieHellman1.setVisible(true);
-                parent.lb_aliceDiffieHellman2.setVisible(true);
-                parent.lb_aliceDiffieHellman3.setVisible(true);
-                
-                parent.lb_bobDiffieHellman1.setVisible(true);
-                parent.lb_bobDiffieHellman2.setVisible(true);
-                parent.lb_bobDiffieHellman3.setVisible(true);
-
-                parent.txt_aliceStep3.setVisible(true);
-                parent.txt_bobStep3.setVisible(true);
-                
-                
-                // Hide these Elements
-                parent.grp_aliceReceivingChain.setVisible(false);
-                
-                parent.grp_bobSendingChain.setVisible(false);
-                
-                parent.lb_aliceReceivingChain1.setVisible(false);
-                parent.lb_aliceReceivingChain2.setVisible(false);
-                parent.lb_aliceReceivingChain3.setVisible(false);
-                parent.lb_aliceReceivingChain4.setVisible(false);
-                parent.lb_aliceReceivingChain5.setVisible(false);
-                
-                parent.lb_bobSendingChain1.setVisible(false);
-                parent.lb_bobSendingChain2.setVisible(false);
-                parent.lb_bobSendingChain3.setVisible(false);
-                parent.lb_bobSendingChain4.setVisible(false);
-                parent.lb_bobSendingChain5.setVisible(false);
-
-                parent.txt_aliceStep4.setVisible(false);
-                parent.txt_bobStep4.setVisible(false);
-            }
-
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_5.switchState(parent);
-                return STEP_5;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_3.switchState(parent);
-                return STEP_3;
-            }
-            
-        }, STEP_5 {
-
-            @Override
-            protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
-                
-                // Show these labels
-                parent.grp_aliceReceivingChain.setVisible(true);
-                
-                parent.grp_bobSendingChain.setVisible(true);
-                
-                parent.lb_aliceReceivingChain1.setVisible(true);
-                parent.lb_aliceReceivingChain2.setVisible(true);
-                parent.lb_aliceReceivingChain3.setVisible(true);
-                parent.lb_aliceReceivingChain4.setVisible(true);
-                parent.lb_aliceReceivingChain5.setVisible(true);
-                
-                parent.lb_bobSendingChain1.setVisible(true);
-                parent.lb_bobSendingChain2.setVisible(true);
-                parent.lb_bobSendingChain3.setVisible(true);
-                parent.lb_bobSendingChain4.setVisible(true);
-                parent.lb_bobSendingChain5.setVisible(true);
-
-                parent.txt_aliceStep4.setVisible(true);
-                parent.txt_bobStep4.setVisible(true);
-                
-            }
-
-            @Override
-            STATE next(SignalEncryptionViewDoubleRatchet parent) {
-                return STEP_5;
-            }
-
-            @Override
-            STATE back(SignalEncryptionViewDoubleRatchet parent) {
-                STEP_4.switchState(parent);
-                return STEP_4;
-            }
-            
-        };
-        
-        protected abstract void switchState(SignalEncryptionViewDoubleRatchet parent);
-        abstract STATE next(SignalEncryptionViewDoubleRatchet parent);
-        abstract STATE back(SignalEncryptionViewDoubleRatchet parent);
-        public STATE setInitialState(SignalEncryptionViewDoubleRatchet parent) {
-            STEP_0.switchState(parent);
-            return STEP_0;
-        }
-    }
     
     
 }

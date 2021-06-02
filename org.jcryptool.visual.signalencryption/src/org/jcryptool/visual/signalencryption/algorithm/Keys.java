@@ -1,6 +1,6 @@
 package org.jcryptool.visual.signalencryption.algorithm;
 
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.ecc.ECPrivateKey;
 import org.whispersystems.libsignal.ecc.ECPublicKey;

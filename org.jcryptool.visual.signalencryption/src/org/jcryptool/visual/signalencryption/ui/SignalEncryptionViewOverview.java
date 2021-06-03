@@ -137,7 +137,7 @@ public class SignalEncryptionViewOverview extends Composite {
         setLayout(new GridLayout());
 
         setTitleAndDescription();
-        parameter();
+        setParameter();
         createOverViewComposite();
 
     }
@@ -358,17 +358,17 @@ public class SignalEncryptionViewOverview extends Composite {
     }
     public void generateBoth() {
         signalEncryptionState.generateBoth();
-        parameter();
+        setParameter();
         textReset();
     }
     public void generateAlice() {
         signalEncryptionState.generateAlice();
-        parameter();
+        setParameter();
         textReset();
     }
     public void generateBob() {
         signalEncryptionState.generateBob();
-        parameter();
+        setParameter();
         textReset();
     }
     public void textReset() {

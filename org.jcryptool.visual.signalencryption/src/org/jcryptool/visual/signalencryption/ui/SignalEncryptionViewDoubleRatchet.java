@@ -63,7 +63,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Composite cmp_aliceMessageBox;
     Composite cmp_bobMessageBox;
 
-    String AlgorithmGroupDescription = Messages.SignalEncryption_AlgorithmGroupDescription;
+    String aliceAlgorithmGroupDescription = Messages.SignalEncryption_alice_AlgorithmGroupDescription;
+    String bobAlgorithmGroupDescription = Messages.SignalEncryption_bob_AlgorithmGroupDescription;
     String stepGroupDescription = Messages.SignalEncryption_stepGroupDescription;
     String DiffieHellmanGroupDescription = Messages.SignalEncryption_DiffieHellmanGroupDescription;
     String RootChainDescription = Messages.SignalEncryption_RootChainDescription;
@@ -166,13 +167,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Text txt_step2;
     Text txt_step3;
     Text txt_step4;
-    Text txt_step5;
+    Text txt_aliceStep5;
 
+    Text txt_bobStep5;
     Text txt_step6;
     Text txt_step7;
     Text txt_step8;
-    Text txt_step9;
-    // Text txt_bobStep5;
+    protected Text txt_step9;
 
     Text txt_alicePlainText;
     Text txt_aliceCipherText;
@@ -213,16 +214,17 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String bobReceivingChainLabel5 = Messages.SignalEncryption_bobReceivingChainLabel5;
 
     private String aliceStep0 = Messages.SignalEncryption_aliceDescriptionText0;
-    private String step1 = Messages.SignalEncryption_aliceDescriptionText1;
-    private String step2 = Messages.SignalEncryption_aliceDescriptionText2;
-    private String step3 = Messages.SignalEncryption_aliceDescriptionText3;
-    private String step4 = Messages.SignalEncryption_aliceDescriptionText4;
-    private String step5 = Messages.SignalEncryption_aliceDescriptionText5;
     private String bobStep0 = Messages.SignalEncryption_bobDescriptionText0;
-    private String step6 = Messages.SignalEncryption_bobDescriptionText1;
-    private String step7 = Messages.SignalEncryption_bobDescriptionText2;
-    private String step8 = Messages.SignalEncryption_bobDescriptionText3;
-    private String step9 = Messages.SignalEncryption_bobDescriptionText4;
+    private String step1 = Messages.SignalEncryption_stepText1;
+    private String step2 = Messages.SignalEncryption_stepText2;
+    private String step3 = Messages.SignalEncryption_stepText3;
+    private String step4 = Messages.SignalEncryption_stepText4;
+    private String aliceStep5 = Messages.SignalEncryption_aliceStepText5;
+    private String bobStep5 = Messages.SignalEncryption_bobStepText5;
+    private String step6 = Messages.SignalEncryption_stepText6;
+    private String step7 = Messages.SignalEncryption_stepText7;
+    private String step8 = Messages.SignalEncryption_stepText8;
+    private String step9 = Messages.SignalEncryption_stepText9;
     // private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
     private String MessageBoxPlainText = "Geben Sie hier Ihre Nachricht an Bob ein.";
     private String MessageBoxCipherText = "The Ciphertext";
@@ -233,6 +235,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private SignalEncryptionViewDoubleRatchet instance;
 
     org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
+
+
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
             SignalEncryptionAlgorithmState signalEncryptionState) {
@@ -251,11 +255,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_algorithmLabels.verticalIndent = 40;
         gd_algorithmLabels.horizontalIndent = 10;
         gd_algorithmLabels.widthHint = 150;
-        gd_algorithmLabels.heightHint = 70;
+        gd_algorithmLabels.heightHint = 60;
 
         // style data for the description texts
         gd_descriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
         gd_descriptionTexts.minimumWidth = 600;
+        gd_descriptionTexts.minimumHeight = 30;
 
         // style data for message box
         gd_MessageBox = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
@@ -270,8 +275,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createBobComposite();
         showAliceView();
 
-        currentState = org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE.STEP_0
-                .setInitialState(this);
+        currentState = org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE.STEP_0.setInitialState(this);
 
     }
 
@@ -436,7 +440,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_bobSteps.setLayout(gl_bobStepsComposite);
         cmp_bobSteps.setLayoutData(gd_bobStepsComposite);
 
-        grp_bobAlgorithm.setText(AlgorithmGroupDescription);
+        grp_bobAlgorithm.setText(bobAlgorithmGroupDescription);
         grp_bobAlgorithm.setLayout(gl_bobAlgorithmComposite);
         grp_bobAlgorithm.setLayoutData(gd_bobAlgorithmComposite);
 
@@ -472,6 +476,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_bobStep0 = new Text(cmp_bobSteps, SWT.NONE | SWT.WRAP);
         txt_bobStep0.setText(bobStep0);
         txt_bobStep0.setLayoutData(gd_descriptionTexts);
+        txt_bobStep5 = new Text(cmp_bobSteps, SWT.NONE | SWT.WRAP);
+        txt_bobStep5.setText(bobStep5);
+        txt_bobStep5.setLayoutData(gd_descriptionTexts);
         txt_step6 = new Text(cmp_bobSteps, SWT.NONE | SWT.WRAP);
         txt_step6.setText(step6);
         txt_step6.setLayoutData(gd_descriptionTexts);
@@ -484,10 +491,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_step9 = new Text(cmp_bobSteps, SWT.NONE | SWT.WRAP);
         txt_step9.setText(step9);
         txt_step9.setLayoutData(gd_descriptionTexts);
-        // txt_bobStep5 = new Text(cmp_bobSteps, SWT.NONE | SWT.WRAP);
-        // txt_bobStep5.setText(bobStep5);
-        // txt_bobStep5.setLayoutData(gd_descriptionTexts);
-
     }
 
     private void createBobSendingChain() {
@@ -722,7 +725,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         cmp_alice.setLayout(gl_aliceComposite);
 
-        grp_aliceAlgorithm.setText(AlgorithmGroupDescription);
+        grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
         grp_aliceAlgorithm.setLayout(gl_aliceAlgorithmComposite);
         grp_aliceAlgorithm.setLayoutData(gd_aliceAlgorithmComposite);
 
@@ -767,9 +770,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_step4 = new Text(cmp_steps, SWT.NONE | SWT.WRAP | SWT.MULTI);
         txt_step4.setText(step4);
         txt_step4.setLayoutData(gd_descriptionTexts);
-        txt_step5 = new Text(cmp_steps, SWT.NONE | SWT.WRAP | SWT.MULTI);
-        txt_step5.setText(step5);
-        txt_step5.setLayoutData(gd_descriptionTexts);
+        txt_aliceStep5 = new Text(cmp_steps, SWT.NONE | SWT.WRAP | SWT.MULTI);
+        txt_aliceStep5.setText(aliceStep5);
+        txt_aliceStep5.setLayoutData(gd_descriptionTexts);
     }
 
     private void createAliceDiffieHellmanChain() {

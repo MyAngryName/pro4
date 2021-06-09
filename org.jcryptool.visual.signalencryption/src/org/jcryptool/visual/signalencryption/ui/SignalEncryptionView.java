@@ -148,6 +148,14 @@ public class SignalEncryptionView extends ViewPart {
         createPartControl(parent);
         parent.layout();
 
-//        reset();
+//        resetTabs();
+        
     }
+    
+//  private void resetTabs() {
+//      if(overViewTabComposite != null && !overViewTabComposite.isDisposed()) overViewTabComposite.dispose();
+//      if(doubleRatchetTabComposite != null && !doubleRatchetTabComposite.isDisposed()) doubleRatchetTabComposite.dispose();
+//      overViewTabComposite = null;
+//      doubleRatchetTabComposite = null;
+//  }
 }

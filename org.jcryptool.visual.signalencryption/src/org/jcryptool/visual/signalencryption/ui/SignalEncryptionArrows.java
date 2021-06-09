@@ -88,7 +88,7 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = height - 0.2f * height;
+        float baseLength = 0.2f * height;
 
         float leftLineY = (width / 2) - (arrowWidth / 2);
         float rightLineY = (width / 2) + (arrowWidth / 2);
@@ -99,8 +99,7 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.moveTo(leftLineY, height);
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, height / 2);
-
+        resultPath.lineTo(width/2,0);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, height);

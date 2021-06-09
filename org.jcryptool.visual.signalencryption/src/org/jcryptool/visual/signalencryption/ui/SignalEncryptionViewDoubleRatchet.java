@@ -8,8 +8,12 @@ import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
@@ -235,6 +239,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private SignalEncryptionViewDoubleRatchet instance;
 
     org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
+
+    private Canvas arr_AliceDiffieHellmanArrow1;
 
 
 
@@ -790,6 +796,35 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         lb_aliceDiffieHellman1.setLayoutData(gd_algorithmLabels);
         lb_aliceDiffieHellman1.setText(aliceDiffieHellmanLabel1);
 
+        // empty label for filling space
+        new Label(cmp_aliceDiffieHellman, SWT.NONE);
+      
+        
+        
+        arrowCanvas = new Canvas(simpleComposite, SWT.DOUBLE_BUFFERED);
+        arrowCanvas.setLayoutData(gridDataWidth(SWT.FILL, SWT.FILL, false, false, 1, 1, 100));
+        arrowCanvas.addPaintListener(new PaintListener() {
+            @Override
+            public void paintControl(PaintEvent event) {
+                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+                Path path = drawArrow(arrowCanvas);
+                event.gc.fillPath(path);
+                path.dispose();
+            }
+        });
+        
+//        arr_AliceDiffieHellmanArrow1 = new Canvas(cmp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
+//        arr_AliceDiffieHellmanArrow1.setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 100));
+//        arr_AliceDiffieHellmanArrow1.addPaintListener(new PaintListener() {
+//            @Override
+//            public void paintControl(PaintEvent event) {
+//                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+//                Path path = drawDownArrow(arr_AliceDiffieHellmanArrow1, 10, 5);
+//                event.gc.fillPath(path);
+//                path.dispose();
+//            }
+//        });
+        
         // empty label for filling space
         new Label(cmp_aliceDiffieHellman, SWT.NONE);
 

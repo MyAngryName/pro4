@@ -242,6 +242,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private Canvas arr_AliceDiffieHellmanArrow1;
 
+    private Canvas arrowCanvas;
+
 
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
@@ -745,7 +747,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_steps.setLayout(gl_stepsComposite);
         cmp_steps.setLayoutData(gd_stepsComposite);
 
-        createAliceDiffieHellmanChain();
+        createAliceDiffieHellmanChain(cmp_aliceDiffieHellman);
 
         createAliceRootChain();
 
@@ -781,7 +783,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_aliceStep5.setLayoutData(gd_descriptionTexts);
     }
 
-    private void createAliceDiffieHellmanChain() {
+    private void createAliceDiffieHellmanChain(Composite cmp_aliceDiffieHellman) {
         //
         // DH Chain
         //
@@ -801,13 +803,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
       
         
         
-        arrowCanvas = new Canvas(simpleComposite, SWT.DOUBLE_BUFFERED);
-        arrowCanvas.setLayoutData(gridDataWidth(SWT.FILL, SWT.FILL, false, false, 1, 1, 100));
+        arrowCanvas = new Canvas(cmp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
+        arrowCanvas.setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 100));
         arrowCanvas.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = drawArrow(arrowCanvas);
+                Path path = SignalEncryptionArrows.drawDownArrow(arrowCanvas, 10, 20);
                 event.gc.fillPath(path);
                 path.dispose();
             }

@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.util.Hex;
@@ -98,7 +98,7 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_g_bob;
     
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
-    private SignalEncryptionState signalEncryptionState;
+    private SignalEncryptionAlgorithmState signalEncryptionState;
 
     private Button btn_regenerate;
     
@@ -129,7 +129,7 @@ public class SignalEncryptionViewOverview extends Composite {
     /**
      * 
      **/
-    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionState signalEncryptionState) {
+    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionAlgorithmState signalEncryptionState) {
         super(parent, style);
         this.signalEncryptionState = signalEncryptionState;
         this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
@@ -137,7 +137,7 @@ public class SignalEncryptionViewOverview extends Composite {
         setLayout(new GridLayout());
 
         setTitleAndDescription();
-        parameter();
+        setParameter();
         createOverViewComposite();
 
     }
@@ -358,17 +358,17 @@ public class SignalEncryptionViewOverview extends Composite {
     }
     public void generateBoth() {
         signalEncryptionState.generateBoth();
-        parameter();
+        setParameter();
         textReset();
     }
     public void generateAlice() {
         signalEncryptionState.generateAlice();
-        parameter();
+        setParameter();
         textReset();
     }
     public void generateBob() {
         signalEncryptionState.generateBob();
-        parameter();
+        setParameter();
         textReset();
     }
     public void textReset() {
@@ -386,7 +386,7 @@ public class SignalEncryptionViewOverview extends Composite {
         value_f_bob.setText(bobReceivingChainKey);
         value_g_bob.setText(bobSenderMsgKey);
     }
-    public void parameter() {
+    public void setParameter() {
         aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
         aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
         aliceRootKey = signalEncryptionState.getaliceRootKey();

@@ -23,7 +23,7 @@ import org.jcryptool.visual.signalencryption.algorithm.Keys;
 import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithm;
 
 
-public class SignalEncryptionState {
+public class SignalEncryptionAlgorithmState {
     
     private STATE currentState = STATE.PARAMETER;
     
@@ -86,14 +86,14 @@ public class SignalEncryptionState {
     private static PreKeySignalMessage tmpPreKeySignalMessage;
     private static SignalMessage tmpSignalMessage;
         
-    public SignalEncryptionState() {
+    public SignalEncryptionAlgorithmState() {
         currentState = STATE.PARAMETER.setInitialState(this);
 
     }
     public enum STATE {
         PARAMETER {
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 signalEncryptionAlgorithm = new SignalEncryptionAlgorithm(STATE.PARAMETER);
                 aliceRatchetPublicKey = new ArrayList<>();
                 aliceRatchetPrivateKey = new ArrayList<>();
@@ -162,18 +162,18 @@ public class SignalEncryptionState {
             }
             
             @Override 
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 return PARAMETER;
             }            
             @Override
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
         }, PRE_KEY_SIGNAL_MESSAGE {
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     aliceEncryptedMessage.add(signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
@@ -221,13 +221,13 @@ public class SignalEncryptionState {
                 varBobSenderMsgKey = bobSenderMsgKey.get(indexCounterFirst);
             }
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 PARAMETER.updateText();
                 return PARAMETER;
             }
             @Override 
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 RECEIVE_PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
@@ -235,7 +235,7 @@ public class SignalEncryptionState {
 
         }, RECEIVE_PRE_KEY_SIGNAL_MESSAGE {
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     bobMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage)));
                 } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
@@ -279,13 +279,13 @@ public class SignalEncryptionState {
                 
             }
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 PRE_KEY_SIGNAL_MESSAGE.updateText();
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
             @Override 
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
@@ -293,7 +293,7 @@ public class SignalEncryptionState {
         }, BOB_SEND_MSG{
             
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     bobEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getBobSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
@@ -345,7 +345,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
@@ -354,7 +354,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
@@ -371,7 +371,7 @@ public class SignalEncryptionState {
         }, ALICE_RCV_MSG{
 
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     aliceMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getAliceSessionCipher().decrypt(bobSignalMessage.get(indexCounterThird))));
                 } catch (InvalidMessageException | DuplicateMessageException | LegacyMessageException
@@ -416,7 +416,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
@@ -425,7 +425,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
@@ -436,7 +436,7 @@ public class SignalEncryptionState {
         }, ALICE_SEND_MSG{
 
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     aliceEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
@@ -486,7 +486,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
@@ -495,7 +495,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
@@ -506,7 +506,7 @@ public class SignalEncryptionState {
         }, BOB_RCV_MSG{
 
             @Override
-            protected void switchState(SignalEncryptionState parent) {
+            protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
                     bobMessage.add(indexCounterSecond, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(aliceSignalMessage.get(indexCounterThird))));
                 } catch (InvalidMessageException | DuplicateMessageException | LegacyMessageException
@@ -551,7 +551,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE next(SignalEncryptionState parent) {
+            STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
@@ -560,7 +560,7 @@ public class SignalEncryptionState {
             }
 
             @Override
-            STATE back(SignalEncryptionState parent) {
+            STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
@@ -569,13 +569,13 @@ public class SignalEncryptionState {
             }
             
         };
-        protected abstract void switchState(SignalEncryptionState parent);
+        protected abstract void switchState(SignalEncryptionAlgorithmState parent);
         protected abstract void updateText();
         protected abstract void createText();
-        abstract STATE next(SignalEncryptionState parent);
-        abstract STATE back(SignalEncryptionState parent);
+        abstract STATE next(SignalEncryptionAlgorithmState parent);
+        abstract STATE back(SignalEncryptionAlgorithmState parent);
         
-        public STATE setInitialState(SignalEncryptionState parent) {
+        public STATE setInitialState(SignalEncryptionAlgorithmState parent) {
             PARAMETER.switchState(parent);
             return PARAMETER;
         }
@@ -584,10 +584,10 @@ public class SignalEncryptionState {
     public STATE getCurrentState() {
         return currentState;
     }
-    public void stepForward(SignalEncryptionState parent) {
+    public void stepForward(SignalEncryptionAlgorithmState parent) {
         currentState = currentState.next(parent);
     }
-    public void stepBack(SignalEncryptionState parent) {
+    public void stepBack(SignalEncryptionAlgorithmState parent) {
         currentState = currentState.back(parent);
     }
     public void generateBoth() {

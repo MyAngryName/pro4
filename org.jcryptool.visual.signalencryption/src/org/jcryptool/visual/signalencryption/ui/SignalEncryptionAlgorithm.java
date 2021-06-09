@@ -1,8 +1,8 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
 import org.jcryptool.visual.signalencryption.algorithm.Keys;
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.SessionCipher;
@@ -33,7 +33,7 @@ public class SignalEncryptionAlgorithm {
     private SignalProtocolAddress aliceAddress;
     private SignalProtocolAddress bobAddress;
     
-    private SignalEncryptionState signalEncryptionState;
+    private SignalEncryptionAlgorithmState signalEncryptionState;
 
     
     public SignalEncryptionAlgorithm(STATE state) {

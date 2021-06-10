@@ -29,8 +29,9 @@ public class Messages extends NLS {
     //Overview Strings - All text variables which can be found in the tab "Overview"
     
     //Top title
-    public static String SignalEncryption_TabTitle;
-    public static String SignalEncryption_TabDesc;
+
+//    public static String SignalEncryption_TabTitle1;
+//    public static String SignalEncryption_TabDesc1;
     
     //Table Titles
     public static String SignalEncryption_TblTitel_Key;
@@ -127,6 +128,19 @@ public class Messages extends NLS {
     public static String SignalEncryption_stepText7;
     public static String SignalEncryption_stepText8;
     public static String SignalEncryption_stepText9;
+
+
+    public static String SignalEncryption_TabTitle1;
+
+
+    public static String SignalEncryption_TabDesc1;
+
+
+    public static String SignalEncryption_TabTitle2;
+
+
+    public static String SignalEncryption_TabDesc2;
+
 
 
 

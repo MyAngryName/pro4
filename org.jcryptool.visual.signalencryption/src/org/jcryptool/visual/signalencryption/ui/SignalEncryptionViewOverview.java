@@ -340,8 +340,8 @@ public class SignalEncryptionViewOverview extends Composite {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle);
-        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc);
+        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle1);
+        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc1);
     }
     
     private void createOverViewComposite() {

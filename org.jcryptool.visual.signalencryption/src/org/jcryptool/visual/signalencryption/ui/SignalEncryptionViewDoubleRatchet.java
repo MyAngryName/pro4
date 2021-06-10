@@ -326,8 +326,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
-        titleAndDescription.setTitle("Title");
-        titleAndDescription.setDescription("Description");
+        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle2);
+        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc2);
     }
 
     private void createMainComposite() {

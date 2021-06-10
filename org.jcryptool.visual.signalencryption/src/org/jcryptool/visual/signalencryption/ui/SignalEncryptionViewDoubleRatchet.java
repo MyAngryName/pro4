@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
@@ -238,21 +239,25 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private SignalEncryptionViewDoubleRatchet instance;
 
-    org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
 
     private Canvas arr_AliceDiffieHellmanArrow1;
 
     private Canvas arrowCanvas;
 
+    private STATE currentState;
 
-
+    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
-            SignalEncryptionAlgorithmState signalEncryptionState) {
+            SignalEncryptionAlgorithmState signalEncryptionAlgorithmState,
+            SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState) {
         super(parent, style);
 
-        this.signalEncryptionState = signalEncryptionState;
-        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
+        this.signalEncryptionState = signalEncryptionAlgorithmState;
+        this.signalEncryptionAlgorithm = signalEncryptionAlgorithmState.getSignalEncryptionAlgorithm();
         this.instance = this;
+        this.signalEncryptionDoubleRatchetState = signalEncryptionDoubleRatchetState;
+        this.currentState = signalEncryptionDoubleRatchetState.getCurrentState();
         gl_parent = new GridLayout(4, false);
         gl_parent.horizontalSpacing = 3;
         gl_parent.verticalSpacing = 0;
@@ -283,7 +288,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createBobComposite();
         showAliceView();
 
-        currentState = org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE.STEP_0.setInitialState(this);
 
     }
 
@@ -352,7 +356,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.back(instance);
+                stateBack();
             }
         });
     }
@@ -368,7 +372,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.next(instance);
+                stateNext();
             }
         });
     }
@@ -1013,6 +1017,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         layout.topControl = this.cmp_bobMessageBox;
         this.grp_bobSendingChain.layout();
 
+    }
+    private void stateNext() {
+        signalEncryptionDoubleRatchetState.stepForward(this);
+    }
+    private void stateBack() {
+        signalEncryptionDoubleRatchetState.stepBack(this);
     }
 
 }

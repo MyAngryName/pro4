@@ -7,8 +7,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
 
 public class SignalEncryptionDoubleRatchetState {
+    
+    private STATE currentState = STATE.STEP_0;
+
+    public SignalEncryptionDoubleRatchetState(SignalEncryptionViewDoubleRatchet parent) {
+        currentState = STATE.STEP_0.setInitialState(parent);
+    }
+    public SignalEncryptionDoubleRatchetState() {
+    }
     
     public enum STATE {
         STEP_0{
@@ -126,10 +135,6 @@ public class SignalEncryptionDoubleRatchetState {
             protected void switchState(SignalEncryptionViewDoubleRatchet parent) {
                 
                 // Show these labels
-
-
-
-
                 parent.grp_aliceRootChain.setVisible(true);
                 parent.lb_aliceRootChain1.setVisible(true);
                 parent.lb_aliceRootChain2.setVisible(true);
@@ -434,5 +439,17 @@ public class SignalEncryptionDoubleRatchetState {
             STEP_0.switchState(parent);
             return STEP_0;
         }
+    }
+    public void resetBoth(SignalEncryptionViewDoubleRatchet parent) {
+        currentState = STATE.STEP_0.setInitialState(parent);
+    }
+    public STATE getCurrentState() {
+        return currentState;
+    }
+    public void stepForward(SignalEncryptionViewDoubleRatchet parent) {
+        currentState = currentState.next(parent);
+    }
+    public void stepBack(SignalEncryptionViewDoubleRatchet parent) {
+        currentState = currentState.back(parent);
     }
 }

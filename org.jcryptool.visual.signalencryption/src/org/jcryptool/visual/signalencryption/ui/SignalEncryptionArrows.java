@@ -133,5 +133,24 @@ public class SignalEncryptionArrows extends Canvas {
 
         return resultPath;
     }
+    public  static Path drawVertikalLine(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        Path resultPath = new Path(canvas.getDisplay());
+        int width = canvas.getBounds().width;
+        int height = canvas.getBounds().height;
+        
+        resultPath.moveTo(width/2, 0);
+        resultPath.lineTo(width/2, height);
 
+        return resultPath;
+    }
+    public  static Path drawHorizontalLine(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        Path resultPath = new Path(canvas.getDisplay());
+        int width = canvas.getBounds().width;
+        int height = canvas.getBounds().height;
+        
+        resultPath.moveTo(0, height/2);
+        resultPath.lineTo(width, height/2);
+
+        return resultPath;
+    }
 }

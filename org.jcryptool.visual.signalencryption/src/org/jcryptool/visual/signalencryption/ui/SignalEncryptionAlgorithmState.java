@@ -88,7 +88,6 @@ public class SignalEncryptionAlgorithmState {
         
     public SignalEncryptionAlgorithmState() {
         currentState = STATE.PARAMETER.setInitialState(this);
-
     }
     public enum STATE {
         PARAMETER {
@@ -124,6 +123,10 @@ public class SignalEncryptionAlgorithmState {
                 aliceSignalMessage = new ArrayList<SignalMessage>();
                 aliceMessage = new ArrayList<String>();
                 bobMessage = new  ArrayList<String>();
+                
+                indexCounterFirst = 0;
+                indexCounterSecond = 0;
+                indexCounterThird = 0;
                 
                 createText();
             }
@@ -590,16 +593,16 @@ public class SignalEncryptionAlgorithmState {
     public void stepBack(SignalEncryptionAlgorithmState parent) {
         currentState = currentState.back(parent);
     }
-    public void generateBoth() {
+    public void resetBoth() {
         currentState = STATE.PARAMETER.setInitialState(this);
     }
-    public void generateAlice() {
+    public void resetAlice() {
         if(currentState == STATE.PARAMETER) {
             signalEncryptionAlgorithm.generateAlice(currentState);
             currentState.createText();  
          }
     }
-    public void generateBob() {
+    public void resetBob() {
         if(currentState == STATE.PARAMETER) {
             signalEncryptionAlgorithm.generateBob(currentState);
             currentState.createText();

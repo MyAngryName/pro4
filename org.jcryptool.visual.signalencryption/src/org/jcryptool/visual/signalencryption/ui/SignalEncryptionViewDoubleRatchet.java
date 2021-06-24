@@ -20,12 +20,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 // import org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE;
 
-/**
- * 
- * @author Dan-Kerko Ciudin
- * 
- * 
- */
+
 
 public class SignalEncryptionViewDoubleRatchet extends Composite {
 

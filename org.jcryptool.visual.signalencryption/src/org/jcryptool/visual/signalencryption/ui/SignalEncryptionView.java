@@ -23,11 +23,7 @@ import org.jcryptool.core.util.ui.auto.SmoothScroller;
 
 
 
-/**
- * 
- * @author Dan-Kerko Ciudin
- * 
- */
+
 
 public class SignalEncryptionView extends ViewPart {
 	

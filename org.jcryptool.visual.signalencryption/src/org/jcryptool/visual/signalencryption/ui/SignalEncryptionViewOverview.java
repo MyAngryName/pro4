@@ -24,11 +24,6 @@ import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.util.Hex;
 
-/**
- * 
- * @author Dan-Kerko Ciudin
- * 
- */
 
 public class SignalEncryptionViewOverview extends Composite {
 
@@ -144,7 +139,7 @@ public class SignalEncryptionViewOverview extends Composite {
 
     private void createDescriptionGroup() {
         gl_descriptionGroup = new GridLayout(1, false);
-        gd_descriptionGroup = new GridData(SWT.FILL, SWT.FILL, false, true);
+        gd_descriptionGroup = new GridData(SWT.FILL, SWT.FILL, true, true);
     }
 
     private void createTable() {
@@ -325,7 +320,7 @@ public class SignalEncryptionViewOverview extends Composite {
 
         keyTableGroup = new Group(overViewComposite, SWT.NONE);
         gl_keyTableGroup = new GridLayout(7, false);
-        gd_keyTableGroup = new GridData(SWT.LEFT, SWT.TOP, false, false);
+        gd_keyTableGroup = new GridData(SWT.FILL, SWT.FILL, true, true);
         gd_keyTableGroup.minimumWidth = 1000;
 
         keyTableGroup.setLayout(gl_keyTableGroup);

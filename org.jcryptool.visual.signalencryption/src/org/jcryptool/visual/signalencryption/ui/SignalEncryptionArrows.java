@@ -232,7 +232,7 @@ public class SignalEncryptionArrows extends Canvas {
         return resultPath;
     }
     
-    public static Path drawRightUpRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
+    public static Path drawRightUpRightArrowHeadless(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
@@ -279,5 +279,52 @@ public class SignalEncryptionArrows extends Canvas {
 
     }
     
+    public static Path drawRightUpRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
+        Path resultPath = new Path(canvas.getDisplay());
+        int width = canvas.getBounds().width;
+        int height = canvas.getBounds().height;
+        float baseLength = width - 0.2f * width;
+
+        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
+        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
+        
+        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
+        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
+
+       
+        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
+        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
+        
+
+        float lowerArrowHeadY = (secondHeight) - (arrowHeadWidth / 2);
+        float upperArrowHeadY = (secondHeight) + (arrowHeadWidth / 2);
+
+        resultPath.moveTo(0, upperLineY);
+        resultPath.lineTo(leftMiddleLineX, upperLineY);
+        
+        resultPath.lineTo(leftMiddleLineX, upperLineYSecond);
+        
+        resultPath.lineTo(baseLength, upperLineYSecond);
+        resultPath.lineTo(baseLength, upperArrowHeadY);
+        
+        resultPath.lineTo(width, secondHeight );
+        resultPath.lineTo(baseLength, lowerArrowHeadY);
+        
+        resultPath.lineTo(baseLength, lowerLineYSecond);
+        
+        resultPath.lineTo(width, upperLineYSecond);
+        
+        resultPath.lineTo(width, lowerLineYSecond);
+
+        resultPath.lineTo(rightMiddleLineX, lowerLineYSecond);
+        
+        resultPath.lineTo(rightMiddleLineX, lowerLineY);
+        resultPath.lineTo(0, lowerLineY);
+        resultPath.lineTo(0, upperLineY);
+
+        return resultPath;
+
+    }
+
 
 }

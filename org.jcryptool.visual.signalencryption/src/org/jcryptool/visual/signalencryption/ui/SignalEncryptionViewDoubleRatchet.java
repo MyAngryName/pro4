@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
 import org.eclipse.swt.custom.StackLayout;
@@ -17,6 +18,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 // import org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE;
 
@@ -523,6 +525,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_bobPlainText.setText(MessageBoxPlainText);
         txt_bobPlainText.setLayoutData(gd_MessageBox);
+        
+        
 
     }
 
@@ -1267,15 +1271,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         txt_aliceCipherText = new Text(cmp_aliceMessageBox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
-        txt_aliceCipherText.setText(MessageBoxCipherText);
+        txt_aliceCipherText.setText(signalEncryptionState.getAliceEncryptedMessage());
         txt_aliceCipherText.setLayoutData(gd_MessageBox);
-        txt_alicePlainText.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                if(stepCounter==5) {
-                	input = txt_alicePlainText.getText();
-                	System.out.println(input);
-                }
-                
+        txt_alicePlainText.addListener(SWT.Modify, new Listener() {
+            
+            @Override
+            public void handleEvent(Event e) {
+                txt_alicePlainText.setTextLimit(256);
             }
         });
 

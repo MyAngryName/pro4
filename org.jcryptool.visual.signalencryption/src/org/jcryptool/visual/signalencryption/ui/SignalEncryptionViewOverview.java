@@ -19,7 +19,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
+<<<<<<< HEAD
 import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
+=======
+import org.jcryptool.visual.signalencryption.ui.SignalEncryptionState.STATE;
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.util.Hex;
@@ -98,7 +102,11 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_g_bob;
     
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
+<<<<<<< HEAD
     private SignalEncryptionAlgorithmState signalEncryptionState;
+=======
+    private SignalEncryptionState signalEncryptionState;
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
 
     private Button btn_regenerate;
     
@@ -131,12 +139,20 @@ public class SignalEncryptionViewOverview extends Composite {
     /**
      * 
      **/
+<<<<<<< HEAD
     public SignalEncryptionViewOverview(final Composite parent, int style, 
             SignalEncryptionAlgorithmState signalEncryptionState,SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite) {
         super(parent, style);
         this.signalEncryptionState = signalEncryptionState;
         this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
         this.doubleRatchetTabComposite = doubleRatchetTabComposite;
+=======
+    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionState signalEncryptionState) {
+        super(parent, style);
+        this.signalEncryptionState = signalEncryptionState;
+        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
+
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         setLayout(new GridLayout());
 
         setTitleAndDescription();
@@ -184,6 +200,7 @@ public class SignalEncryptionViewOverview extends Composite {
         value_b_alice_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_b_alice_private.setLayoutData(gd_value);
         value_b_alice_private.setText(aliceRatchetPrivateKey); 
+<<<<<<< HEAD
         
         value_b_bob_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_b_bob_private.setLayoutData(gd_value);
@@ -197,6 +214,21 @@ public class SignalEncryptionViewOverview extends Composite {
         text_b_public.setLayoutData(gd_text);
         text_b_public.setText(Messages.SignalEncryption_DescText_Diffie_Public);
 
+=======
+        
+        value_b_bob_private = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        value_b_bob_private.setLayoutData(gd_value);
+        value_b_bob_private.setText(bobRatchetPrivateKey);
+        
+        //First line of the table - DH Public Key
+        label_b_public = new Label(keyTableGroup, SWT.READ_ONLY);
+        label_b_public.setText(Messages.SignalEncryption_KeyName_Diffie_Public);
+
+        text_b_public = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        text_b_public.setLayoutData(gd_text);
+        text_b_public.setText(Messages.SignalEncryption_DescText_Diffie_Public);
+
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         value_b_alice_public = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
         value_b_alice_public.setLayoutData(gd_value);
         value_b_alice_public.setText(aliceRatchetPublicKey); 
@@ -343,8 +375,13 @@ public class SignalEncryptionViewOverview extends Composite {
 
         titleAndDescription = new TitleAndDescriptionComposite(this);
         titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+<<<<<<< HEAD
         titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle1);
         titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc1);
+=======
+        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle);
+        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc);
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
     }
     
     private void createOverViewComposite() {
@@ -361,18 +398,30 @@ public class SignalEncryptionViewOverview extends Composite {
     }
     public void generateBoth() {
         signalEncryptionState.generateBoth();
+<<<<<<< HEAD
         doubleRatchetTabComposite.resetAll();
         setParameter();
+=======
+        parameter();
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         textReset();
     }
     public void generateAlice() {
         signalEncryptionState.generateAlice();
+<<<<<<< HEAD
         setParameter();
+=======
+        parameter();
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         textReset();
     }
     public void generateBob() {
         signalEncryptionState.generateBob();
+<<<<<<< HEAD
         setParameter();
+=======
+        parameter();
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         textReset();
     }
     public void textReset() {
@@ -390,7 +439,11 @@ public class SignalEncryptionViewOverview extends Composite {
         value_f_bob.setText(bobReceivingChainKey);
         value_g_bob.setText(bobSenderMsgKey);
     }
+<<<<<<< HEAD
     public void setParameter() {
+=======
+    public void parameter() {
+>>>>>>> 47ab36d5920ad2b05a23343f317887c831aa3b11
         aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
         aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
         aliceRootKey = signalEncryptionState.getaliceRootKey();

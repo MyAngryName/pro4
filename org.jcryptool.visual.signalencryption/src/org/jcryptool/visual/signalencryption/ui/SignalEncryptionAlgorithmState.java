@@ -709,6 +709,7 @@ public class SignalEncryptionAlgorithmState {
     }
     public String getBobMessage() {
         System.out.println(currentState.toString());
+        System.out.println(bobMessageRcv.get(bobCounterMessagesRcv));
         return bobMessageRcv.get(bobCounterMessagesRcv);
     }
     public String getAliceMessage() {

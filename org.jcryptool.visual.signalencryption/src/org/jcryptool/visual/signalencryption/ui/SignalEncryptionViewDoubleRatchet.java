@@ -314,7 +314,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         // style data for the description texts
         gd_descriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
         gd_descriptionTexts.minimumWidth = 600;
-        gd_descriptionTexts.minimumHeight = 30;
+        gd_descriptionTexts.minimumHeight = 40;
 
         // style data for message box
         gd_MessageBox = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);

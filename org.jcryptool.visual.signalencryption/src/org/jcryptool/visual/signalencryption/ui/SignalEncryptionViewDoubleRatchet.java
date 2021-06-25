@@ -86,6 +86,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     String SendingChainDescription = Messages.SignalEncryption_SendingChainDescription;
     String ReceivingChainDescription = Messages.SignalEncryption_ReceivingChainDescription;
     String MessageBoxDescription = Messages.SignalEncryption_MessageBoxDescription;
+    String btn_NextDescription = Messages.SignalEncryption_btnName_Next;
+    String btn_PreviousDescription = Messages.SignalEncryption_btnName_Previous;
+    
     GridLayout gl_parent;
     GridLayout gl_aliceDiffieHellmanComposite;
     GridLayout gl_aliceComposite;
@@ -396,7 +399,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnPrev = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         gd_btnPrev.widthHint = 150;
         btn_previous.setLayoutData(gd_btnPrev);
-        btn_previous.setText("Previous");
+        btn_previous.setText(btn_PreviousDescription);
         btn_previous.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -415,7 +418,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
-        btn_next.setText("Next");
+        btn_next.setText(btn_NextDescription);
         btn_next.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -427,14 +430,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     }
 
-    private void showBobView() {
+    void showBobView() {
         StackLayout layout = (StackLayout) this.cmp_main.getLayout();
         layout.topControl = this.cmp_bob;
         this.cmp_main.layout();
 
     }
 
-    private void showAliceView() {
+    void showAliceView() {
         StackLayout layout = (StackLayout) this.cmp_main.getLayout();
         layout.topControl = this.cmp_alice;
         this.cmp_main.layout();

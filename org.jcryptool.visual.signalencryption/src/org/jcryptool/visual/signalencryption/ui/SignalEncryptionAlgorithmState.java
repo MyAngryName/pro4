@@ -670,10 +670,18 @@ public class SignalEncryptionAlgorithmState {
         return aliceMessage.get(indexCounterFirst);
     }
     public String getBobEncryptedMessage() {
-        return ToHex.toString(bobEncryptedMessage.get(indexCounterSecond).serialize());
+        if(currentState == STATE.PARAMETER) {
+            return "Nothing here";
+        }else {
+            return ToHex.toString(bobEncryptedMessage.get(indexCounterSecond).serialize());
+        }
     }
     public String getAliceEncryptedMessage() {
-        return ToHex.toString(aliceEncryptedMessage.get(indexCounterSecond).serialize());
+        if(currentState == STATE.PARAMETER) {
+            return "Nothing here";
+        }else {
+            return ToHex.toString(aliceEncryptedMessage.get(indexCounterSecond).serialize());
+        }
     }
     public void saveMessageAlice(String msg) {
         aliceMessage.add(msg);

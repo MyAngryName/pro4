@@ -89,13 +89,13 @@ public class SignalEncryptionAlgorithm {
         bobKeys = new Keys(bobSessionStore, aliceAddress, state);
     }
     
-    public void generateAlice(STATE state) {
+    public void generateAlice(STATE currentState) {
         session.createSessionAlice();
         
         aliceSessionCipher = session.getAliceSessionCipher();
         aliceSessionStore = session.getAliceSessionStore();
         aliceAddress = session.getAliceAddress();
-        aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
+        aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
     }
     
     public void generateBob(STATE state) {

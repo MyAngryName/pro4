@@ -112,7 +112,7 @@ public class SignalEncryptionDoubleRatchetState {
                 
                 swtParent.txt_step2.setVisible(false);
                 
-                swtParent.signalEncryptionState.saveMessageAlice("Hello World");
+                //swtParent.signalEncryptionState.saveMessageAlice("Hello World");
                 swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage());
 
             }

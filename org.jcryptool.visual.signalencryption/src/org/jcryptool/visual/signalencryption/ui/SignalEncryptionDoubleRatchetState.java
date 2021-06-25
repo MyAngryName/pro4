@@ -241,7 +241,6 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.grp_bobAlgorithm.setVisible(false);
                 swtParent.txt_aliceStep5.setVisible(false);
                 swtParent.txt_bobStep5.setVisible(false);
-                System.out.println(swtParent.txt_alicePlainText.getText());
 
             }
 
@@ -348,6 +347,7 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.lb_bobReceivingChain5.setVisible(false);
                 swtParent.txt_step8.setVisible(false);
                 
+                System.out.println(swtParent.txt_alicePlainText.getText());
 
             }
 

@@ -196,6 +196,8 @@ public class SignalEncryptionAlgorithmState {
             
             @Override 
             STATE back(SignalEncryptionAlgorithmState parent) {
+                indexCounterVariables--;
+                PARAMETER.updateText();
                 return PARAMETER;
             }            
             @Override
@@ -351,7 +353,6 @@ public class SignalEncryptionAlgorithmState {
 
             @Override
             protected void updateText() {
-                
                 varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterVariables);
                 varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterVariables);
                 varAliceRootKey = aliceRootKey.get(indexCounterVariables);
@@ -402,7 +403,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterSecond--;
                 indexCounterThird--;
                 
-                //bobCounterMessagesRcv--;
+                bobCounterMessagesRcv--;
                 //aliceCounterEncrypted--;
                 if(indexCounterVariables == 2) {
                     RECEIVE_PRE_KEY_SIGNAL_MESSAGE.updateText();
@@ -410,7 +411,7 @@ public class SignalEncryptionAlgorithmState {
                 } else {
                     BOB_RCV_MSG.updateText();
                     aliceCounterEncrypted--;
-                    bobCounterMessagesRcv--;
+                    
                     return BOB_RCV_MSG;
                 }
 
@@ -627,6 +628,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterSecond--;
                 indexCounterThird--;
                 aliceCounterMessages--;
+                
                 ALICE_SEND_MSG.updateText();
                 return ALICE_SEND_MSG;
             }
@@ -707,26 +709,24 @@ public class SignalEncryptionAlgorithmState {
     public String getBobSenderMsgKey() {
         return varBobSenderMsgKey;
     }
-    public String getBobMessage() {
-        System.out.println(currentState.toString());
-        System.out.println(bobMessageRcv.get(bobCounterMessagesRcv));
-        return bobMessageRcv.get(bobCounterMessagesRcv);
+    public String getBobMessage(int i) {
+        return bobMessageRcv.get(i);
     }
-    public String getAliceMessage() {
-        return aliceMessageRcv.get(aliceCounterMessagesRcv);
+    public String getAliceMessage(int i) {
+        return aliceMessageRcv.get(i);
     }
-    public String getBobEncryptedMessage() {
+    public String getBobEncryptedMessage(int i) {
         if(currentState == STATE.PARAMETER) {
             return "Nothing here";
         }else {
-            return ToHex.toString(bobEncryptedMessage.get(bobCounterEncrypted).serialize());
+            return ToHex.toString(bobEncryptedMessage.get(i).serialize());
         }
     }
-    public String getAliceEncryptedMessage() {
+    public String getAliceEncryptedMessage(int i) {
         if(currentState == STATE.PARAMETER) {
             return "Nothing here";
         }else {
-            return ToHex.toString(aliceEncryptedMessage.get(aliceCounterEncrypted).serialize());
+            return ToHex.toString(aliceEncryptedMessage.get(i).serialize());
         }
     }
     public void saveMessageAlice(String msg) {

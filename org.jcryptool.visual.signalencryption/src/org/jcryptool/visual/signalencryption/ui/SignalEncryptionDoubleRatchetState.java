@@ -207,12 +207,14 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }
@@ -316,7 +318,9 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.lb_bobRootChain3.setVisible(false);
                 swtParent.txt_step7.setVisible(false);
                 
-                
+                swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage());
+                swtParent.txt_bobPlainText.setVisible(true);
+
             }
 
             @Override
@@ -411,7 +415,6 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobPlainText.setVisible(true);
                 swtParent.txt_step9.setVisible(true);
                 
-                swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage());
 
 
             }

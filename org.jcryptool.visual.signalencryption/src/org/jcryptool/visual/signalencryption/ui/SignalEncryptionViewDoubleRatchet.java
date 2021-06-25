@@ -11,6 +11,8 @@ import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -288,6 +290,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     
     String input;
     private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    
+    ModifyListener keys_changedListener;
+
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
             SignalEncryptionAlgorithmState signalEncryptionState) {
@@ -1280,6 +1285,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 txt_alicePlainText.setTextLimit(256);
             }
         });
+        txt_alicePlainText.setEditable(true);
+        System.out.println(txt_alicePlainText.getText());
+
 
     }
 

@@ -113,6 +113,7 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_step2.setVisible(false);
                 
                 swtParent.signalEncryptionState.saveMessageAlice("Hello World");
+                swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage());
 
             }
 
@@ -157,7 +158,7 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_step3.setVisible(false);
                 
                 // State
-                
+
 
             }
 
@@ -240,6 +241,8 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.grp_bobAlgorithm.setVisible(false);
                 swtParent.txt_aliceStep5.setVisible(false);
                 swtParent.txt_bobStep5.setVisible(false);
+                System.out.println(swtParent.txt_alicePlainText.getText());
+
             }
 
             @Override

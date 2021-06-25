@@ -81,10 +81,14 @@ public class SignalEncryptionAlgorithmState {
     private static int indexCounterFirst = 0;
     private static int indexCounterSecond = 0;
     private static int indexCounterThird = 0;
+    private static int messageCounterAlice = 0;
+    private static int messageCounterBob = 0;
 
     
     private static PreKeySignalMessage tmpPreKeySignalMessage;
     private static SignalMessage tmpSignalMessage;
+    
+    private static String message;
         
     public SignalEncryptionAlgorithmState() {
         currentState = STATE.PARAMETER.setInitialState(this);
@@ -124,6 +128,12 @@ public class SignalEncryptionAlgorithmState {
                 aliceSignalMessage = new ArrayList<SignalMessage>();
                 aliceMessage = new ArrayList<String>();
                 bobMessage = new  ArrayList<String>();
+                
+                indexCounterFirst = 0;
+                indexCounterSecond = 0;
+                indexCounterThird = 0;
+                messageCounterAlice = 0;
+                messageCounterBob = 0;
                 
                 createText();
             }
@@ -175,7 +185,8 @@ public class SignalEncryptionAlgorithmState {
             @Override
             protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
-                    aliceEncryptedMessage.add(signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    message = aliceMessage.get(messageCounterAlice);
+                    aliceEncryptedMessage.add(signalEncryptionAlgorithm.getAliceSessionCipher().encrypt(message.getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
@@ -229,6 +240,7 @@ public class SignalEncryptionAlgorithmState {
             @Override 
             STATE next(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst++;
+                messageCounterAlice++;
                 RECEIVE_PRE_KEY_SIGNAL_MESSAGE.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
             }
@@ -281,6 +293,7 @@ public class SignalEncryptionAlgorithmState {
             @Override
             STATE back(SignalEncryptionAlgorithmState parent) {
                 indexCounterFirst--;
+                messageCounterAlice--;
                 PRE_KEY_SIGNAL_MESSAGE.updateText();
                 return PRE_KEY_SIGNAL_MESSAGE;
             }
@@ -295,7 +308,8 @@ public class SignalEncryptionAlgorithmState {
             @Override
             protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
-                    bobEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getBobSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    message = bobMessage.get(messageCounterBob);
+                    bobEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getBobSessionCipher().encrypt(message.getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
@@ -349,6 +363,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
+                messageCounterBob++;
                 ALICE_RCV_MSG.switchState(parent);
                 return ALICE_RCV_MSG;
             }
@@ -429,6 +444,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
+                messageCounterBob--;
                 BOB_SEND_MSG.updateText();
                 return BOB_SEND_MSG;
             }
@@ -438,7 +454,8 @@ public class SignalEncryptionAlgorithmState {
             @Override
             protected void switchState(SignalEncryptionAlgorithmState parent) {
                 try {
-                    aliceEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt("Hello world!".getBytes("UTF-8")));
+                    message = aliceMessage.get(messageCounterAlice);
+                    aliceEncryptedMessage.add(indexCounterSecond,signalEncryptionAlgorithm.getAliceSessionCipher().encrypt(message.getBytes("UTF-8")));
                 } catch (UnsupportedEncodingException | UntrustedIdentityException e) {
                     updateText();
                 }
@@ -490,6 +507,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterFirst++;
                 indexCounterSecond++;
                 indexCounterThird++;
+                messageCounterAlice++;
                 BOB_RCV_MSG.switchState(parent);
                 return BOB_RCV_MSG;
             }
@@ -564,6 +582,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterFirst--;
                 indexCounterSecond--;
                 indexCounterThird--;
+                messageCounterAlice--;
                 ALICE_SEND_MSG.updateText();
                 return ALICE_SEND_MSG;
             }
@@ -655,6 +674,13 @@ public class SignalEncryptionAlgorithmState {
     }
     public String getAliceEncryptedMessage() {
         return ToHex.toString(aliceEncryptedMessage.get(indexCounterSecond).serialize());
+    }
+    public void saveMessageAlice(String msg) {
+        aliceMessage.add(msg);
+    }
+    public void saveMessageBob(String msg) {
+        bobMessage.add(msg);
+
     }
 
 }

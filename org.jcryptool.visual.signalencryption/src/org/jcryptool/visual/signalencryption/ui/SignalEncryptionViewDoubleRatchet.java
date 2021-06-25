@@ -248,8 +248,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private SignalEncryptionViewDoubleRatchet instance;
 
-    org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
-
     private Canvas arr_aliceDiffieHellmanArrow1;
 
 
@@ -287,6 +285,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Canvas arr_aliceSpace2;
     
     String input;
+    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
             SignalEncryptionAlgorithmState signalEncryptionState) {
@@ -325,8 +324,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createBobComposite();
         showAliceView();
 
-        currentState = org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE.STEP_0
-                .setInitialState(this);
+
+        this.signalEncryptionDoubleRatchetState = new SignalEncryptionDoubleRatchetState(this);
 
     }
 
@@ -395,8 +394,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.back(instance);
-                stepCounter--;
+
+                signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
             }
         });
     }
@@ -412,8 +411,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.next(instance);     
-                stepCounter++;
+                signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
+                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
             }
         });
 
@@ -1455,5 +1454,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         this.grp_bobSendingChain.layout();
 
     }
+    public void resetAll() {
+        signalEncryptionDoubleRatchetState.reset(this);
+    }
+
 
 }

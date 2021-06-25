@@ -1274,6 +1274,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         txt_alicePlainText.setText(MessageBoxPlainText);
         txt_alicePlainText.setLayoutData(gd_MessageBox);
 
+        txt_aliceCipherText.setLayoutData(gd_MessageBox);
         txt_aliceCipherText = new Text(cmp_aliceMessageBox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         

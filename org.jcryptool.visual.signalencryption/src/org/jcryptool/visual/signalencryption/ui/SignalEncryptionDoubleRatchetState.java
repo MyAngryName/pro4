@@ -279,17 +279,20 @@ public class SignalEncryptionDoubleRatchetState {
                
                 // State
                 swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage());
+                swtParent.txt_bobCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage());
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_6.switchState(swtParent, parent);
                 return STEP_6;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
@@ -312,7 +315,9 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.lb_bobRootChain2.setVisible(false);
                 swtParent.lb_bobRootChain3.setVisible(false);
                 swtParent.txt_step7.setVisible(false);
-
+                
+                swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage());
+                
             }
 
             @Override

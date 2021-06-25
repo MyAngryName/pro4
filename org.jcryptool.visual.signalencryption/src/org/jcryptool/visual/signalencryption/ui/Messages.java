@@ -141,7 +141,8 @@ public class Messages extends NLS {
 
     public static String SignalEncryption_TabDesc2;
 
-
+    public static String SignalEncryption_BtnName_Next;
+    public static String SignalEncryption_BtnName_Previous;
 
 
 

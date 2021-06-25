@@ -40,6 +40,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Button btn_next;
     Button btn_previous;
 
+    int stepCounter = 1;
+    
     Group grp_steps;
     Group grp_aliceAlgorithm;
     Group grp_bobSteps;
@@ -248,7 +250,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private Canvas arr_aliceDiffieHellmanArrow1;
 
-    private Canvas arrowCanvas;
 
     private Canvas arr_aliceDiffieHellmanArrow2;
 
@@ -284,6 +285,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private Canvas arr_aliceSpace2;
     
     private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    String input;
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
             SignalEncryptionAlgorithmState signalEncryptionState) {
@@ -393,6 +395,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
+
             }
         });
     }
@@ -408,10 +411,16 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
+<<<<<<< org.jcryptool.visual.signalencryption/src/org/jcryptool/visual/signalencryption/ui/SignalEncryptionViewDoubleRatchet.java
                 signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
                 System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
+=======
+                currentState = currentState.next(instance);     
+                stepCounter++;
+>>>>>>> org.jcryptool.visual.signalencryption/src/org/jcryptool/visual/signalencryption/ui/SignalEncryptionViewDoubleRatchet.java
             }
         });
+
     }
 
     private void showBobView() {
@@ -1265,6 +1274,15 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_aliceCipherText.setText(MessageBoxCipherText);
         txt_aliceCipherText.setLayoutData(gd_MessageBox);
+        txt_alicePlainText.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                if(stepCounter==5) {
+                	input = txt_alicePlainText.getText();
+                	System.out.println(input);
+                }
+                
+            }
+        });
 
     }
 

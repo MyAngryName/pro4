@@ -12,6 +12,7 @@ import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.S
 public class SignalEncryptionDoubleRatchetState {
     
     private STATE currentState = STATE.STEP_0;
+    private static int counter = 0;
     
     public SignalEncryptionDoubleRatchetState(SignalEncryptionViewDoubleRatchet swtParent) {
         currentState = STATE.STEP_0.setInitialState(swtParent, this);
@@ -77,6 +78,8 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_step9.setVisible(false);
                 swtParent.txt_aliceCipherText.setVisible(false);
                 swtParent.txt_bobPlainText.setVisible(false);
+                
+                counter = 0;
             }
 
             @Override
@@ -317,20 +320,17 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_step7.setVisible(false);
                 
                 swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage());
-                swtParent.txt_bobPlainText.setVisible(true);
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_7.switchState(swtParent, parent);
                 return STEP_7;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_5.switchState(swtParent, parent);
                 return STEP_5;
             }
@@ -413,13 +413,15 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobPlainText.setVisible(true);
                 swtParent.txt_step9.setVisible(true);
                 
-
+                
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                return STEP_9;
+                swtParent.txt_bobPlainText.setText(swtParent.MessageBoxPlainText);
+                BOB_SEND_MSG.switchState(swtParent, parent);
+                return BOB_SEND_MSG;
             }
 
             @Override
@@ -428,7 +430,114 @@ public class SignalEncryptionDoubleRatchetState {
                 return STEP_8;
             }
             
+        }, BOB_SEND_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.saveMessageBob(swtParent.txt_bobPlainText.getText());
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                
+                counter++;
+                ALICE_RCV_MSG.switchState(swtParent, parent);
+                return ALICE_RCV_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                if(counter == 0) {
+                    swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                    STEP_9.switchState(swtParent, parent);
+                    return STEP_9;
+                }else {
+                    swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                    BOB_RCV_MSG.switchState(swtParent, parent);
+                    return BOB_RCV_MSG;
+                }
+                
+            }
+            
+        }, ALICE_RCV_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                ALICE_SEND_MSG.switchState(swtParent, parent);
+                return ALICE_SEND_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return BOB_SEND_MSG;
+            }
+            
+        }, ALICE_SEND_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                BOB_RCV_MSG.switchState(swtParent, parent);
+                return BOB_RCV_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return ALICE_RCV_MSG;
+            }
+            
+        }, BOB_RCV_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                BOB_SEND_MSG.switchState(swtParent, parent);
+                return BOB_SEND_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return ALICE_SEND_MSG;
+            }
+            
         };
+        
+        
 //        , STEP_10 {
 //
 //            @Override

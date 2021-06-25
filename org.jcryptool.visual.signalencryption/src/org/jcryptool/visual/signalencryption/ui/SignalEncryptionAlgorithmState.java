@@ -327,7 +327,7 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterVariables++;
                 indexCounterSecond++;
                 bobCounterMessagesRcv++;
-                
+                BOB_SEND_MSG.switchState(parent);
                 return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;
             }
         }, BOB_SEND_MSG{
@@ -402,8 +402,8 @@ public class SignalEncryptionAlgorithmState {
                 indexCounterSecond--;
                 indexCounterThird--;
                 
-                bobCounterMessagesRcv--;
-                aliceCounterEncrypted--;
+                //bobCounterMessagesRcv--;
+                //aliceCounterEncrypted--;
                 if(indexCounterVariables == 2) {
                     RECEIVE_PRE_KEY_SIGNAL_MESSAGE.updateText();
                     return RECEIVE_PRE_KEY_SIGNAL_MESSAGE;

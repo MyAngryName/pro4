@@ -244,7 +244,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private String step8 = Messages.SignalEncryption_stepText8;
     private String step9 = Messages.SignalEncryption_stepText9;
     // private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
-    private String MessageBoxPlainText = "Geben Sie hier Ihre Nachricht an Bob ein.";
+    String MessageBoxPlainText = "Geben Sie hier Ihre Nachricht an Bob ein.";
     private String MessageBoxCipherText = "The Ciphertext";
 
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
@@ -403,6 +403,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
+                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
+
             }
         });
     }

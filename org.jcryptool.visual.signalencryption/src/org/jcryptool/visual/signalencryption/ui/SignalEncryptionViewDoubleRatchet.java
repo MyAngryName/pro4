@@ -246,8 +246,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private SignalEncryptionViewDoubleRatchet instance;
 
-    org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
-
     private Canvas arr_aliceDiffieHellmanArrow1;
 
     private Canvas arrowCanvas;
@@ -405,7 +403,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
-        btn_next.setText("Next");
+        btn_next.setText(signalEncryptionDoubleRatchetState.getCurrentState().toString());
         btn_next.addSelectionListener(new SelectionAdapter() {
 
             @Override

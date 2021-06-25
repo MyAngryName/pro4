@@ -446,6 +446,8 @@ public class SignalEncryptionDoubleRatchetState {
     }
     public void reset(SignalEncryptionViewDoubleRatchet swtParent) {
         currentState = STATE.STEP_0.setInitialState(swtParent, this);
-
+    }
+    public STATE getCurrentState() {
+        return currentState;
     }
 }

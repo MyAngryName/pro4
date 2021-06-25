@@ -403,12 +403,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
         btn_next.setLayoutData(gd_btnNext);
-        btn_next.setText(signalEncryptionDoubleRatchetState.getCurrentState().toString());
+        btn_next.setText("Next");
         btn_next.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
                 signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
+                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
             }
         });
     }

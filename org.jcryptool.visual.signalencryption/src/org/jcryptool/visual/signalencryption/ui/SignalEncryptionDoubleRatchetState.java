@@ -111,6 +111,9 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.grp_aliceRootChain.setVisible(false);
                 
                 swtParent.txt_step2.setVisible(false);
+                
+                swtParent.signalEncryptionState.saveMessageAlice("Hello World");
+
             }
 
             @Override
@@ -152,6 +155,10 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.lb_aliceSendingChain5.setVisible(false);
 
                 swtParent.txt_step3.setVisible(false);
+                
+                // State
+                
+
             }
 
             @Override

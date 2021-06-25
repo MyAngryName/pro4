@@ -237,13 +237,13 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_aliceStep5.setVisible(false);
                 swtParent.txt_bobStep5.setVisible(false);
                 
-                swtParent.signalEncryptionState.saveMessageAlice(swtParent.txt_alicePlainText.getText());
                 
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                swtParent.signalEncryptionState.saveMessageAlice(swtParent.txt_alicePlainText.getText());
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_5.switchState(swtParent, parent);
                 return STEP_5;

@@ -94,8 +94,8 @@ public class SignalEncryptionView extends ViewPart {
 		
 		//init first tab
 	    signalEncryptionState = new SignalEncryptionAlgorithmState();
-		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState);	
         doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
+		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);	
         tbtmOverview.setControl(overViewTabComposite);
 		                     
 		
@@ -116,7 +116,7 @@ public class SignalEncryptionView extends ViewPart {
 	public void setTab(int tab) { 
         switch (tab) {
          case 0:
-           overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState);    
+           overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);    
            tbtmOverview.setControl(overViewTabComposite);
            previousTab = 0;
            break; 

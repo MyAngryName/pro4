@@ -246,7 +246,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private SignalEncryptionViewDoubleRatchet instance;
 
-    org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE currentState = SignalEncryptionDoubleRatchetState.STATE.STEP_0;
+    SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
 
     private Canvas arr_aliceDiffieHellmanArrow1;
 
@@ -321,9 +321,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         createAliceComposite();
         createBobComposite();
         showAliceView();
-
-        currentState = org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE.STEP_0
-                .setInitialState(this);
+        this.signalEncryptionDoubleRatchetState = new SignalEncryptionDoubleRatchetState(this);
 
     }
 
@@ -392,7 +390,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.back(instance);
+                signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
             }
         });
     }
@@ -408,7 +406,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                currentState = currentState.next(instance);
+                signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
             }
         });
     }
@@ -1439,6 +1437,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         layout.topControl = this.cmp_bobMessageBox;
         this.grp_bobSendingChain.layout();
 
+    }
+    public void resetAll() {
+        signalEncryptionDoubleRatchetState.reset(this);
     }
 
 }

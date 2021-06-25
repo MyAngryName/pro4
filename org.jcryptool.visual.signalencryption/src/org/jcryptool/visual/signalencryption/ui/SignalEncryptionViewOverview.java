@@ -126,14 +126,17 @@ public class SignalEncryptionViewOverview extends Composite {
 
     private Button btn_prekeysignalmessage;
     
+    private SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite;
+    
     /**
      * 
      **/
-    public SignalEncryptionViewOverview(final Composite parent, int style, SignalEncryptionAlgorithmState signalEncryptionState) {
+    public SignalEncryptionViewOverview(final Composite parent, int style, 
+            SignalEncryptionAlgorithmState signalEncryptionState,SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite) {
         super(parent, style);
         this.signalEncryptionState = signalEncryptionState;
         this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
-
+        this.doubleRatchetTabComposite = doubleRatchetTabComposite;
         setLayout(new GridLayout());
 
         setTitleAndDescription();
@@ -358,6 +361,7 @@ public class SignalEncryptionViewOverview extends Composite {
     }
     public void generateBoth() {
         signalEncryptionState.generateBoth();
+        doubleRatchetTabComposite.resetAll();
         setParameter();
         textReset();
     }

@@ -207,14 +207,12 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }

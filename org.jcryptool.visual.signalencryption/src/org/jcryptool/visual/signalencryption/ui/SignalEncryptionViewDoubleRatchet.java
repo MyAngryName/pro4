@@ -530,6 +530,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_bobPlainText.setText(MessageBoxPlainText);
         txt_bobPlainText.setLayoutData(gd_MessageBox);
+        txt_bobPlainText.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event e) {
+                txt_bobPlainText.setTextLimit(256);
+            }
+        });
+        txt_bobPlainText.setEditable(true);
         
         
 

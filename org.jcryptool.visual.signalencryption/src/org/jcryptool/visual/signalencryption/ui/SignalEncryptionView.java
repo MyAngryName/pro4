@@ -97,7 +97,7 @@ public class SignalEncryptionView extends ViewPart {
 		                     
 		
         scrolledComposite.setContent(tabFolder);
-        scrolledComposite.setMinSize(tabFolder.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrolledComposite.setMinSize(tabFolder.computeSize(SignalEncryptionConstants.PLUGIN_WIDTH,SignalEncryptionConstants.PLUGIN_HEIGTH));
 		
 		// This makes the ScrolledComposite scrolling, when the mouse 
 		// is on a Text with one or more of the following tags: SWT.READ_ONLY,

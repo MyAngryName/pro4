@@ -84,6 +84,9 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.arr_aliceSendingChainArrow1.setVisible(false);
                 swtParent.arr_aliceSendingChainArrow2.setVisible(false);
                 swtParent.arr_aliceSendingChainArrow3.setVisible(false);
+                swtParent.cmp_bobArrowSpace1.setVisible(false);
+                swtParent.cmp_bobArrowSpace2.setVisible(false);
+                
                 
                 counter = 0;
                 counterAliceEncryptedMessage = 0;
@@ -140,7 +143,6 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.cmp_aliceArrowSpace2.setVisible(false);
 
                 
-                //swtParent.signalEncryptionState.saveMessageAlice("Hello World");
                 swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage(counterAliceEncryptedMessage));
 
             }
@@ -411,6 +413,7 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobRootChain2.setVisible(false);
                 swtParent.txt_bobRootChain3.setVisible(false);
                 swtParent.txt_step7.setVisible(false);
+                swtParent.cmp_bobArrowSpace1.setVisible(false);
                 
                 swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage(counterBobMessage));
 
@@ -455,6 +458,7 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobRootChain2.setVisible(true);
                 swtParent.txt_bobRootChain3.setVisible(true);
                 swtParent.txt_step7.setVisible(true);
+                swtParent.cmp_bobArrowSpace1.setVisible(true);
                 
                 // Hide these Elements
                 swtParent.grp_bobSendingReceivingChain.setVisible(false);

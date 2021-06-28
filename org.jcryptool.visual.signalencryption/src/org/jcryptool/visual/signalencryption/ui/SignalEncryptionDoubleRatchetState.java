@@ -444,7 +444,11 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobRootChain3.setVisible(false);
                 swtParent.txt_step7.setVisible(false);
                 swtParent.cmp_bobArrowSpace1.setVisible(false);
-                
+                swtParent.grp_bobSendingReceivingChain.setVisible(false);
+                swtParent.txt_bobReceivingChain1.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow4.setVisible(false);
+
+                swtParent.cmp_bobArrowSpace2.setVisible(false);
                 swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage(counterBobMessage));
 
             }
@@ -493,14 +497,20 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobRootChain3.setVisible(true);
                 swtParent.txt_step7.setVisible(true);
                 swtParent.cmp_bobArrowSpace1.setVisible(true);
+                swtParent.cmp_bobArrowSpace2.setVisible(true);
+                swtParent.txt_bobReceivingChain1.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow4.setVisible(true);
+                swtParent.grp_bobSendingReceivingChain.setVisible(true);
                 
                 // Hide these Elements
-                swtParent.grp_bobSendingReceivingChain.setVisible(false);
-                swtParent.txt_bobReceivingChain1.setVisible(false);
                 swtParent.txt_bobReceivingChain2.setVisible(false);
                 swtParent.txt_bobReceivingChain3.setVisible(false);
                 swtParent.txt_bobReceivingChain4.setVisible(false);
                 swtParent.txt_bobReceivingChain5.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow1.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow2.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow3.setVisible(false);
+
                 swtParent.txt_step8.setVisible(false);
                 
 
@@ -549,6 +559,10 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobReceivingChain4.setVisible(true);
                 swtParent.txt_bobReceivingChain5.setVisible(true);
                 swtParent.txt_step8.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow1.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow2.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow3.setVisible(true);
+
                 
                 // Hide these Elements
                 swtParent.txt_step9.setVisible(false);

@@ -602,7 +602,7 @@ public class SignalEncryptionDoubleRatchetState {
 
                 globalCounter++;
                 singelton.unlock(parent, globalCounter);
-                swtParent.txt_bobPlainText.setText(swtParent.MessageBoxPlainText);
+                swtParent.txt_bobPlainText.setText(swtParent.MessageboxPlainText);
                 counter = 0;
                 BOB_SEND_MSG.switchState(swtParent, parent);
                 return BOB_SEND_MSG;

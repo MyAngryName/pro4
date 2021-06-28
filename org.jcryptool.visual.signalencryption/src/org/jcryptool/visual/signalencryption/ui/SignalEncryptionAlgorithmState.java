@@ -110,6 +110,19 @@ public class SignalEncryptionAlgorithmState {
             @Override
             protected void switchState(SignalEncryptionAlgorithmState parent) {
                 signalEncryptionAlgorithm = new SignalEncryptionAlgorithm(STATE.PARAMETER);
+
+                indexCounterVariables = 0;
+                indexCounterSecond = 0;
+                
+                indexCounterThird = 0;
+                aliceCounterMessages = 0;
+                aliceCounterEncrypted = 0;
+                aliceCounterMessagesRcv = 0;
+                
+                bobCounterEncrypted = 0;
+                bobCounterMessagesSend = 0;
+                bobCounterMessagesRcv = 0;
+                
                 aliceRatchetPublicKey = new ArrayList<>();
                 aliceRatchetPrivateKey = new ArrayList<>();
                 
@@ -145,6 +158,10 @@ public class SignalEncryptionAlgorithmState {
                 aliceMessageRcv = new ArrayList<String>();
                 bobMessageRcv = new  ArrayList<String>();
                 
+                createText();
+            }
+            @Override
+            protected void createText() {
                 indexCounterVariables = 0;
                 indexCounterSecond = 0;
                 
@@ -157,11 +174,41 @@ public class SignalEncryptionAlgorithmState {
                 bobCounterMessagesSend = 0;
                 bobCounterMessagesRcv = 0;
                 
+                aliceRatchetPublicKey = new ArrayList<>();
+                aliceRatchetPrivateKey = new ArrayList<>();
                 
-                createText();
-            }
-            @Override
-            protected void createText() {
+                bobRatchetPublicKey = new ArrayList<String>();
+                bobRatchetPrivateKey = new ArrayList<String>();
+                
+                aliceSharedKey = new ArrayList<String>();
+                bobSharedKey = new ArrayList<String>();
+                
+                aliceRootKey = new ArrayList<String>();
+                bobRootKey = new ArrayList<String>();
+                
+                aliceSendingChainKey = new ArrayList<String>();
+                bobSendingChainKey = new ArrayList<String>();
+                
+                aliceReceivingChainKey = new ArrayList<String>();
+                bobReceivingChainKey = new ArrayList<String>();
+                
+                aliceSenderMsgKey = new ArrayList<String>();
+                bobSenderMsgKey = new ArrayList<String>();
+                
+                aliceEncryptedMessage = new ArrayList<CiphertextMessage>();
+                
+                bobEncryptedMessage = new ArrayList<CiphertextMessage>();
+                bobSignalMessage = new  ArrayList<SignalMessage>();
+                
+                aliceSignalMessage = new ArrayList<SignalMessage>();
+                
+                
+                aliceMessageSend = new ArrayList<String>();
+                bobMessageSend = new  ArrayList<String>();
+                
+                aliceMessageRcv = new ArrayList<String>();
+                bobMessageRcv = new  ArrayList<String>();
+                
                 aliceRatchetPrivateKey.add(indexCounterVariables, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
                 aliceRatchetPublicKey.add(indexCounterVariables,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
                 aliceRootKey.add(indexCounterVariables,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
@@ -175,10 +222,12 @@ public class SignalEncryptionAlgorithmState {
                 bobSendingChainKey.add(indexCounterVariables,"Keine Sitzung begonnen");
                 bobReceivingChainKey.add(indexCounterVariables,"Keine Sitzung begonnen");
                 bobSenderMsgKey.add(indexCounterVariables,"Keine Sitzung begonnen");
+                
                 updateText();
             }
             @Override
             protected void updateText() {
+                System.out.println(indexCounterVariables);
                 varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterVariables);
                 varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterVariables);
                 varAliceRootKey = aliceRootKey.get(indexCounterVariables);
@@ -225,6 +274,7 @@ public class SignalEncryptionAlgorithmState {
             }
             @Override
             protected void createText() {
+                System.out.println(indexCounterVariables);
                 aliceRatchetPrivateKey.add(indexCounterVariables, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
                 aliceRatchetPublicKey.add(indexCounterVariables, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));
                 aliceRootKey.add(indexCounterVariables, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRootKey().getKeyBytes()));
@@ -301,6 +351,7 @@ public class SignalEncryptionAlgorithmState {
             }
             @Override
             protected void updateText() {
+                System.out.println(indexCounterVariables);
                 varAliceRatchetPrivateKey = aliceRatchetPrivateKey.get(indexCounterVariables);
                 varAliceRatchetPublicKey = aliceRatchetPublicKey.get(indexCounterVariables);
                 varAliceRootKey = aliceRootKey.get(indexCounterVariables);
@@ -735,6 +786,19 @@ public class SignalEncryptionAlgorithmState {
     public void saveMessageBob(String msg) {
         bobMessageSend.add(msg);
 
+    }
+    public void resetCounter() {
+        indexCounterVariables = 0;
+        indexCounterSecond = 0;
+        
+        indexCounterThird = 0;
+        aliceCounterMessages = 0;
+        aliceCounterEncrypted = 0;
+        aliceCounterMessagesRcv = 0;
+        
+        bobCounterEncrypted = 0;
+        bobCounterMessagesSend = 0;
+        bobCounterMessagesRcv = 0;
     }
 
 }

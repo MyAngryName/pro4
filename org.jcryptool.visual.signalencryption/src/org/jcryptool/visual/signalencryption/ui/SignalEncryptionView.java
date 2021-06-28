@@ -113,7 +113,10 @@ public class SignalEncryptionView extends ViewPart {
 	public void setTab(int tab) { 
         switch (tab) {
          case 0:
-//           overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);    
+
+           //overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);
+           overViewTabComposite.setParameter();
+           overViewTabComposite.textReset();
            tbtmOverview.setControl(overViewTabComposite);
            previousTab = 0;
            break; 
@@ -144,15 +147,7 @@ public class SignalEncryptionView extends ViewPart {
         }
         createPartControl(parent);
         parent.layout();
-
-//        resetTabs();
         
     }
     
-//  private void resetTabs() {
-//      if(overViewTabComposite != null && !overViewTabComposite.isDisposed()) overViewTabComposite.dispose();
-//      if(doubleRatchetTabComposite != null && !doubleRatchetTabComposite.isDisposed()) doubleRatchetTabComposite.dispose();
-//      overViewTabComposite = null;
-//      doubleRatchetTabComposite = null;
-//  }
 }

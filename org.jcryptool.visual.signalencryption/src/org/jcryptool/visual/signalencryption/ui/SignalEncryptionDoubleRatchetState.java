@@ -15,9 +15,13 @@ public class SignalEncryptionDoubleRatchetState {
     private static int counter = 0;
     private static int counterAliceEncryptedMessage = 0;
     private static int counterBobMessage = 0;
+    private static int globalCounter = 0;
+    private static Singleton singelton;
+    private SignalEncryptionViewDoubleRatchet GlobalSwtParent;
     
     public SignalEncryptionDoubleRatchetState(SignalEncryptionViewDoubleRatchet swtParent) {
         currentState = STATE.STEP_0.setInitialState(swtParent, this);
+        this.GlobalSwtParent = swtParent;
     } 
     
     public enum STATE {
@@ -84,16 +88,23 @@ public class SignalEncryptionDoubleRatchetState {
                 counter = 0;
                 counterAliceEncryptedMessage = 0;
                 counterBobMessage = 0;
+                globalCounter = 0;
+                
+                singelton = singelton.getInstance();
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_1.switchState(swtParent, parent);
                 return STEP_1;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 return STEP_0;
             }
 
@@ -139,12 +150,16 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_0.switchState(swtParent, parent);
                 return STEP_0;
             }
@@ -194,12 +209,16 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_3.switchState(swtParent, parent);
                 return STEP_3;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_1.switchState(swtParent, parent);
                 return STEP_1;
             }
@@ -215,7 +234,6 @@ public class SignalEncryptionDoubleRatchetState {
                 // TODO Auto-generated method stub
                 
             }
-
             
         }, STEP_3{
 
@@ -253,12 +271,16 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }
@@ -302,6 +324,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.saveMessageAlice(swtParent.txt_alicePlainText.getText());
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_5.switchState(swtParent, parent);
@@ -310,6 +334,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_3.switchState(swtParent, parent);
                 return STEP_3;
@@ -357,6 +383,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 counterAliceEncryptedMessage++;
                 STEP_6.switchState(swtParent, parent);
@@ -365,6 +393,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
@@ -408,6 +438,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 counterBobMessage++;
                 STEP_7.switchState(swtParent, parent);
                 return STEP_7;
@@ -415,6 +447,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 counterAliceEncryptedMessage--;
                 STEP_5.switchState(swtParent, parent);
                 return STEP_5;
@@ -460,12 +494,16 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_8.switchState(swtParent, parent);
                 return STEP_8;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 counterBobMessage--;
                 STEP_6.switchState(swtParent, parent);
                 return STEP_6;
@@ -506,12 +544,16 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_9.switchState(swtParent, parent);
                 return STEP_9;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_7.switchState(swtParent, parent);
                 return STEP_7;
             }
@@ -544,6 +586,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.txt_bobPlainText.setText(swtParent.MessageBoxPlainText);
                 counter = 0;
                 BOB_SEND_MSG.switchState(swtParent, parent);
@@ -552,6 +596,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_8.switchState(swtParent, parent);
                 return STEP_8;
             }
@@ -579,6 +625,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.saveMessageBob(swtParent.txt_bobPlainText.getText());
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 
@@ -589,6 +637,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 if(counter <= 0) {
                     swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                     STEP_9.switchState(swtParent, parent);
@@ -604,7 +654,7 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
-                // TODO Auto-generated method stub
+                // TODO Auto-gesingelton.unlock(parent, globalCounter);nerated method stub
                 
             }
 
@@ -626,6 +676,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 counter++;
                 ALICE_SEND_MSG.switchState(swtParent, parent);
@@ -634,6 +686,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 counter--;
                 return BOB_SEND_MSG;
@@ -663,6 +717,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 counter++;
                 BOB_RCV_MSG.switchState(swtParent, parent);
@@ -671,6 +727,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 counter--;
                 return ALICE_RCV_MSG;
@@ -699,6 +757,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 counter++;
                 BOB_SEND_MSG.switchState(swtParent, parent);
@@ -707,6 +767,8 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 counter--;
                 return ALICE_SEND_MSG;
@@ -770,5 +832,16 @@ public class SignalEncryptionDoubleRatchetState {
     }
     public STATE getCurrentState() {
         return currentState;
+    }
+    public void setLock() {
+        GlobalSwtParent.txt_bobPlainText.setEditable(false);
+        GlobalSwtParent.txt_alicePlainText.setEditable(false);
+    }
+    public void setUnlock() {
+        GlobalSwtParent.txt_bobPlainText.setEditable(true);
+        GlobalSwtParent.txt_alicePlainText.setEditable(true);
+    }
+    public SignalEncryptionViewDoubleRatchet getSwtParent() {
+        return GlobalSwtParent;
     }
 }

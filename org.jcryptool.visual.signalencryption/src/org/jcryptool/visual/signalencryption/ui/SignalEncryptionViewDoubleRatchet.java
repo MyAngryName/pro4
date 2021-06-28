@@ -274,6 +274,18 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private StackLayout sl_BobSendingReceivingChainGroup;
 
+    private GridData gd_algorithmGroup;
+
+    private GridData gd_stepsGroup;
+
+    private GridData gd_diffieHellmanGroup;
+
+    private GridData gd_rootChainGroup;
+
+    private GridData gd_messageboxGroup;
+
+    private GridData gd_sendingReceivingChainGroup;
+
 
 
 
@@ -324,13 +336,20 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gl_rootChainComposite = new GridLayout(1, false);
         gl_sendingReceivingChainComposite = new GridLayout(4, false);
         gl_messageboxComposite = new GridLayout(1, false);
+        
+        gd_algorithmGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_diffieHellmanGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_rootChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_messageboxGroup = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_sendingReceivingChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 
         gd_algorithmComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_stepsComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_diffieHellmanComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-        gd_rootChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+        gd_diffieHellmanComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_rootChainComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_messageboxComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        gd_sendingReceivingChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+        gd_sendingReceivingChainComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         
 
         setTitleAndDescription();
@@ -925,12 +944,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_alice.setLayout(gl_aliceComposite);
 
         grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
-        grp_aliceAlgorithm.setLayout(gl_algorithmComposite);
-        grp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
+        grp_aliceAlgorithm.setLayout(gl_algorithmGroup);
+        grp_aliceAlgorithm.setLayoutData(gd_algorithmGroup);
 
         grp_aliceSteps.setText(stepGroupDescription);
-        grp_aliceSteps.setLayout(gl_stepsComposite);
-        grp_aliceSteps.setLayoutData(gd_stepsComposite);
+        grp_aliceSteps.setLayout(gl_stepsGroup);
+        grp_aliceSteps.setLayoutData(gd_stepsGroup);
 
         cmp_aliceAlgorithm.setLayout(gl_algorithmComposite);
         cmp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);

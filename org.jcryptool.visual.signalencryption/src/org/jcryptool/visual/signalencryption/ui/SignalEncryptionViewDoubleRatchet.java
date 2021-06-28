@@ -508,11 +508,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
+        new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
@@ -530,7 +531,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
@@ -960,45 +961,47 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_aliceArrowSpace1.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED | SWT.BORDER);
+        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED );
         arr_aliceSpace1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, true, 1, 1,75));
         arr_aliceSpace1.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
         
         cmp_aliceArrowSpace2.setLayout(gl_arrowSpaceComposite);
         cmp_aliceArrowSpace2.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED| SWT.BORDER);
+        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED);
         arr_aliceSpace2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, true, true, 1, 1,75));
         arr_aliceSpace2.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
     }
 
     private void createAliceSteps() {

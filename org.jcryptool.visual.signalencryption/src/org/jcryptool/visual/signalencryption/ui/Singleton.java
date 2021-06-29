@@ -53,4 +53,7 @@ public class Singleton {
             System.out.println(counter + " is already unlocked");
         }
     }
+    protected static boolean getLockStatus() {
+    	return lockStatus;
+    }
 }

@@ -20,7 +20,7 @@ public class Singleton {
        return instance;
     }
     
-    private static void reset() {
+    protected static void reset() {
         lockStatus = false;
         stateValue = null;
         counterChecker = -1;

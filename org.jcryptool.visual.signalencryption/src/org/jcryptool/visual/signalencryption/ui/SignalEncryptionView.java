@@ -89,6 +89,8 @@ public class SignalEncryptionView extends ViewPart {
 		});
 		
 		//init first tab
+		Singleton singleton = Singleton.getInstance();
+		singleton.reset();
 	    signalEncryptionState = new SignalEncryptionAlgorithmState();
         doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
 		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);	

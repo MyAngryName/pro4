@@ -162,52 +162,6 @@ public class SignalEncryptionAlgorithmState {
             }
             @Override
             protected void createText() {
-                indexCounterVariables = 0;
-                indexCounterSecond = 0;
-                
-                indexCounterThird = 0;
-                aliceCounterMessages = 0;
-                aliceCounterEncrypted = 0;
-                aliceCounterMessagesRcv = 0;
-                
-                bobCounterEncrypted = 0;
-                bobCounterMessagesSend = 0;
-                bobCounterMessagesRcv = 0;
-                
-                aliceRatchetPublicKey = new ArrayList<>();
-                aliceRatchetPrivateKey = new ArrayList<>();
-                
-                bobRatchetPublicKey = new ArrayList<String>();
-                bobRatchetPrivateKey = new ArrayList<String>();
-                
-                aliceSharedKey = new ArrayList<String>();
-                bobSharedKey = new ArrayList<String>();
-                
-                aliceRootKey = new ArrayList<String>();
-                bobRootKey = new ArrayList<String>();
-                
-                aliceSendingChainKey = new ArrayList<String>();
-                bobSendingChainKey = new ArrayList<String>();
-                
-                aliceReceivingChainKey = new ArrayList<String>();
-                bobReceivingChainKey = new ArrayList<String>();
-                
-                aliceSenderMsgKey = new ArrayList<String>();
-                bobSenderMsgKey = new ArrayList<String>();
-                
-                aliceEncryptedMessage = new ArrayList<CiphertextMessage>();
-                
-                bobEncryptedMessage = new ArrayList<CiphertextMessage>();
-                bobSignalMessage = new  ArrayList<SignalMessage>();
-                
-                aliceSignalMessage = new ArrayList<SignalMessage>();
-                
-                
-                aliceMessageSend = new ArrayList<String>();
-                bobMessageSend = new  ArrayList<String>();
-                
-                aliceMessageRcv = new ArrayList<String>();
-                bobMessageRcv = new  ArrayList<String>();
                 
                 aliceRatchetPrivateKey.add(indexCounterVariables, ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPrivateKey().serialize()));
                 aliceRatchetPublicKey.add(indexCounterVariables,ToHex.toString(signalEncryptionAlgorithm.getAliceKeys().getRatchetPublicKey().serialize()));

@@ -550,7 +550,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,156);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrowHeadless(arr_bobSpace2, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }

@@ -384,6 +384,44 @@ public class SignalEncryptionArrows extends Canvas {
         return resultPath;
 
     }
+    public static Path drawLeftUpLeftArrowHeadless(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
+        Path resultPath = new Path(canvas.getDisplay());
+        int width = canvas.getBounds().width;
+        int height = canvas.getBounds().height;
+        float baseLength = 0.2f * width;
+
+        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
+        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
+        
+        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
+        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
+
+       
+        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
+        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
+        
+
+        float lowerArrowHeadY = (height / 2) - (secondHeight /2) - (arrowHeadWidth / 2);
+        float upperArrowHeadY = (height / 2) - (secondHeight/2) + (arrowHeadWidth / 2);
+
+        resultPath.moveTo(width, upperLineY);
+        resultPath.lineTo(rightMiddleLineX, upperLineY);
+        
+        resultPath.lineTo(rightMiddleLineX, upperLineYSecond);
+        
+		resultPath.lineTo(0, upperLineYSecond);
+        resultPath.lineTo(0, lowerLineYSecond);
+
+		
+        resultPath.lineTo(leftMiddleLineX, lowerLineYSecond);
+        
+        resultPath.lineTo(leftMiddleLineX, lowerLineY);
+        resultPath.lineTo(width, lowerLineY);
+        resultPath.lineTo(width, upperLineY);
+
+        return resultPath;
+
+    }
     
 
 

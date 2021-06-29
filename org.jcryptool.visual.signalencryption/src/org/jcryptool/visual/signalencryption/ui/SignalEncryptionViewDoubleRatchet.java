@@ -235,7 +235,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_aliceSendingChainArrow1;
     protected Canvas arr_aliceSendingChainArrow2;
     protected Canvas arr_aliceSendingChainArrow3;
-    protected Canvas arr_aliceSendingChainArrow4;   
+    protected Canvas arr_aliceSendingChainArrow4;
     protected Canvas arr_aliceReceivingChainArrow1;
     protected Canvas arr_aliceReceivingChainArrow2;
     protected Canvas arr_aliceReceivingChainArrow3;
@@ -1250,7 +1250,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private void createAliceMessagebox() {
         grp_aliceMessagebox.setLayout(gl_messageboxGroup);
         grp_aliceMessagebox.setLayoutData(gd_messageboxComposite);
-        grp_aliceMessagebox.setText(MessageboxDescription);
+        grp_aliceMessagebox.setText("Nachricht");
         
         cmp_aliceMessagebox.setLayout(gl_messageboxComposite);
         cmp_aliceMessagebox.setLayoutData(gd_messageboxComposite);

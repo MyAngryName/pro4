@@ -33,7 +33,7 @@ public class SignalEncryptionArrows extends Canvas {
         gridData.widthHint = width;
         return gridData;
     }
-    private static float arrowHeadSize = 1;
+    private final static float arrowHeadSize = 12;
 
     public static Path drawRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
         Path resultPath = new Path(canvas.getDisplay());
@@ -157,13 +157,13 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.moveTo(leftLineY, 0);
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, height);
+        resultPath.lineTo(width/2, baseLength + arrowHeadSize);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, lowerLineY);
         resultPath.lineTo(baseLengthSecond, lowerLineY);
         resultPath.lineTo(baseLengthSecond, lowerArrowHeadY);
-        resultPath.lineTo(width, height / 2);
+        resultPath.lineTo(baseLengthSecond + arrowHeadSize, height / 2);
         resultPath.lineTo(baseLengthSecond, upperArrowHeadY);
         resultPath.lineTo(baseLengthSecond, upperLineY);
         resultPath.lineTo(rightLineY, upperLineY);
@@ -204,7 +204,7 @@ public class SignalEncryptionArrows extends Canvas {
         
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, height);
+        resultPath.lineTo(width/2, baseLength + arrowHeadSize);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, 0);
@@ -343,7 +343,7 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = width + 0.2f * width;
+        float baseLength = 0.2f * width;
 
         float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
         float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
@@ -360,9 +360,9 @@ public class SignalEncryptionArrows extends Canvas {
         float upperArrowHeadY = (height / 2) - (secondHeight/2) + (arrowHeadWidth / 2);
 
         resultPath.moveTo(width, upperLineY);
-        resultPath.lineTo(leftMiddleLineX, upperLineY);
+        resultPath.lineTo(rightMiddleLineX, upperLineY);
         
-        resultPath.lineTo(leftMiddleLineX, upperLineYSecond);
+        resultPath.lineTo(rightMiddleLineX, upperLineYSecond);
         
 		//resultPath.lineTo(0, upperLineYSecond);
         //resultPath.lineTo(0, lowerLineYSecond);
@@ -375,9 +375,9 @@ public class SignalEncryptionArrows extends Canvas {
         
         resultPath.lineTo(baseLength, lowerLineYSecond);
 		
-        resultPath.lineTo(rightMiddleLineX, lowerLineYSecond);
+        resultPath.lineTo(leftMiddleLineX, lowerLineYSecond);
         
-        resultPath.lineTo(rightMiddleLineX, lowerLineY);
+        resultPath.lineTo(leftMiddleLineX, lowerLineY);
         resultPath.lineTo(width, lowerLineY);
         resultPath.lineTo(width, upperLineY);
 

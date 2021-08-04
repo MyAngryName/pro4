@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
@@ -30,7 +31,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private TitleAndDescriptionComposite titleAndDescription;
 
-    Composite cmp_main;
+    Composite cmp_body;
     Composite cmp_alice;
     Composite cmp_bob;
 
@@ -63,7 +64,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Composite cmp_bobSendingChain;
     Composite cmp_bobReceivingChain;
     Composite cmp_bobRootChain;
-    Composite cmp_aliceAlgorithm;
+//    Composite cmp_aliceAlgorithm;
     Composite cmp_aliceSteps;
     Composite cmp_aliceMessagebox;
     Composite cmp_bobMessagebox;
@@ -235,7 +236,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_aliceSendingChainArrow1;
     protected Canvas arr_aliceSendingChainArrow2;
     protected Canvas arr_aliceSendingChainArrow3;
-    protected Canvas arr_aliceSendingChainArrow4;   
+    protected Canvas arr_aliceSendingChainArrow4;
     protected Canvas arr_aliceReceivingChainArrow1;
     protected Canvas arr_aliceReceivingChainArrow2;
     protected Canvas arr_aliceReceivingChainArrow3;
@@ -274,6 +275,22 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private StackLayout sl_BobSendingReceivingChainGroup;
 
+    private GridData gd_algorithmGroup;
+
+    private GridData gd_stepsGroup;
+
+    private GridData gd_diffieHellmanGroup;
+
+    private GridData gd_rootChainGroup;
+
+    private GridData gd_messageboxGroup;
+
+    private GridData gd_sendingReceivingChainGroup;
+
+    private Composite cmp_buttons;
+
+    private Composite cmp_header;
+
 
 
 
@@ -287,10 +304,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         this.signalEncryptionState = signalEncryptionState;
         this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
         this.instance = this;
-        gl_parent = new GridLayout(4, false);
-        gl_parent.horizontalSpacing = 3;
-        gl_parent.verticalSpacing = 0;
+        gl_parent = new GridLayout(1, false);
         setLayout(gl_parent);
+        
 
         // style data for the labels within the algorithm
         gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
@@ -298,11 +314,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_algorithmLabels.heightHint = 60;
 
         // style data for the description texts
-        gd_longDescriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_longDescriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_longDescriptionTexts.minimumHeight = 30;
         
-        gd_shortDescriptionTexts = new GridData(SWT.FILL,SWT.FILL,true,true, 1, 1);
-        gd_shortDescriptionTexts.minimumHeight =20;
+        gd_shortDescriptionTexts = new GridData(SWT.FILL,SWT.FILL,false,false, 1, 1);
+        gd_shortDescriptionTexts.minimumHeight = 20;
         // style data for message box
         gd_Messagebox = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         
@@ -311,7 +327,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gd_arrowSpaceComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
         
 
-        gl_algorithmGroup = new GridLayout(1, false);
+        gl_algorithmGroup = new GridLayout(6, false);
         gl_stepsGroup = new GridLayout(1, false);
         gl_diffieHellmanGroup = new GridLayout(1, false);
         gl_rootChainGroup = new GridLayout(1, false);
@@ -324,21 +340,24 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gl_rootChainComposite = new GridLayout(1, false);
         gl_sendingReceivingChainComposite = new GridLayout(4, false);
         gl_messageboxComposite = new GridLayout(1, false);
+        
+        gd_algorithmGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_diffieHellmanGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_rootChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_messageboxGroup = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+        gd_sendingReceivingChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 
         gd_algorithmComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_stepsComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_diffieHellmanComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gd_rootChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-        gd_messageboxComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_messageboxComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
         gd_sendingReceivingChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         
 
-        setTitleAndDescription();
-        createAliceButton();
-        createPreviousButton();
-        createNextButton();
-        createBobButton();
-        createMainComposite();
+        createHeaderComposite();
+        createBodyComposite();
         createAliceComposite();
         createBobComposite();
         showAliceView();
@@ -347,23 +366,52 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     }
 
-    private void setTitleAndDescription() {
-        titleAndDescription = new TitleAndDescriptionComposite(this);
-        titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1));
-        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle2);
-        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc2);
+    private void createHeaderComposite() {
+
+        cmp_header = new Composite(this, SWT.NONE);
+        cmp_header.setLayout(new GridLayout(1,false));
+        cmp_header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 14, 1));
+        cmp_header.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_CYAN));
+        
+        setTitleAndDescription();
+        createButtons();
+        
     }
 
-    private void createMainComposite() {
+    private void createButtons() {
+        cmp_buttons = new Composite(cmp_header, SWT.NONE);
+        cmp_buttons.setLayout(new GridLayout(4,false));
+        cmp_buttons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,14,1));
+        
+        createAliceButton();
+        createPreviousButton();
+        createNextButton();
+        createBobButton();
+        
+    }
 
-        cmp_main = new Composite(this, SWT.NONE);
-        cmp_main.setLayout(new StackLayout());
-        cmp_main.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 14, 1));
+    private void setTitleAndDescription() {
+        
+        Text text123 = new Text(cmp_header, SWT.NONE);
+        text123.setText(Messages.SignalEncryption_TabTitle2 + "\n\n" + Messages.SignalEncryption_TabDesc2);
+        text123.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+//        titleAndDescription = new TitleAndDescriptionComposite(cmp_header);
+//        titleAndDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 14, 1));
+//        titleAndDescription.setTitle(Messages.SignalEncryption_TabTitle2);
+//        titleAndDescription.setDescription(Messages.SignalEncryption_TabDesc2);
+    }
 
+    private void createBodyComposite() {
+
+        cmp_body = new Composite(this, SWT.NONE);
+        cmp_body.setLayout(new StackLayout());
+        cmp_body.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        cmp_body.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_CYAN));
     }
 
     private void createAliceButton() {
-        btn_alice = new Button(this, SWT.LEFT);
+        
+        btn_alice = new Button(cmp_buttons, SWT.LEFT);
         btn_alice.setAlignment(SWT.CENTER);
 
         gd_btnAlice = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
@@ -382,7 +430,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     }
 
     private void createBobButton() {
-        btn_bob = new Button(this, SWT.RIGHT);
+        btn_bob = new Button(cmp_buttons, SWT.RIGHT);
         btn_bob.setAlignment(SWT.CENTER);
         gd_btnBob = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         gd_btnBob.widthHint = 150;
@@ -400,7 +448,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     }
 
     private void createPreviousButton() {
-        btn_previous = new Button(this, SWT.PUSH);
+        btn_previous = new Button(cmp_buttons, SWT.PUSH);
         btn_previous.setAlignment(SWT.CENTER);
         gd_btnPrev = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
         gd_btnPrev.widthHint = 150;
@@ -419,7 +467,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     }
 
     private void createNextButton() {
-        btn_next = new Button(this, SWT.PUSH);
+        btn_next = new Button(cmp_buttons, SWT.PUSH);
         btn_next.setAlignment(SWT.CENTER);
         gd_btnNext = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         gd_btnNext.widthHint = 150;
@@ -438,7 +486,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     
     private void createBobComposite() {
         // Init of the layouts and data needed
-        cmp_bob = new Composite(cmp_main, SWT.NONE);
+        cmp_bob = new Composite(cmp_body, SWT.NONE);
 
         // Parent groups for algorithm and steps composites
         grp_bobSteps = new Group(cmp_bob, SWT.CENTER);
@@ -456,11 +504,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_bobArrowSpace1 = new Composite(cmp_bobAlgorithm, SWT.CENTER);
         grp_bobDiffieHellman = new Group(cmp_bobAlgorithm, SWT.CENTER);
 
-        // Composites for chain labels
+        // Composites for overlapping sending and receiving chains
         cmp_bobSendingChain = new Composite(grp_bobSendingReceivingChain, SWT.CENTER);
         cmp_bobReceivingChain = new Composite(grp_bobSendingReceivingChain, SWT.CENTER);
-        cmp_bobRootChain = new Composite(grp_bobRootChain, SWT.CENTER);
-        cmp_bobDiffieHellman = new Composite(grp_bobDiffieHellman, SWT.CENTER);
 
         // Composite for Message Box
         cmp_bobMessagebox = new Composite(grp_bobMessagebox, SWT.CENTER);
@@ -508,11 +554,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
+        new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
@@ -530,7 +577,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrowHeadless(arr_bobSpace2, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
@@ -548,16 +595,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 	    grp_bobMessagebox.setLayout(gl_messageboxGroup);
 	    grp_bobMessagebox.setLayoutData(gd_messageboxComposite);
 	    grp_bobMessagebox.setText(MessageboxDescription);
-	    
-        cmp_bobMessagebox.setLayout(gl_messageboxComposite);
-        cmp_bobMessagebox.setLayoutData(gd_messageboxComposite);
 
-        txt_bobCipherText = new Text(cmp_bobMessagebox,
+        txt_bobCipherText = new Text(grp_bobMessagebox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_bobCipherText.setText(MessageboxCipherText);
         txt_bobCipherText.setLayoutData(gd_Messagebox);
 
-        txt_bobPlainText = new Text(cmp_bobMessagebox,
+        txt_bobPlainText = new Text(grp_bobMessagebox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_bobPlainText.setText(MessageboxPlainText);
         txt_bobPlainText.setLayoutData(gd_Messagebox);
@@ -793,15 +837,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobRootChain.setLayout(gl_rootChainComposite);
         grp_bobRootChain.setLayoutData(gd_rootChainComposite);
 
-        cmp_bobRootChain.setLayout(gl_rootChainComposite);
-        cmp_bobRootChain.setLayoutData(gd_rootChainComposite);
-
-        txt_bobRootChain1 = new Text(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain1 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobRootChain1.setLayoutData(gd_algorithmLabels);
         txt_bobRootChain1.setText(bobRootChainLabel1);
 
         // arrow down
-        arr_bobRootChainArrow1 = new Canvas(cmp_bobRootChain, SWT.DOUBLE_BUFFERED);
+        arr_bobRootChainArrow1 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
         arr_bobRootChainArrow1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_bobRootChainArrow1.addPaintListener(new PaintListener() {
@@ -814,12 +855,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_bobRootChain2 = new Text(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain2 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobRootChain2.setLayoutData(gd_algorithmLabels);
         txt_bobRootChain2.setText(bobRootChainLabel2);
 
         // arrow down
-        arr_bobRootChainArrow2 = new Canvas(cmp_bobRootChain, SWT.DOUBLE_BUFFERED);
+        arr_bobRootChainArrow2 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
         arr_bobRootChainArrow2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_bobRootChainArrow2.addPaintListener(new PaintListener() {
@@ -832,7 +873,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_bobRootChain3 = new Text(cmp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain3 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobRootChain3.setLayoutData(gd_algorithmLabels);
         txt_bobRootChain3.setText(bobRootChainLabel3);
 
@@ -843,15 +884,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobDiffieHellman.setLayout(gl_diffieHellmanComposite);
         grp_bobDiffieHellman.setLayoutData(gd_rootChainComposite);
 
-        cmp_bobDiffieHellman.setLayout(gl_diffieHellmanComposite);
-        cmp_bobDiffieHellman.setLayoutData(gd_diffieHellmanComposite);
-
-        txt_bobDiffieHellman1 = new Text(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman1 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobDiffieHellman1.setLayoutData(gd_algorithmLabels);
         txt_bobDiffieHellman1.setText(bobDiffieHellmanLabel1);
 
         // arrow down
-        arr_bobDiffieHellmanArrow1 = new Canvas(cmp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
+        arr_bobDiffieHellmanArrow1 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
         arr_bobDiffieHellmanArrow1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_bobDiffieHellmanArrow1.addPaintListener(new PaintListener() {
@@ -864,12 +902,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_bobDiffieHellman2 = new Text(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman2 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobDiffieHellman2.setLayoutData(gd_algorithmLabels);
         txt_bobDiffieHellman2.setText(bobDiffieHellmanLabel2);
 
         // arrow up
-        arr_bobDiffieHellmanArrow2 = new Canvas(cmp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
+        arr_bobDiffieHellmanArrow2 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
         arr_bobDiffieHellmanArrow2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_bobDiffieHellmanArrow2.addPaintListener(new PaintListener() {
@@ -882,7 +920,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_bobDiffieHellman3 = new Text(cmp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman3 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_bobDiffieHellman3.setLayoutData(gd_algorithmLabels);
         txt_bobDiffieHellman3.setText(bobDiffieHellmanLabel3);
 
@@ -890,32 +928,26 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private void createAliceComposite() {
         // Init of the widgets, layouts and data needed
-        cmp_alice = new Composite(cmp_main, SWT.NONE);
+        cmp_alice = new Composite(cmp_body, SWT.NONE);
 
         // Parent groups for algorithm and steps composites
         grp_aliceSteps = new Group(cmp_alice, SWT.CENTER);
         grp_aliceAlgorithm = new Group(cmp_alice, SWT.CENTER);
 
         // Parent composite for chain groups
-        cmp_aliceAlgorithm = new Composite(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceSteps = new Composite(grp_aliceSteps, SWT.CENTER | SWT.FILL);
+//        cmp_aliceAlgorithm = new Composite(grp_aliceAlgorithm, SWT.CENTER);
 
         // Parent groups for chain composites
-        grp_aliceDiffieHellman = new Group(cmp_aliceAlgorithm, SWT.CENTER);    
-        cmp_aliceArrowSpace1 = new Composite(cmp_aliceAlgorithm, SWT.CENTER);  
-        grp_aliceRootChain = new Group(cmp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceArrowSpace2 = new Composite(cmp_aliceAlgorithm, SWT.CENTER); 
-        grp_aliceSendingReceivingChain = new Group(cmp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceMessagebox = new Group(cmp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.CENTER);    
+        cmp_aliceArrowSpace1 = new Composite(grp_aliceAlgorithm, SWT.CENTER);  
+        grp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        cmp_aliceArrowSpace2 = new Composite(grp_aliceAlgorithm, SWT.CENTER); 
+        grp_aliceSendingReceivingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceMessagebox = new Group(grp_aliceAlgorithm, SWT.CENTER);
 
-        // Composites for chain labels
-        cmp_aliceDiffieHellman = new Composite(grp_aliceDiffieHellman, SWT.CENTER);
-        cmp_aliceRootChain = new Composite(grp_aliceRootChain, SWT.CENTER);
+        // Composites for overlapping sending and receiving chains
         cmp_aliceSendingChain = new Composite(grp_aliceSendingReceivingChain, SWT.CENTER);
         cmp_aliceReceivingChain = new Composite(grp_aliceSendingReceivingChain, SWT.CENTER);
-
-        // Composite for Message Box
-        cmp_aliceMessagebox = new Composite(grp_aliceMessagebox, SWT.CENTER);
 
         // Layouts
         gl_aliceComposite = new GridLayout(1, false);
@@ -924,18 +956,18 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_alice.setLayout(gl_aliceComposite);
 
         grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
-        grp_aliceAlgorithm.setLayout(gl_algorithmComposite);
-        grp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
+        grp_aliceAlgorithm.setLayout(gl_algorithmGroup);
+        grp_aliceAlgorithm.setLayoutData(gd_algorithmGroup);
 
         grp_aliceSteps.setText(stepGroupDescription);
-        grp_aliceSteps.setLayout(gl_stepsComposite);
-        grp_aliceSteps.setLayoutData(gd_stepsComposite);
+        grp_aliceSteps.setLayout(gl_stepsGroup);
+        grp_aliceSteps.setLayoutData(gd_stepsGroup);
 
-        cmp_aliceAlgorithm.setLayout(gl_algorithmComposite);
-        cmp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
+//        cmp_aliceAlgorithm.setLayout(gl_algorithmComposite);
+//        cmp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
 
-        cmp_aliceSteps.setLayout(gl_stepsComposite);
-        cmp_aliceSteps.setLayoutData(gd_stepsComposite);
+//        cmp_aliceSteps.setLayout(gl_stepsComposite);
+//        cmp_aliceSteps.setLayoutData(gd_stepsComposite);
 
         createAliceSteps();
         
@@ -960,64 +992,66 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_aliceArrowSpace1.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED | SWT.BORDER);
+        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED );
         arr_aliceSpace1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, true, 1, 1,75));
         arr_aliceSpace1.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE );
         
         cmp_aliceArrowSpace2.setLayout(gl_arrowSpaceComposite);
         cmp_aliceArrowSpace2.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED| SWT.BORDER);
+        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED);
         arr_aliceSpace2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, true, true, 1, 1,75));
         arr_aliceSpace2.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,151);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,156);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
-        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE );
     }
 
     private void createAliceSteps() {
-        txt_aliceStep0 = new Text(cmp_aliceSteps, SWT.WRAP | SWT.READ_ONLY);
+        txt_aliceStep0 = new Text(grp_aliceSteps, SWT.WRAP | SWT.READ_ONLY);
         txt_aliceStep0.setText(aliceStep0);
         txt_aliceStep0.setLayoutData(gd_shortDescriptionTexts);
-        txt_step1 = new Text(cmp_aliceSteps, SWT.WRAP | SWT.READ_ONLY);
+        txt_step1 = new Text(grp_aliceSteps, SWT.WRAP | SWT.READ_ONLY);
         txt_step1.setText(step1);
         txt_step1.setLayoutData(gd_shortDescriptionTexts);
-        txt_step2 = new Text(cmp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
+        txt_step2 = new Text(grp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
         txt_step2.setText(step2);
         txt_step2.setLayoutData(gd_longDescriptionTexts);
-        txt_step3 = new Text(cmp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
+        txt_step3 = new Text(grp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
         txt_step3.setText(step3);
         txt_step3.setLayoutData(gd_longDescriptionTexts);
-        txt_step4 = new Text(cmp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
+        txt_step4 = new Text(grp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
         txt_step4.setText(step4);
         txt_step4.setLayoutData(gd_shortDescriptionTexts);
-        txt_aliceStep5 = new Text(cmp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
+        txt_aliceStep5 = new Text(grp_aliceSteps, SWT.READ_ONLY | SWT.WRAP );
         txt_aliceStep5.setText(aliceStep5);
         txt_aliceStep5.setLayoutData(gd_longDescriptionTexts);
     }
@@ -1027,15 +1061,15 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_aliceDiffieHellman.setLayout(gl_diffieHellmanComposite);
         grp_aliceDiffieHellman.setLayoutData(gd_diffieHellmanComposite);
 
-        cmp_aliceDiffieHellman.setLayout(gl_diffieHellmanComposite);
-        cmp_aliceDiffieHellman.setLayoutData(gd_diffieHellmanComposite);
+//        cmp_aliceDiffieHellman.setLayout(gl_diffieHellmanComposite);
+//        cmp_aliceDiffieHellman.setLayoutData(gd_diffieHellmanComposite);
 
-        txt_aliceDiffieHellman1 = new Text(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman1 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceDiffieHellman1.setLayoutData(gd_algorithmLabels);
         txt_aliceDiffieHellman1.setText(aliceDiffieHellmanLabel1);
 
         // arrow down
-        arr_aliceDiffieHellmanArrow1 = new Canvas(cmp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
+        arr_aliceDiffieHellmanArrow1 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
         arr_aliceDiffieHellmanArrow1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_aliceDiffieHellmanArrow1.addPaintListener(new PaintListener() {
@@ -1048,12 +1082,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_aliceDiffieHellman2 = new Text(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman2 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceDiffieHellman2.setLayoutData(gd_algorithmLabels);
         txt_aliceDiffieHellman2.setText(aliceDiffieHellmanLabel2);
 
         // arrow up
-        arr_aliceDiffieHellmanArrow2 = new Canvas(cmp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
+        arr_aliceDiffieHellmanArrow2 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
         arr_aliceDiffieHellmanArrow2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_aliceDiffieHellmanArrow2.addPaintListener(new PaintListener() {
@@ -1067,7 +1101,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         });
 
 
-        txt_aliceDiffieHellman3 = new Text(cmp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman3 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceDiffieHellman3.setLayoutData(gd_algorithmLabels);
         txt_aliceDiffieHellman3.setText(aliceDiffieHellmanLabel3);
      
@@ -1079,15 +1113,15 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_aliceRootChain.setLayout(gl_rootChainComposite);
         grp_aliceRootChain.setLayoutData(gd_rootChainComposite);
 
-        cmp_aliceRootChain.setLayout(gl_rootChainComposite);
-        cmp_aliceRootChain.setLayoutData(gd_rootChainComposite);
+//        cmp_aliceRootChain.setLayout(gl_rootChainComposite);
+//        cmp_aliceRootChain.setLayoutData(gd_rootChainComposite);
 
-        txt_aliceRootChain1 = new Text(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain1 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceRootChain1.setLayoutData(gd_algorithmLabels);
         txt_aliceRootChain1.setText(aliceRootChainLabel1);
 
         // arrow down
-        arr_aliceRootChainArrow1 = new Canvas(cmp_aliceRootChain, SWT.DOUBLE_BUFFERED);
+        arr_aliceRootChainArrow1 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
         arr_aliceRootChainArrow1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_aliceRootChainArrow1.addPaintListener(new PaintListener() {
@@ -1100,12 +1134,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_aliceRootChain2 = new Text(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain2 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceRootChain2.setLayoutData(gd_algorithmLabels);
         txt_aliceRootChain2.setText(aliceRootChainLabel2);
         
         // arrow down
-        arr_aliceRootChainArrow2 = new Canvas(cmp_aliceRootChain, SWT.DOUBLE_BUFFERED);
+        arr_aliceRootChainArrow2 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
         arr_aliceRootChainArrow2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, false, 1, 1, 75));
         arr_aliceRootChainArrow2.addPaintListener(new PaintListener() {
@@ -1118,7 +1152,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             }
         });
 
-        txt_aliceRootChain3 = new Text(cmp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain3 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
         txt_aliceRootChain3.setLayoutData(gd_algorithmLabels);
         txt_aliceRootChain3.setText(aliceRootChainLabel3);
 
@@ -1227,17 +1261,15 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private void createAliceMessagebox() {
         grp_aliceMessagebox.setLayout(gl_messageboxGroup);
-        grp_aliceMessagebox.setLayoutData(gd_messageboxComposite);
-        grp_aliceMessagebox.setText(MessageboxDescription);
         
-        cmp_aliceMessagebox.setLayout(gl_messageboxComposite);
-        cmp_aliceMessagebox.setLayoutData(gd_messageboxComposite);
-
-        txt_alicePlainText = new Text(cmp_aliceMessagebox, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+        grp_aliceMessagebox.setLayoutData(gd_messageboxComposite);
+        grp_aliceMessagebox.setText("Nachricht");
+        
+        txt_alicePlainText = new Text(grp_aliceMessagebox, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
         txt_alicePlainText.setText(MessageboxPlainText);
         txt_alicePlainText.setLayoutData(gd_Messagebox);
 
-        txt_aliceCipherText = new Text(cmp_aliceMessagebox,
+        txt_aliceCipherText = new Text(grp_aliceMessagebox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_aliceCipherText.setLayoutData(gd_Messagebox);
         
@@ -1358,15 +1390,15 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     }
     void showBobView() {
-        StackLayout layout = (StackLayout) this.cmp_main.getLayout();
+        StackLayout layout = (StackLayout) this.cmp_body.getLayout();
         layout.topControl = this.cmp_bob;
-        this.cmp_main.layout();
+        this.cmp_body.layout();
 
     }
     void showAliceView() {
-        StackLayout layout = (StackLayout) this.cmp_main.getLayout();
+        StackLayout layout = (StackLayout) this.cmp_body.getLayout();
         layout.topControl = this.cmp_alice;
-        this.cmp_main.layout();
+        this.cmp_body.layout();
     }
     void showAliceReceivingChain() {
         StackLayout layout = (StackLayout) this.grp_aliceSendingReceivingChain.getLayout();

@@ -306,7 +306,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         this.instance = this;
         gl_parent = new GridLayout(1, false);
         setLayout(gl_parent);
-        setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
         
 
         // style data for the labels within the algorithm
@@ -334,7 +333,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gl_rootChainGroup = new GridLayout(1, false);
         gl_messageboxGroup = new GridLayout(1, false);
 
+
+        gl_algorithmComposite = new GridLayout(6, false);
+        gl_stepsComposite = new GridLayout(1, false);
+        gl_diffieHellmanComposite = new GridLayout(1, false);
+        gl_rootChainComposite = new GridLayout(1, false);
         gl_sendingReceivingChainComposite = new GridLayout(4, false);
+        gl_messageboxComposite = new GridLayout(1, false);
         
         gd_algorithmGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);

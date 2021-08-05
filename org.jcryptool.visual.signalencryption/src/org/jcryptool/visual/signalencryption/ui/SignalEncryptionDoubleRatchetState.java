@@ -12,9 +12,16 @@ import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.S
 public class SignalEncryptionDoubleRatchetState {
     
     private STATE currentState = STATE.STEP_0;
+    private static int counter = 0;
+    private static int counterAliceEncryptedMessage = 0;
+    private static int counterBobMessage = 0;
+    private static int globalCounter = 0;
+    private static Singleton singelton;
+    private SignalEncryptionViewDoubleRatchet GlobalSwtParent;
     
     public SignalEncryptionDoubleRatchetState(SignalEncryptionViewDoubleRatchet swtParent) {
         currentState = STATE.STEP_0.setInitialState(swtParent, this);
+        this.GlobalSwtParent = swtParent;
     } 
     
     public enum STATE {
@@ -24,47 +31,45 @@ public class SignalEncryptionDoubleRatchetState {
                 
                 // Hide these Elements
                 swtParent.grp_bobAlgorithm.setVisible(false);
-                swtParent.grp_bobSendingChain.setVisible(false);
-                swtParent.grp_bobReceivingChain.setVisible(false);
+                swtParent.grp_bobSendingReceivingChain.setVisible(false);
                 swtParent.grp_bobRootChain.setVisible(false);
                 swtParent.grp_bobDiffieHellman.setVisible(false);
-                swtParent.lb_bobSendingChain1.setVisible(false);
-                swtParent.lb_bobSendingChain2.setVisible(false);
-                swtParent.lb_bobSendingChain3.setVisible(false);
-                swtParent.lb_bobSendingChain4.setVisible(false);
-                swtParent.lb_bobSendingChain5.setVisible(false);
-                swtParent.lb_bobReceivingChain1.setVisible(false);
-                swtParent.lb_bobReceivingChain2.setVisible(false);
-                swtParent.lb_bobReceivingChain3.setVisible(false);
-                swtParent.lb_bobReceivingChain4.setVisible(false);
-                swtParent.lb_bobReceivingChain5.setVisible(false);
-                swtParent.lb_bobRootChain1.setVisible(false);
-                swtParent.lb_bobRootChain2.setVisible(false);
-                swtParent.lb_bobRootChain3.setVisible(false);
-                swtParent.lb_bobDiffieHellman1.setVisible(false);
-                swtParent.lb_bobDiffieHellman2.setVisible(false);
-                swtParent.lb_bobDiffieHellman3.setVisible(false);
+                swtParent.txt_bobSendingChain1.setVisible(false);
+                swtParent.txt_bobSendingChain2.setVisible(false);
+                swtParent.txt_bobSendingChain3.setVisible(false);
+                swtParent.txt_bobSendingChain4.setVisible(false);
+                swtParent.txt_bobSendingChain5.setVisible(false);
+                swtParent.txt_bobReceivingChain1.setVisible(false);
+                swtParent.txt_bobReceivingChain2.setVisible(false);
+                swtParent.txt_bobReceivingChain3.setVisible(false);
+                swtParent.txt_bobReceivingChain4.setVisible(false);
+                swtParent.txt_bobReceivingChain5.setVisible(false);
+                swtParent.txt_bobRootChain1.setVisible(false);
+                swtParent.txt_bobRootChain2.setVisible(false);
+                swtParent.txt_bobRootChain3.setVisible(false);
+                swtParent.txt_bobDiffieHellman1.setVisible(false);
+                swtParent.txt_bobDiffieHellman2.setVisible(false);
+                swtParent.txt_bobDiffieHellman3.setVisible(false);
                 swtParent.grp_aliceAlgorithm.setVisible(false);
                 swtParent.grp_aliceDiffieHellman.setVisible(false);
                 swtParent.grp_aliceRootChain.setVisible(false);
-                swtParent.grp_aliceSendingChain.setVisible(false);
-                swtParent.grp_aliceReceivingChain.setVisible(false);
-                swtParent.lb_aliceDiffieHellman1.setVisible(false);
-                swtParent.lb_aliceDiffieHellman2.setVisible(false);
-                swtParent.lb_aliceDiffieHellman3.setVisible(false);
-                swtParent.lb_aliceRootChain1.setVisible(false);
-                swtParent.lb_aliceRootChain2.setVisible(false);
-                swtParent.lb_aliceRootChain3.setVisible(false);
-                swtParent.lb_aliceSendingChain1.setVisible(false);
-                swtParent.lb_aliceSendingChain2.setVisible(false);
-                swtParent.lb_aliceSendingChain3.setVisible(false);
-                swtParent.lb_aliceSendingChain4.setVisible(false);
-                swtParent.lb_aliceSendingChain5.setVisible(false);
-                swtParent.lb_aliceReceivingChain1.setVisible(false);
-                swtParent.lb_aliceReceivingChain2.setVisible(false);
-                swtParent.lb_aliceReceivingChain3.setVisible(false);
-                swtParent.lb_aliceReceivingChain4.setVisible(false);
-                swtParent.lb_aliceReceivingChain5.setVisible(false);
+                swtParent.grp_aliceSendingReceivingChain.setVisible(false);
+                swtParent.txt_aliceDiffieHellman1.setVisible(false);
+                swtParent.txt_aliceDiffieHellman2.setVisible(false);
+                swtParent.txt_aliceDiffieHellman3.setVisible(false);
+                swtParent.txt_aliceRootChain1.setVisible(false);
+                swtParent.txt_aliceRootChain2.setVisible(false);
+                swtParent.txt_aliceRootChain3.setVisible(false);
+                swtParent.txt_aliceSendingChain1.setVisible(false);
+                swtParent.txt_aliceSendingChain2.setVisible(false);
+                swtParent.txt_aliceSendingChain3.setVisible(false);
+                swtParent.txt_aliceSendingChain4.setVisible(false);
+                swtParent.txt_aliceSendingChain5.setVisible(false);
+                swtParent.txt_aliceReceivingChain1.setVisible(false);
+                swtParent.txt_aliceReceivingChain2.setVisible(false);
+                swtParent.txt_aliceReceivingChain3.setVisible(false);
+                swtParent.txt_aliceReceivingChain4.setVisible(false);
+                swtParent.txt_aliceReceivingChain5.setVisible(false);
                 swtParent.txt_step1.setVisible(false);
                 swtParent.txt_step2.setVisible(false);
                 swtParent.txt_step3.setVisible(false);
@@ -77,18 +82,51 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_step9.setVisible(false);
                 swtParent.txt_aliceCipherText.setVisible(false);
                 swtParent.txt_bobPlainText.setVisible(false);
+                swtParent.cmp_aliceArrowSpace1.setVisible(false);
+                swtParent.cmp_aliceArrowSpace2.setVisible(false);
+                swtParent.grp_aliceMessagebox.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow1.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow2.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow3.setVisible(false);
+                swtParent.cmp_bobArrowSpace1.setVisible(false);
+                swtParent.cmp_bobArrowSpace2.setVisible(false);
+                
+                
+                counter = 0;
+                counterAliceEncryptedMessage = 0;
+                counterBobMessage = 0;
+                globalCounter = 0;
+                
+                singelton = singelton.getInstance();
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_1.switchState(swtParent, parent);
                 return STEP_1;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 return STEP_0;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_1 {
 
@@ -97,38 +135,57 @@ public class SignalEncryptionDoubleRatchetState {
                 // Show these labels
                 swtParent.grp_aliceAlgorithm.setVisible(true);
                 swtParent.grp_aliceDiffieHellman.setVisible(true);
-                swtParent.lb_aliceDiffieHellman1.setVisible(true);
-                swtParent.lb_aliceDiffieHellman2.setVisible(true);
-                swtParent.lb_aliceDiffieHellman3.setVisible(true);
+                swtParent.txt_aliceDiffieHellman1.setVisible(true);
+                swtParent.txt_aliceDiffieHellman2.setVisible(true);
+                swtParent.txt_aliceDiffieHellman3.setVisible(true);
                 swtParent.txt_step1.setVisible(true);
                 
                 
                 // Hide these Elements
                 swtParent.grp_aliceRootChain.setVisible(false);
-                swtParent.lb_aliceRootChain1.setVisible(false);
-                swtParent.lb_aliceRootChain2.setVisible(false);
-                swtParent.lb_aliceRootChain3.setVisible(false);
+                swtParent.txt_aliceRootChain1.setVisible(false);
+                swtParent.txt_aliceRootChain2.setVisible(false);
+                swtParent.txt_aliceRootChain3.setVisible(false);
                 swtParent.grp_aliceRootChain.setVisible(false);
-                
+                swtParent.cmp_aliceArrowSpace1.setVisible(false);
                 swtParent.txt_step2.setVisible(false);
+                swtParent.grp_aliceSendingReceivingChain.setVisible(false);
+                swtParent.txt_aliceSendingChain1.setVisible(false);
+                swtParent.cmp_aliceArrowSpace2.setVisible(false);
+
                 
-                swtParent.signalEncryptionState.saveMessageAlice("Hello World");
+                swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage(counterAliceEncryptedMessage));
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_0.switchState(swtParent, parent);
                 return STEP_0;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_2 {
 
@@ -137,42 +194,59 @@ public class SignalEncryptionDoubleRatchetState {
                 
                 // Show these labels
                 swtParent.grp_aliceRootChain.setVisible(true);
-                swtParent.lb_aliceRootChain1.setVisible(true);
-                swtParent.lb_aliceRootChain2.setVisible(true);
-                swtParent.lb_aliceRootChain3.setVisible(true);
-                swtParent.grp_aliceRootChain.setVisible(true);
+                swtParent.txt_aliceRootChain1.setVisible(true);
+                swtParent.txt_aliceRootChain2.setVisible(true);
+                swtParent.txt_aliceRootChain3.setVisible(true);
+                swtParent.grp_aliceRootChain.setVisible(true);                
+                swtParent.grp_aliceSendingReceivingChain.setVisible(true);
+                swtParent.txt_aliceSendingChain1.setVisible(true);
+                swtParent.arr_aliceSendingChainArrow4.setVisible(true);
+                swtParent.cmp_aliceArrowSpace2.setVisible(true);
                 
                 swtParent.txt_step2.setVisible(true);
-
+                swtParent.cmp_aliceArrowSpace1.setVisible(true);
                 
                 // Hide these Elements
-                swtParent.grp_aliceSendingChain.setVisible(false);
-                
-                swtParent.lb_aliceSendingChain1.setVisible(false);
-                swtParent.lb_aliceSendingChain2.setVisible(false);
-                swtParent.lb_aliceSendingChain3.setVisible(false);
-                swtParent.lb_aliceSendingChain4.setVisible(false);
-                swtParent.lb_aliceSendingChain5.setVisible(false);
-
+                swtParent.txt_aliceReceivingChain1.setVisible(false);
+                swtParent.txt_aliceSendingChain2.setVisible(false);
+                swtParent.txt_aliceSendingChain3.setVisible(false);
+                swtParent.txt_aliceSendingChain4.setVisible(false);
+                swtParent.txt_aliceSendingChain5.setVisible(false);
                 swtParent.txt_step3.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow1.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow2.setVisible(false);
+                swtParent.arr_aliceSendingChainArrow3.setVisible(false);
                 
                 // State
-                
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_3.switchState(swtParent, parent);
                 return STEP_3;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_1.switchState(swtParent, parent);
                 return STEP_1;
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
             }
             
         }, STEP_3{
@@ -183,43 +257,57 @@ public class SignalEncryptionDoubleRatchetState {
 
                 // Show these labels
 
-                swtParent.grp_aliceSendingChain.setVisible(true);
-                
-                swtParent.lb_aliceSendingChain1.setVisible(true);
-                swtParent.lb_aliceSendingChain2.setVisible(true);
-                swtParent.lb_aliceSendingChain3.setVisible(true);
-                swtParent.lb_aliceSendingChain4.setVisible(true);
-                swtParent.lb_aliceSendingChain5.setVisible(true);
 
+                swtParent.txt_aliceSendingChain2.setVisible(true);
+                swtParent.txt_aliceSendingChain3.setVisible(true);
+                swtParent.txt_aliceSendingChain4.setVisible(true);
+                swtParent.txt_aliceSendingChain5.setVisible(true);
                 swtParent.txt_step3.setVisible(true);
+                swtParent.arr_aliceSendingChainArrow1.setVisible(true);
+                swtParent.arr_aliceSendingChainArrow2.setVisible(true);
+                swtParent.arr_aliceSendingChainArrow3.setVisible(true);
                 
                 
                 
-                // Hide these Elements            
-                swtParent.grp_aliceReceivingChain.setVisible(false);
-                
-                swtParent.lb_aliceReceivingChain1.setVisible(false);
-                swtParent.lb_aliceReceivingChain2.setVisible(false);
-                swtParent.lb_aliceReceivingChain3.setVisible(false);
-                swtParent.lb_aliceReceivingChain4.setVisible(false);
-                swtParent.lb_aliceReceivingChain5.setVisible(false);
-                
-                swtParent.grp_bobSendingChain.setVisible(false);
+                // Hide these Elements
 
+                swtParent.txt_aliceReceivingChain2.setVisible(false);
+                swtParent.txt_aliceReceivingChain3.setVisible(false);
+                swtParent.txt_aliceReceivingChain4.setVisible(false);
+                swtParent.txt_aliceReceivingChain5.setVisible(false);                
+                swtParent.grp_bobSendingReceivingChain.setVisible(false);
+                swtParent.grp_aliceMessagebox.setVisible(false);
                 swtParent.txt_step4.setVisible(false);
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_2.switchState(swtParent, parent);
                 return STEP_2;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_4 {
 
@@ -227,11 +315,8 @@ public class SignalEncryptionDoubleRatchetState {
             protected void switchState(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
                 
                 // Show these labels
-                swtParent.grp_aliceReceivingChain.setVisible(true);
-                swtParent.grp_bobSendingChain.setVisible(true);
-                
-                swtParent.showAliceMessageBox();
-                
+                swtParent.grp_aliceSendingReceivingChain.setVisible(true);
+                swtParent.grp_aliceMessagebox.setVisible(true);
                 swtParent.txt_step4.setVisible(true);
                                 
                 // Hide these Elements
@@ -240,19 +325,43 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.grp_bobAlgorithm.setVisible(false);
                 swtParent.txt_aliceStep5.setVisible(false);
                 swtParent.txt_bobStep5.setVisible(false);
+                swtParent.grp_bobMessagebox.setVisible(false);
+                
+                
+
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.saveMessageAlice(swtParent.txt_alicePlainText.getText());
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 STEP_5.switchState(swtParent, parent);
                 return STEP_5;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_3.switchState(swtParent, parent);
                 return STEP_3;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_5 {
 
@@ -262,33 +371,58 @@ public class SignalEncryptionDoubleRatchetState {
                 // Show these labels
 
                 swtParent.grp_bobAlgorithm.setVisible(true);
-                swtParent.showBobMessageBox();
                 swtParent.txt_aliceCipherText.setVisible(true);
                 swtParent.txt_bobCipherText.setVisible(true);
                 swtParent.txt_aliceStep5.setVisible(true);
                 swtParent.txt_bobStep5.setVisible(true);
+                swtParent.grp_bobMessagebox.setVisible(true);
+
+                swtParent.showAliceView();
                 
                 // Hide these Elements
                 swtParent.grp_bobDiffieHellman.setVisible(false);
-                swtParent.lb_bobDiffieHellman1.setVisible(false);
-                swtParent.lb_bobDiffieHellman2.setVisible(false);
-                swtParent.lb_bobDiffieHellman3.setVisible(false);
+                swtParent.txt_bobDiffieHellman1.setVisible(false);
+                swtParent.txt_bobDiffieHellman2.setVisible(false);
+                swtParent.txt_bobDiffieHellman3.setVisible(false);
                 swtParent.txt_step6.setVisible(false);
                
-                
+                // State
+                swtParent.txt_aliceCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage(counterAliceEncryptedMessage));
+                swtParent.txt_bobCipherText.setText(swtParent.signalEncryptionState.getAliceEncryptedMessage(counterAliceEncryptedMessage));
+
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counterAliceEncryptedMessage++;
                 STEP_6.switchState(swtParent, parent);
                 return STEP_6;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
                 STEP_4.switchState(swtParent, parent);
                 return STEP_4;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_6 {
 
@@ -297,31 +431,58 @@ public class SignalEncryptionDoubleRatchetState {
                 
                 // Show these labels
                 swtParent.grp_bobDiffieHellman.setVisible(true);
-                swtParent.lb_bobDiffieHellman1.setVisible(true);
-                swtParent.lb_bobDiffieHellman2.setVisible(true);
-                swtParent.lb_bobDiffieHellman3.setVisible(true);
+                swtParent.txt_bobDiffieHellman1.setVisible(true);
+                swtParent.txt_bobDiffieHellman2.setVisible(true);
+                swtParent.txt_bobDiffieHellman3.setVisible(true);
                 swtParent.txt_step6.setVisible(true);
+                swtParent.showBobView();
                 
                 // Hide these Elements
                 swtParent.grp_bobRootChain.setVisible(false);
-                swtParent.lb_bobRootChain1.setVisible(false);
-                swtParent.lb_bobRootChain2.setVisible(false);
-                swtParent.lb_bobRootChain3.setVisible(false);
+                swtParent.txt_bobRootChain1.setVisible(false);
+                swtParent.txt_bobRootChain2.setVisible(false);
+                swtParent.txt_bobRootChain3.setVisible(false);
                 swtParent.txt_step7.setVisible(false);
+                swtParent.cmp_bobArrowSpace1.setVisible(false);
+                swtParent.grp_bobSendingReceivingChain.setVisible(false);
+                swtParent.txt_bobReceivingChain1.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow4.setVisible(false);
+
+                swtParent.cmp_bobArrowSpace2.setVisible(false);
+                swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage(counterBobMessage));
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                counterBobMessage++;
                 STEP_7.switchState(swtParent, parent);
                 return STEP_7;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                counterAliceEncryptedMessage--;
                 STEP_5.switchState(swtParent, parent);
                 return STEP_5;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_7 {
 
@@ -331,18 +492,25 @@ public class SignalEncryptionDoubleRatchetState {
 
                 // Show these labels
                 swtParent.grp_bobRootChain.setVisible(true);
-                swtParent.lb_bobRootChain1.setVisible(true);
-                swtParent.lb_bobRootChain2.setVisible(true);
-                swtParent.lb_bobRootChain3.setVisible(true);
+                swtParent.txt_bobRootChain1.setVisible(true);
+                swtParent.txt_bobRootChain2.setVisible(true);
+                swtParent.txt_bobRootChain3.setVisible(true);
                 swtParent.txt_step7.setVisible(true);
+                swtParent.cmp_bobArrowSpace1.setVisible(true);
+                swtParent.cmp_bobArrowSpace2.setVisible(true);
+                swtParent.txt_bobReceivingChain1.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow4.setVisible(true);
+                swtParent.grp_bobSendingReceivingChain.setVisible(true);
                 
                 // Hide these Elements
-                swtParent.grp_bobReceivingChain.setVisible(false);
-                swtParent.lb_bobReceivingChain1.setVisible(false);
-                swtParent.lb_bobReceivingChain2.setVisible(false);
-                swtParent.lb_bobReceivingChain3.setVisible(false);
-                swtParent.lb_bobReceivingChain4.setVisible(false);
-                swtParent.lb_bobReceivingChain5.setVisible(false);
+                swtParent.txt_bobReceivingChain2.setVisible(false);
+                swtParent.txt_bobReceivingChain3.setVisible(false);
+                swtParent.txt_bobReceivingChain4.setVisible(false);
+                swtParent.txt_bobReceivingChain5.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow1.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow2.setVisible(false);
+                swtParent.arr_bobReceivingChainArrow3.setVisible(false);
+
                 swtParent.txt_step8.setVisible(false);
                 
 
@@ -350,15 +518,33 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_8.switchState(swtParent, parent);
                 return STEP_8;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                counterBobMessage--;
                 STEP_6.switchState(swtParent, parent);
                 return STEP_6;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_8 {
 
@@ -366,14 +552,17 @@ public class SignalEncryptionDoubleRatchetState {
             protected void switchState(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
 
                 // Show these labels
-                swtParent.grp_bobReceivingChain.setVisible(true);
-                swtParent.lb_bobReceivingChain1.setVisible(true);
-                swtParent.lb_bobReceivingChain2.setVisible(true);
-                swtParent.lb_bobReceivingChain3.setVisible(true);
-                swtParent.lb_bobReceivingChain4.setVisible(true);
-                swtParent.lb_bobReceivingChain5.setVisible(true);
-
+                swtParent.grp_bobSendingReceivingChain.setVisible(true);
+                swtParent.txt_bobReceivingChain1.setVisible(true);
+                swtParent.txt_bobReceivingChain2.setVisible(true);
+                swtParent.txt_bobReceivingChain3.setVisible(true);
+                swtParent.txt_bobReceivingChain4.setVisible(true);
+                swtParent.txt_bobReceivingChain5.setVisible(true);
                 swtParent.txt_step8.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow1.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow2.setVisible(true);
+                swtParent.arr_bobReceivingChainArrow3.setVisible(true);
+
                 
                 // Hide these Elements
                 swtParent.txt_step9.setVisible(false);
@@ -382,15 +571,32 @@ public class SignalEncryptionDoubleRatchetState {
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
                 STEP_9.switchState(swtParent, parent);
                 return STEP_9;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_7.switchState(swtParent, parent);
                 return STEP_7;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
             
         }, STEP_9 {
 
@@ -400,21 +606,218 @@ public class SignalEncryptionDoubleRatchetState {
                 // Show these labels
                 swtParent.txt_bobPlainText.setVisible(true);
                 swtParent.txt_step9.setVisible(true);
+                
+                
 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
-                return STEP_9;
+
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.txt_bobPlainText.setText(swtParent.MessageboxPlainText);
+                swtParent.txt_alicePlainText.setText(swtParent.MessageboxPlainText);
+                counter = 0;
+                BOB_SEND_MSG.switchState(swtParent, parent);
+                return BOB_SEND_MSG;
             }
 
             @Override
             STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
                 STEP_8.switchState(swtParent, parent);
                 return STEP_8;
             }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
+            
+        }, BOB_SEND_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.saveMessageBob(swtParent.txt_bobPlainText.getText());
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                
+                counter++;
+                ALICE_RCV_MSG.switchState(swtParent, parent);
+                return ALICE_RCV_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                if(counter <= 0) {
+                    swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                    STEP_9.switchState(swtParent, parent);
+                    return STEP_9;
+                }else {
+                    swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                    counter--;
+                    BOB_RCV_MSG.switchState(swtParent, parent);
+                    return BOB_RCV_MSG;
+                }
+                
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-gesingelton.unlock(parent, globalCounter);nerated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
+            
+        }, ALICE_RCV_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                ALICE_SEND_MSG.switchState(swtParent, parent);
+                return ALICE_SEND_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return BOB_SEND_MSG;
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
+            
+        }, ALICE_SEND_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                BOB_RCV_MSG.switchState(swtParent, parent);
+                return BOB_RCV_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return ALICE_RCV_MSG;
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
+        }, BOB_RCV_MSG{
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
+                    SignalEncryptionDoubleRatchetState parent) {
+                
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                globalCounter++;
+                singelton.unlock(parent, globalCounter);
+                swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
+                counter++;
+                BOB_SEND_MSG.switchState(swtParent, parent);
+                return BOB_SEND_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singelton.lock(parent, globalCounter);
+                globalCounter--;
+                swtParent.signalEncryptionState.stepBack(swtParent.signalEncryptionState);
+                counter--;
+                return ALICE_SEND_MSG;
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
             
         };
+        
+        
 //        , STEP_10 {
 //
 //            @Override
@@ -438,6 +841,8 @@ public class SignalEncryptionDoubleRatchetState {
 //        };
         
         protected abstract void switchState(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent);
+        abstract void updateText(SignalEncryptionViewDoubleRatchet swtParent);
+        abstract void saveText();
         abstract STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent);
         abstract STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent);
         public STATE setInitialState(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
@@ -456,5 +861,16 @@ public class SignalEncryptionDoubleRatchetState {
     }
     public STATE getCurrentState() {
         return currentState;
+    }
+    public void setLock() {
+        GlobalSwtParent.txt_bobPlainText.setEditable(false);
+        GlobalSwtParent.txt_alicePlainText.setEditable(false);
+    }
+    public void setUnlock() {
+        GlobalSwtParent.txt_bobPlainText.setEditable(true);
+        GlobalSwtParent.txt_alicePlainText.setEditable(true);
+    }
+    public SignalEncryptionViewDoubleRatchet getSwtParent() {
+        return GlobalSwtParent;
     }
 }

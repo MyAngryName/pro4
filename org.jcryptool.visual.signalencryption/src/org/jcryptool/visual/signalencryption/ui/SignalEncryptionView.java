@@ -23,11 +23,7 @@ import org.jcryptool.core.util.ui.auto.SmoothScroller;
 
 
 
-/**
- * 
- * @author Dan-Kerko Ciudin
- * 
- */
+
 
 public class SignalEncryptionView extends ViewPart {
 	
@@ -101,7 +97,7 @@ public class SignalEncryptionView extends ViewPart {
 		                     
 		
         scrolledComposite.setContent(tabFolder);
-        scrolledComposite.setMinSize(tabFolder.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        scrolledComposite.setMinSize(tabFolder.computeSize(SignalEncryptionConstants.PLUGIN_WIDTH,SignalEncryptionConstants.PLUGIN_HEIGTH));
 		
 		// This makes the ScrolledComposite scrolling, when the mouse 
 		// is on a Text with one or more of the following tags: SWT.READ_ONLY,
@@ -117,7 +113,10 @@ public class SignalEncryptionView extends ViewPart {
 	public void setTab(int tab) { 
         switch (tab) {
          case 0:
-           overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);    
+
+           //overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);
+           overViewTabComposite.setParameter();
+           overViewTabComposite.textReset();
            tbtmOverview.setControl(overViewTabComposite);
            previousTab = 0;
            break; 
@@ -148,15 +147,7 @@ public class SignalEncryptionView extends ViewPart {
         }
         createPartControl(parent);
         parent.layout();
-
-//        resetTabs();
         
     }
     
-//  private void resetTabs() {
-//      if(overViewTabComposite != null && !overViewTabComposite.isDisposed()) overViewTabComposite.dispose();
-//      if(doubleRatchetTabComposite != null && !doubleRatchetTabComposite.isDisposed()) doubleRatchetTabComposite.dispose();
-//      overViewTabComposite = null;
-//      doubleRatchetTabComposite = null;
-//  }
 }

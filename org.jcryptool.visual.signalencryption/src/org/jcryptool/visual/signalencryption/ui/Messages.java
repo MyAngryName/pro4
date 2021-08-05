@@ -79,7 +79,7 @@ public class Messages extends NLS {
     public static String SignalEncryption_RootChainDescription;
     public static String SignalEncryption_SendingChainDescription;
     public static String SignalEncryption_ReceivingChainDescription;
-    public static String SignalEncryption_MessageBoxDescription;
+    public static String SignalEncryption_MessageboxDescription;
     
     public static String SignalEncryption_aliceDiffieHellmanLabel1;
     public static String SignalEncryption_aliceDiffieHellmanLabel2;
@@ -142,7 +142,8 @@ public class Messages extends NLS {
 
     public static String SignalEncryption_TabDesc2;
 
-
+    public static String SignalEncryption_btnName_Next;
+    public static String SignalEncryption_btnName_Previous;
 
 
 

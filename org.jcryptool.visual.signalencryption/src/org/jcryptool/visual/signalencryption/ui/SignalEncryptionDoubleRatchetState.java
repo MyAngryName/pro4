@@ -618,8 +618,6 @@ public class SignalEncryptionDoubleRatchetState {
                 swtParent.txt_bobPlainText.setVisible(true);
                 swtParent.txt_step9.setVisible(true);
                 
-                
-
             }
 
             @Override
@@ -627,11 +625,9 @@ public class SignalEncryptionDoubleRatchetState {
 
                 globalCounter++;
                 singleton.unlock(parent, globalCounter);
-                swtParent.txt_bobPlainText.setText(swtParent.MessageboxPlainText);
-                swtParent.txt_alicePlainText.setText(swtParent.MessageboxPlainText);
-                counter = 0;
-                BOB_SEND_MSG.switchState(swtParent, parent);
-                return BOB_SEND_MSG;
+                
+                STEP_10.switchState(swtParent, parent);
+                return STEP_10;
             }
 
             @Override
@@ -654,19 +650,78 @@ public class SignalEncryptionDoubleRatchetState {
                 
             }
 
-            
+        }, STEP_10 {
+
+            @Override
+            protected void switchState(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                
+                if(!singleton.getLockStatus()) {
+                    swtParent.txt_bobCipherText.setText(swtParent.MessageboxPlainText);
+                    swtParent.txt_bobPlainText.setText("");
+                    swtParent.txt_alicePlainText.setText(swtParent.MessageboxPlainText);
+                    swtParent.txt_aliceCipherText.setText("");
+                    swtParent.txt_bobCipherText.setEditable(true);
+                    swtParent.txt_alicePlainText.setEditable(false);
+                }else {
+                    swtParent.txt_bobPlainText.setText(swtParent.signalEncryptionState.getBobMessage(counterBobMessage));
+                    swtParent.txt_alicePlainText.setText(swtParent.signalEncryptionState.getAliceMessage(0));
+
+                }
+                
+                
+            }
+
+            @Override
+            STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+
+                globalCounter++;
+                singleton.unlock(parent, globalCounter);
+                
+                counter = 0;
+                BOB_SEND_MSG.switchState(swtParent, parent);
+                return BOB_SEND_MSG;
+            }
+
+            @Override
+            STATE back(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
+                singleton.lock(parent, globalCounter);
+                globalCounter--;
+                STEP_9.switchState(swtParent, parent);
+                return STEP_9;
+            }
+
+            @Override
+            void updateText(SignalEncryptionViewDoubleRatchet swtParent) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            void saveText() {
+                // TODO Auto-generated method stub
+                
+            }
+
+                
         }, BOB_SEND_MSG{
 
             @Override
             protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
                     SignalEncryptionDoubleRatchetState parent) {
+
+                if(!singleton.getLockStatus()) {
+                    swtParent.txt_bobCipherText.setEditable(true);
+                }
                 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
                 globalCounter++;
+                
                 singleton.unlock(parent, globalCounter);
+                
+                swtParent.txt_bobCipherText.setEditable(false);
                 
                 if(!singleton.getLockStatus()) {
                 	swtParent.signalEncryptionState.saveMessageBob(swtParent.txt_bobPlainText.getText());
@@ -755,13 +810,19 @@ public class SignalEncryptionDoubleRatchetState {
             protected void switchState(SignalEncryptionViewDoubleRatchet swtParent,
                     SignalEncryptionDoubleRatchetState parent) {
                 // TODO Auto-generated method stub
+                if(!singleton.getLockStatus()) {
+                    swtParent.txt_aliceCipherText.setEditable(true);
+                }
                 
             }
 
             @Override
             STATE next(SignalEncryptionViewDoubleRatchet swtParent, SignalEncryptionDoubleRatchetState parent) {
                 globalCounter++;
+                
                 singleton.unlock(parent, globalCounter);
+                
+                swtParent.txt_aliceCipherText.setEditable(false);
                 swtParent.signalEncryptionState.stepForward(swtParent.signalEncryptionState);
                 counter++;
                 BOB_RCV_MSG.switchState(swtParent, parent);

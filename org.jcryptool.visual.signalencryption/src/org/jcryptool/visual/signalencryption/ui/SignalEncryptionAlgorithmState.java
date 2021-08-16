@@ -99,9 +99,13 @@ public class SignalEncryptionAlgorithmState {
     private static SignalMessage tmpSignalMessage;
     
     private static String message;
+    
+    private static Singleton singleton;
+
         
     public SignalEncryptionAlgorithmState() {
         currentState = STATE.PARAMETER.setInitialState(this);
+        singleton = singleton.getInstance();
 
     }
     public enum STATE {
@@ -278,13 +282,19 @@ public class SignalEncryptionAlgorithmState {
         }, RECEIVE_PRE_KEY_SIGNAL_MESSAGE {
             @Override
             protected void switchState(SignalEncryptionAlgorithmState parent) {
-                try {
-                    bobMessageRcv.add(bobCounterMessagesRcv, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage)));
-                } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
-                        | InvalidKeyIdException | InvalidKeyException | UntrustedIdentityException e) {
+                if(!singleton.getLockStatus()) {
+                    try {
+                        bobMessageRcv.add(bobCounterMessagesRcv, new String(signalEncryptionAlgorithm.getBobSessionCipher().decrypt(alicePreKeySignalMessage)));
+                        createText();
+                    } catch (DuplicateMessageException | LegacyMessageException | InvalidMessageException
+                            | InvalidKeyIdException | InvalidKeyException | UntrustedIdentityException e) {
+                        updateText();
+                    }
+                } else {
                     updateText();
                 }
-                createText();
+                
+                
             }
             @Override
             protected void createText() {

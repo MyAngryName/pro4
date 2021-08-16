@@ -38,7 +38,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Button btn_bob;
     Button btn_next;
     Button btn_previous;
-
     
     Group grp_aliceSteps;
     Group grp_aliceAlgorithm;
@@ -122,8 +121,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     GridData gd_bobReceivingChainGroup;
     GridData gd_arrowSpaceComposite;
     GridData gd_Messagebox;
-    
-    GridData gd_MessageBox;
 
     Text txt_aliceDiffieHellman1;
     Text txt_aliceDiffieHellman2;
@@ -225,7 +222,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     // private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
     String MessageboxPlainText = "Geben Sie hier Ihre Nachricht an Bob ein.";
     private String MessageboxCipherText = "The Ciphertext";
-    private String txt_aliceCipherText.setText(MessageBoxCipherText);
 
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
     SignalEncryptionAlgorithmState signalEncryptionState;
@@ -244,8 +240,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_aliceReceivingChainArrow2;
     protected Canvas arr_aliceReceivingChainArrow3;
 	protected Canvas arr_aliceReceivingChainArrow4;	
-    //protected Canvas arr_aliceSpace1;
-    //protected Canvas arr_aliceSpace2;
+    protected Canvas arr_aliceSpace1;
+    protected Canvas arr_aliceSpace2;
 
 
 
@@ -264,10 +260,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_bobSpace1;
     protected Canvas arr_bobSpace2;
 
-
     
-    //String input;
-    //private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    String input;
+    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
     
     ModifyListener keys_changedListener;
 
@@ -279,28 +274,10 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
     private StackLayout sl_BobSendingReceivingChainGroup;
 
-    private GridData gd_algorithmGroup;
-
-    private GridData gd_stepsGroup;
-
-    private GridData gd_diffieHellmanGroup;
-
-    private GridData gd_rootChainGroup;
-
-    private GridData gd_messageboxGroup;
-
-    private GridData gd_sendingReceivingChainGroup;
 
 
 
 
-
-
-    private Canvas arr_aliceSpace1;
-    private Canvas arr_aliceSpace2;
-    
-    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
-    String input;
 
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
@@ -347,20 +324,13 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         gl_rootChainComposite = new GridLayout(1, false);
         gl_sendingReceivingChainComposite = new GridLayout(4, false);
         gl_messageboxComposite = new GridLayout(1, false);
-        
-        gd_algorithmGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_diffieHellmanGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_rootChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_messageboxGroup = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        gd_sendingReceivingChainGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 
         gd_algorithmComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_stepsComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_diffieHellmanComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-        gd_rootChainComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_diffieHellmanComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+        gd_rootChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gd_messageboxComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        gd_sendingReceivingChainComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        gd_sendingReceivingChainComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         
 
         setTitleAndDescription();
@@ -442,7 +412,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
-
+                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
 
             }
         });
@@ -459,19 +429,10 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-
-                currentState = currentState.next(instance);     
-                stepCounter++;
+                signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
+                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
             }
         });
-
-    }
-
-    private void showBobView() {
-        StackLayout layout = (StackLayout) this.cmp_main.getLayout();
-        layout.topControl = this.cmp_bob;
-        this.cmp_main.layout();
-
 
     }
     
@@ -547,12 +508,11 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,156);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace1, 5, 10,151);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
         new Text(cmp_bobArrowSpace1,SWT.NONE);
@@ -570,7 +530,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,156);
+                Path path = SignalEncryptionArrows.drawLeftUpLeftArrow(arr_bobSpace2, 5, 10,151);
                 event.gc.fillPath(path);
                 path.dispose();
             }
@@ -964,12 +924,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_alice.setLayout(gl_aliceComposite);
 
         grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
-        grp_aliceAlgorithm.setLayout(gl_algorithmGroup);
-        grp_aliceAlgorithm.setLayoutData(gd_algorithmGroup);
+        grp_aliceAlgorithm.setLayout(gl_algorithmComposite);
+        grp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
 
         grp_aliceSteps.setText(stepGroupDescription);
-        grp_aliceSteps.setLayout(gl_stepsGroup);
-        grp_aliceSteps.setLayoutData(gd_stepsGroup);
+        grp_aliceSteps.setLayout(gl_stepsComposite);
+        grp_aliceSteps.setLayoutData(gd_stepsComposite);
 
         cmp_aliceAlgorithm.setLayout(gl_algorithmComposite);
         cmp_aliceAlgorithm.setLayoutData(gd_algorithmComposite);
@@ -1000,47 +960,45 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_aliceArrowSpace1.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED );
+        arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED | SWT.BORDER);
         arr_aliceSpace1
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, true, 1, 1,75));
         arr_aliceSpace1.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,156);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrow(arr_aliceSpace1, 5, 10,151);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
-        new Text(cmp_aliceArrowSpace1,SWT.NONE );
+        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace1,SWT.NONE | SWT.BORDER);
         
         cmp_aliceArrowSpace2.setLayout(gl_arrowSpaceComposite);
         cmp_aliceArrowSpace2.setLayoutData(gd_arrowSpaceComposite);
         
         // arrow up
-        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED);
+        arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED| SWT.BORDER);
         arr_aliceSpace2
                 .setLayoutData(SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, true, true, 1, 1,75));
         arr_aliceSpace2.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,156);
+                Path path = SignalEncryptionArrows.drawRightUpRightArrowHeadless(arr_aliceSpace2, 5, 10,151);
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
-        new Text(cmp_aliceArrowSpace2,SWT.NONE );
+        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
+        new Text(cmp_aliceArrowSpace2,SWT.NONE | SWT.BORDER);
     }
 
     private void createAliceSteps() {
@@ -1281,17 +1239,18 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         txt_aliceCipherText = new Text(cmp_aliceMessagebox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
-        txt_aliceCipherText.setText(MessageBoxCipherText);
-        txt_aliceCipherText.setLayoutData(gd_MessageBox);
-        txt_alicePlainText.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                if(stepCounter==5) {
-                	input = txt_alicePlainText.getText();
-                	System.out.println(input);
-                }
-                
+        txt_aliceCipherText.setLayoutData(gd_Messagebox);
+        
+        txt_aliceCipherText.setText("Encrypted Message");
+        txt_alicePlainText.addListener(SWT.Modify, new Listener() {
+
+            @Override
+            public void handleEvent(Event e) {
+                txt_alicePlainText.setTextLimit(256);
             }
         });
+        txt_alicePlainText.setEditable(true);
+        System.out.println(txt_alicePlainText.getText());
 
 
     }

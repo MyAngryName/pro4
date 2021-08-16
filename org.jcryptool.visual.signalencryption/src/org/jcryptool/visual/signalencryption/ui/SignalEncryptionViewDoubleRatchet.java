@@ -38,6 +38,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     Button btn_bob;
     Button btn_next;
     Button btn_previous;
+
     
     Group grp_aliceSteps;
     Group grp_aliceAlgorithm;
@@ -260,6 +261,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_bobSpace1;
     protected Canvas arr_bobSpace2;
 
+
     
     String input;
     private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
@@ -290,6 +292,12 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
 
 
+
+    private Canvas arr_aliceSpace1;
+    private Canvas arr_aliceSpace2;
+    
+    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    String input;
 
 
     SignalEncryptionViewDoubleRatchet(Composite parent, int style,
@@ -431,7 +439,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 signalEncryptionDoubleRatchetState.stepBack(instance, signalEncryptionDoubleRatchetState);
-                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
+
 
             }
         });
@@ -448,10 +456,19 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                signalEncryptionDoubleRatchetState.stepForward(instance, signalEncryptionDoubleRatchetState);
-                System.out.println(signalEncryptionDoubleRatchetState.getCurrentState().toString());
+
+                currentState = currentState.next(instance);     
+                stepCounter++;
             }
         });
+
+    }
+
+    private void showBobView() {
+        StackLayout layout = (StackLayout) this.cmp_main.getLayout();
+        layout.topControl = this.cmp_bob;
+        this.cmp_main.layout();
+
 
     }
     
@@ -1261,18 +1278,17 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         txt_aliceCipherText = new Text(cmp_aliceMessagebox,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
-        txt_aliceCipherText.setLayoutData(gd_Messagebox);
-        
-        txt_aliceCipherText.setText("Encrypted Message");
-        txt_alicePlainText.addListener(SWT.Modify, new Listener() {
-
-            @Override
-            public void handleEvent(Event e) {
-                txt_alicePlainText.setTextLimit(256);
+        txt_aliceCipherText.setText(MessageBoxCipherText);
+        txt_aliceCipherText.setLayoutData(gd_MessageBox);
+        txt_alicePlainText.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                if(stepCounter==5) {
+                	input = txt_alicePlainText.getText();
+                	System.out.println(input);
+                }
+                
             }
         });
-        txt_alicePlainText.setEditable(true);
-        System.out.println(txt_alicePlainText.getText());
 
 
     }

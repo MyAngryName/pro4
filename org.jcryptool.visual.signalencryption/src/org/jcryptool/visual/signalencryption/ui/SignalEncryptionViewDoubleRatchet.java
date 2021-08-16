@@ -122,6 +122,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     GridData gd_bobReceivingChainGroup;
     GridData gd_arrowSpaceComposite;
     GridData gd_Messagebox;
+    
+    GridData gd_MessageBox;
 
     Text txt_aliceDiffieHellman1;
     Text txt_aliceDiffieHellman2;
@@ -223,6 +225,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     // private String bobStep5 = Messages.SignalEncryption_bobDescriptionText5;
     String MessageboxPlainText = "Geben Sie hier Ihre Nachricht an Bob ein.";
     private String MessageboxCipherText = "The Ciphertext";
+    private String txt_aliceCipherText.setText(MessageBoxCipherText);
 
     private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
     SignalEncryptionAlgorithmState signalEncryptionState;
@@ -241,8 +244,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     protected Canvas arr_aliceReceivingChainArrow2;
     protected Canvas arr_aliceReceivingChainArrow3;
 	protected Canvas arr_aliceReceivingChainArrow4;	
-    protected Canvas arr_aliceSpace1;
-    protected Canvas arr_aliceSpace2;
+    //protected Canvas arr_aliceSpace1;
+    //protected Canvas arr_aliceSpace2;
 
 
 
@@ -263,8 +266,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
 
     
-    String input;
-    private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
+    //String input;
+    //private SignalEncryptionDoubleRatchetState signalEncryptionDoubleRatchetState;
     
     ModifyListener keys_changedListener;
 

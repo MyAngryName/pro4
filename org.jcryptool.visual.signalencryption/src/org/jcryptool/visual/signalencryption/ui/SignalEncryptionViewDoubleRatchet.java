@@ -257,7 +257,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     private void createButtons() {
         cmp_buttons = new Composite(cmp_header, SWT.NONE);
         cmp_buttons.setLayout(new GridLayout(4, false));
-        cmp_buttons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 14, 1));
+        cmp_buttons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 
         createAliceButton();
         createPreviousButton();
@@ -271,7 +271,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_body = new Composite(this, SWT.NONE);
         cmp_body.setLayout(new StackLayout());
         cmp_body.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        cmp_body.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_CYAN));
     }
 
     private void createAliceButton() {

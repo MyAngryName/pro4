@@ -372,6 +372,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_bobMessagebox = new Composite(grp_bobMessagebox, SWT.CENTER);
 
         // Layouts
+        StackLayout sl_BobSendingReceivingChainGroup = new StackLayout();
+        grp_bobSendingReceivingChain.setLayout(sl_BobSendingReceivingChainGroup);
+        grp_bobSendingReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
 
         grp_bobSteps.setText(stepGroupDescription);
         grp_bobSteps.setLayout(Layout.gl_stepsComposite());
@@ -488,10 +491,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     }
 
     private void createBobSendingChain() {
-        StackLayout sl_BobSendingReceivingChainGroup = new StackLayout();
-        grp_bobSendingReceivingChain.setLayout(sl_BobSendingReceivingChainGroup);
-        grp_bobSendingReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
-
         cmp_bobSendingChain.setLayout(Layout.gl_sendingReceivingChainComposite());
         cmp_bobSendingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
 
@@ -808,6 +807,10 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_aliceReceivingChain = new Composite(grp_aliceSendingReceivingChain, SWT.CENTER);
 
         // Layouts
+        StackLayout sl_AliceSendingReceivingChainGroup = new StackLayout();
+        grp_aliceSendingReceivingChain.setLayout(sl_AliceSendingReceivingChainGroup);
+        grp_aliceSendingReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
+
         var gl_algorithmGroup = new GridLayout(6, false);
         var gd_algorithmGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
@@ -1137,10 +1140,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     }
 
     private void createAliceSendingChain() {
-        StackLayout sl_AliceSendingReceivingChainGroup = new StackLayout();
-        grp_aliceSendingReceivingChain.setLayout(sl_AliceSendingReceivingChainGroup);
-        grp_aliceSendingReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
-
         cmp_aliceSendingChain.setLayout(Layout.gl_sendingReceivingChainComposite());
         cmp_aliceSendingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
 

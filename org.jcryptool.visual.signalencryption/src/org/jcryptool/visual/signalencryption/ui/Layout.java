@@ -39,7 +39,7 @@ public class Layout {
     }
 
     public static GridData gd_stepsComposite() {
-        return new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        return new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
     }
 
     public static GridData gd_algorithmComposite() {
@@ -51,12 +51,16 @@ public class Layout {
     }
 
     public static GridData gd_Messagebox() {
-        return new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        var gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gridData.minimumHeight = 150;
+        gridData.widthHint = 250;
+        return gridData;
     }
 
     public static GridData gd_shortDescriptionTexts() {
-        var gd_shortDescriptionTexts = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+        var gd_shortDescriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_shortDescriptionTexts.minimumHeight = 20;
+        gd_shortDescriptionTexts.widthHint = 800;
         return gd_shortDescriptionTexts;
 
     }
@@ -89,6 +93,7 @@ public class Layout {
     public static GridData gd_longDescriptionTexts() {
         var gd_longDescriptionTexts = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         gd_longDescriptionTexts.minimumHeight = 30;
+        gd_longDescriptionTexts.widthHint = 800;
         return gd_longDescriptionTexts;
     }
 

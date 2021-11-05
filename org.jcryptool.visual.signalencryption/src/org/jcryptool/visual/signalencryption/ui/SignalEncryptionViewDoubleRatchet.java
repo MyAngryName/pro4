@@ -4,22 +4,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 // import org.jcryptool.visual.signalencryption.ui.SignalEncryptionDoubleRatchetState.STATE;
@@ -245,7 +240,6 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_header = new Composite(this, SWT.NONE);
         cmp_header.setLayout(new GridLayout(1, false));
         cmp_header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 14, 1));
-        cmp_header.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_CYAN));
 
         createButtons();
 
@@ -353,23 +347,23 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_bob.setLayout(new GridLayout(1, true));
 
         // Parent groups for algorithm and steps composites
-        grp_bobSteps = new Group(cmp_bob, SWT.CENTER);
-        grp_bobAlgorithm = new Group(cmp_bob, SWT.CENTER);
+        grp_bobSteps = new Group(cmp_bob, SWT.NONE);
+        grp_bobAlgorithm = new Group(cmp_bob, SWT.NONE);
 
         // Parent groups for chain composites
-        grp_bobMessagebox = new Group(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobSendingReceivingChain = new Group(grp_bobAlgorithm, SWT.CENTER);
-        cmp_bobArrowSpace2 = new Composite(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobRootChain = new Group(grp_bobAlgorithm, SWT.CENTER);
-        cmp_bobArrowSpace1 = new Composite(grp_bobAlgorithm, SWT.CENTER);
-        grp_bobDiffieHellman = new Group(grp_bobAlgorithm, SWT.CENTER);
+        grp_bobMessagebox = new Group(grp_bobAlgorithm, SWT.NONE);
+        grp_bobSendingReceivingChain = new Group(grp_bobAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace2 = new Composite(grp_bobAlgorithm, SWT.NONE);
+        grp_bobRootChain = new Group(grp_bobAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace1 = new Composite(grp_bobAlgorithm, SWT.NONE);
+        grp_bobDiffieHellman = new Group(grp_bobAlgorithm, SWT.NONE);
 
         // Composites for overlapping sending and receiving chains
-        cmp_bobSendingChain = new Composite(grp_bobSendingReceivingChain, SWT.CENTER);
-        cmp_bobReceivingChain = new Composite(grp_bobSendingReceivingChain, SWT.CENTER);
+        cmp_bobSendingChain = new Composite(grp_bobSendingReceivingChain, SWT.NONE);
+        cmp_bobReceivingChain = new Composite(grp_bobSendingReceivingChain, SWT.NONE);
 
         // Composite for Message Box
-        cmp_bobMessagebox = new Composite(grp_bobMessagebox, SWT.CENTER);
+        cmp_bobMessagebox = new Composite(grp_bobMessagebox, SWT.NONE);
 
         // Layouts
         StackLayout sl_BobSendingReceivingChainGroup = new StackLayout();
@@ -383,7 +377,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_bobAlgorithm.setText(bobAlgorithmGroupDescription);
         grp_bobAlgorithm.setLayout(Layout.gl_algorithmComposite());
         grp_bobAlgorithm.setLayoutData(Layout.gd_algorithmComposite());
-
+        
         createBobSendingChain();
         createBobReceivingChain();
         createBobRootChain();
@@ -791,20 +785,20 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         cmp_alice.setLayout(new GridLayout(1, false));
 
         // Parent groups for algorithm and steps composites
-        grp_aliceSteps = new Group(cmp_alice, SWT.CENTER);
-        grp_aliceAlgorithm = new Group(cmp_alice, SWT.CENTER);
+        grp_aliceSteps = new Group(cmp_alice, SWT.NONE);
+        grp_aliceAlgorithm = new Group(cmp_alice, SWT.NONE);
 
         // Parent groups for chain composites
-        grp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceArrowSpace1 = new Composite(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        cmp_aliceArrowSpace2 = new Composite(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceSendingReceivingChain = new Group(grp_aliceAlgorithm, SWT.CENTER);
-        grp_aliceMessagebox = new Group(grp_aliceAlgorithm, SWT.CENTER);
+        grp_aliceDiffieHellman = new Group(grp_aliceAlgorithm, SWT.NONE);
+        cmp_aliceArrowSpace1 = new Composite(grp_aliceAlgorithm, SWT.NONE);
+        grp_aliceRootChain = new Group(grp_aliceAlgorithm, SWT.NONE);
+        cmp_aliceArrowSpace2 = new Composite(grp_aliceAlgorithm, SWT.NONE);
+        grp_aliceSendingReceivingChain = new Group(grp_aliceAlgorithm, SWT.NONE);
+        grp_aliceMessagebox = new Group(grp_aliceAlgorithm, SWT.NONE);
 
         // Composites for overlapping sending and receiving chains
-        cmp_aliceSendingChain = new Composite(grp_aliceSendingReceivingChain, SWT.CENTER);
-        cmp_aliceReceivingChain = new Composite(grp_aliceSendingReceivingChain, SWT.CENTER);
+        cmp_aliceSendingChain = new Composite(grp_aliceSendingReceivingChain, SWT.NONE);
+        cmp_aliceReceivingChain = new Composite(grp_aliceSendingReceivingChain, SWT.NONE);
 
         // Layouts
         StackLayout sl_AliceSendingReceivingChainGroup = new StackLayout();
@@ -816,9 +810,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         grp_aliceAlgorithm.setText(aliceAlgorithmGroupDescription);
         grp_aliceAlgorithm.setLayout(gl_algorithmGroup);
         grp_aliceAlgorithm.setLayoutData(gd_algorithmGroup);
-
+        
         var gl_stepsGroup = new GridLayout(1, false);
-        var gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+        var gd_stepsGroup = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         grp_aliceSteps.setText(stepGroupDescription);
         grp_aliceSteps.setLayout(gl_stepsGroup);
         grp_aliceSteps.setLayoutData(gd_stepsGroup);
@@ -839,6 +833,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         // arrow up
         arr_aliceSpace1 = new Canvas(cmp_aliceArrowSpace1, SWT.DOUBLE_BUFFERED);
+        arr_aliceSpace1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         arr_aliceSpace1.setLayoutData(
                 SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, false, true, 1, 1, 75));
         arr_aliceSpace1.addPaintListener(new PaintListener() {
@@ -863,6 +858,7 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
 
         // arrow up
         arr_aliceSpace2 = new Canvas(cmp_aliceArrowSpace2, SWT.DOUBLE_BUFFERED);
+        new Text(cmp_aliceArrowSpace1, SWT.NONE);
         arr_aliceSpace2.setLayoutData(
                 SignalEncryptionArrows.canvasData(SWT.FILL, SWT.FILL, true, true, 1, 1, 75));
         arr_aliceSpace2.addPaintListener(new PaintListener() {
@@ -1250,13 +1246,14 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
     void showBobView() {
         StackLayout layout = (StackLayout) this.cmp_body.getLayout();
         layout.topControl = this.cmp_bob;
-        this.cmp_body.layout();
+        cmp_body.layout();
     }
 
     void showAliceView() {
         StackLayout layout = (StackLayout) this.cmp_body.getLayout();
         layout.topControl = this.cmp_alice;
-        this.cmp_body.layout();
+        cmp_body.layout();
+        
     }
 
     void showAliceReceivingChain() {

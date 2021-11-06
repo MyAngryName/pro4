@@ -13,33 +13,78 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.jcryptool.core.util.ui.layout.GridDataBuilder;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 
+import static org.jcryptool.visual.signalencryption.ui.SignalEncryptionViewDoubleRatchetConstants.*;
+
 public class SignalEncryptionArrows extends Canvas {
+
+    private static final boolean DRAW_HEAD = true;
+    private static final boolean DRAW_NO_HEAD = false;
 
     public SignalEncryptionArrows(Composite parent, int style) {
         super(parent, style);
     }
 
-    /*
-     * public void setArrowData(int arrowWidth, int arrowHeadWidth) { this.arrowWidth = arrowWidth;
-     * this.arrowHeadWidth = arrowHeadWidth; }
+    /**
+     * Create a Layout for an arrow Canvas with a fixed width and auto-adjusted height.
+     * 
+     * @param horizonalAlignment
+     * @param verticalAlignment
+     * @param grabExcessHorizontal
+     * @param grabExcessVertical
+     * @param horizontalSpan
+     * @param verticalSpan
+     * @param width
+     * @return
      */
     public static GridData canvasData(int horizonalAlignment, int verticalAlignment, boolean grabExcessHorizontal,
             boolean grabExcessVertical, int horizontalSpan, int verticalSpan, int width) {
-        var gridData = new GridData(horizonalAlignment, verticalAlignment, grabExcessHorizontal, grabExcessVertical,
-                horizontalSpan, verticalSpan);
-        gridData.widthHint = width;
-        return gridData;
+        return canvasData(
+                horizonalAlignment,
+                verticalAlignment,
+                grabExcessHorizontal,
+                grabExcessVertical,
+                horizontalSpan,
+                verticalSpan,
+                width,
+                SWT.DEFAULT
+        );
     }
-    private final static float arrowHeadSize = 12;
+    
+    /**
+     * Create a Layout for an arrow Canvas with both fixed width and height.
+     * 
+     * @param horizonalAlignment
+     * @param verticalAlignment
+     * @param grabExcessHorizontal
+     * @param grabExcessVertical
+     * @param horizontalSpan
+     * @param verticalSpan
+     * @param width
+     * @param height
+     * @return
+     */
+    public static GridData canvasData(int horizonalAlignment, int verticalAlignment, boolean grabExcessHorizontal,
+            boolean grabExcessVertical, int horizontalSpan, int verticalSpan, int width, int height) {
+        return GridDataBuilder.with(
+                horizonalAlignment,
+                verticalAlignment,
+                grabExcessHorizontal,
+                grabExcessVertical, horizontalSpan,
+                verticalSpan)
+                .widthHint(width)
+                .heightHint(height)
+                .get();
+    }
 
     public static Path drawRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = width - 0.2f * width;
+        float baseLength = width - (ARROW_HEAD_SIZE + TARGET_MARGIN);
 
         float lowerLineY = (height / 2) - (arrowWidth / 2);
         float upperLineY = (height / 2) + (arrowWidth / 2);
@@ -51,7 +96,7 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.lineTo(0, upperLineY);
         resultPath.lineTo(baseLength, upperLineY);
         resultPath.lineTo(baseLength, upperArrowHeadY);
-        resultPath.lineTo(baseLength + arrowHeadSize, height / 2);
+        resultPath.lineTo(baseLength + ARROW_HEAD_SIZE, height / 2);
         resultPath.lineTo(baseLength, lowerArrowHeadY);
         resultPath.lineTo(baseLength, lowerLineY);
         resultPath.lineTo(0, lowerLineY);
@@ -63,7 +108,7 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = 0.2f * width;
+        float baseLength = ARROW_HEAD_SIZE + TARGET_MARGIN;
         
 
         float lowerLineY = (height / 2) - (arrowWidth / 2);
@@ -76,7 +121,7 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.lineTo(width, upperLineY);
         resultPath.lineTo(baseLength, upperLineY);
         resultPath.lineTo(baseLength, upperArrowHeadY);
-        resultPath.lineTo(baseLength - arrowHeadSize, height / 2);
+        resultPath.lineTo(baseLength - ARROW_HEAD_SIZE, height / 2);
         resultPath.lineTo(baseLength, lowerArrowHeadY);
         resultPath.lineTo(baseLength, lowerLineY);
         resultPath.lineTo(width, lowerLineY);
@@ -89,7 +134,7 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = 0.2f * height;
+        float baseLength = ARROW_HEAD_SIZE + TARGET_MARGIN;
 
         float leftLineY = (width / 2) - (arrowWidth / 2);
         float rightLineY = (width / 2) + (arrowWidth / 2);
@@ -100,7 +145,7 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.moveTo(leftLineY, height);
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2,baseLength - arrowHeadSize);
+        resultPath.lineTo(width/2,baseLength - ARROW_HEAD_SIZE);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, height);
@@ -113,7 +158,7 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = height - 0.2f * height;
+        float baseLength = height - (ARROW_HEAD_SIZE + TARGET_MARGIN);
         
 
         float leftLineY = (width / 2) - (arrowWidth / 2);
@@ -125,7 +170,7 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.moveTo(leftLineY, 0);
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, baseLength + arrowHeadSize);
+        resultPath.lineTo(width/2, baseLength + ARROW_HEAD_SIZE);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, 0);
@@ -138,8 +183,8 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = height - 0.2f * height;
-        float baseLengthSecond = width - 0.2f * width;
+        float baseLength = height - (ARROW_HEAD_SIZE + TARGET_MARGIN);
+        float baseLengthSecond = width - (ARROW_HEAD_SIZE + TARGET_MARGIN);
         
 
         float leftLineY = (width / 2) - (arrowWidth / 2);
@@ -157,13 +202,13 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.moveTo(leftLineY, 0);
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, baseLength + arrowHeadSize);
+        resultPath.lineTo(width/2, baseLength + ARROW_HEAD_SIZE);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, lowerLineY);
         resultPath.lineTo(baseLengthSecond, lowerLineY);
         resultPath.lineTo(baseLengthSecond, lowerArrowHeadY);
-        resultPath.lineTo(baseLengthSecond + arrowHeadSize, height / 2);
+        resultPath.lineTo(baseLengthSecond + ARROW_HEAD_SIZE, height / 2);
         resultPath.lineTo(baseLengthSecond, upperArrowHeadY);
         resultPath.lineTo(baseLengthSecond, upperLineY);
         resultPath.lineTo(rightLineY, upperLineY);
@@ -176,8 +221,8 @@ public class SignalEncryptionArrows extends Canvas {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = height - 0.2f * height;
-        float baseLengthSecond =  0.2f * width;
+        float baseLength = height - (ARROW_HEAD_SIZE - TARGET_MARGIN);
+        float baseLengthSecond = ARROW_HEAD_SIZE + TARGET_MARGIN;
         
 
         float leftLineY = (width / 2) - (arrowWidth / 2);
@@ -197,14 +242,14 @@ public class SignalEncryptionArrows extends Canvas {
         resultPath.lineTo(leftLineY, upperLineY);
         resultPath.lineTo(baseLengthSecond, upperLineY);
         resultPath.lineTo(baseLengthSecond, upperArrowHeadY);
-        resultPath.lineTo(baseLengthSecond - arrowHeadSize, height / 2);
+        resultPath.lineTo(baseLengthSecond - ARROW_HEAD_SIZE, height / 2);
         resultPath.lineTo(baseLengthSecond, lowerArrowHeadY);
         resultPath.lineTo(baseLengthSecond, lowerLineY);
         resultPath.lineTo(leftLineY, lowerLineY);
         
         resultPath.lineTo(leftLineY, baseLength);
         resultPath.lineTo(leftArrowLineY, baseLength);
-        resultPath.lineTo(width/2, baseLength + arrowHeadSize);
+        resultPath.lineTo(width/2, baseLength + ARROW_HEAD_SIZE);
         resultPath.lineTo(rightArrowLineY, baseLength);
         resultPath.lineTo(rightLineY, baseLength);
         resultPath.lineTo(rightLineY, 0);
@@ -246,184 +291,139 @@ public class SignalEncryptionArrows extends Canvas {
 
         return resultPath;
     }
-    
-    public static Path drawRightUpRightArrowHeadless(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
+
+    public static Path drawRightUpRightLine(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        // Note that arrowHeadWidth is still a parameter here, to ensure that the up-right-up line
+        // is on the same height as the arrows' line. 
+        return drawUpRightUp(canvas, DRAW_NO_HEAD, arrowWidth, arrowHeadWidth);
+    }
+
+    public static Path drawRightUpRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        return drawUpRightUp(canvas, DRAW_HEAD, arrowWidth, arrowHeadWidth);
+    }
+
+    public static Path drawLeftUpLeftLine(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        // Note that arrowHeadWidth is still a parameter here, to ensure that the up-left-up line
+        // is on the same height as the arrows' line. 
+        return drawLeftUpLeft(canvas, DRAW_NO_HEAD, arrowWidth, arrowHeadWidth);
+    }
+
+    public static Path drawLeftUpLeftArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth) {
+        return drawLeftUpLeft(canvas, DRAW_HEAD, arrowWidth, arrowHeadWidth);
+    }
+ 
+    private static Path drawUpRightUp(Canvas canvas, boolean drawHead, int arrowWidth, int arrowHeadWidth) {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = width - 0.2f * width;
+        float horizontalLength = width - (ARROW_HEAD_SIZE + TARGET_MARGIN);
+        
+        // left edge of the middle line.
+        float middleLineXLeft = (width / 2) - (arrowWidth / 2);
+        // right edge of the middle line.
+        float middleLineXRight = (width / 2) + (arrowWidth / 2);  
 
-        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
-        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
-        
-        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
-        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
+        // upper edge of top line
+        float upperLineYTop = (arrowHeadWidth / 2) - (arrowWidth / 2);
+        // lower edge of top line
+        float upperLineYBottom = (arrowHeadWidth / 2) + (arrowHeadWidth / 2) - (arrowWidth / 2);
 
-       
-        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
-        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
+        // corner of arrow space top
+        float topArrowHeadY = 0;
+        // corner of arrow space bottom 
+        float bottomArrowHeadY = arrowHeadWidth;
+        float arrowTipX = width - TARGET_MARGIN;
         
-
-        float lowerArrowHeadY = (secondHeight) - (arrowHeadWidth / 2);
-        float upperArrowHeadY = (secondHeight) + (arrowHeadWidth / 2);
-
-        resultPath.moveTo(0, upperLineY);
-        resultPath.lineTo(leftMiddleLineX, upperLineY);
+        //                                                              X          Y
+        resultPath.moveTo(0, height - arrowWidth);                 // left        bottom
+        resultPath.lineTo(middleLineXLeft, height - arrowWidth);   // middle      bottom
+        resultPath.lineTo(middleLineXLeft, upperLineYTop);         // middle       top 
+        resultPath.lineTo(horizontalLength, upperLineYTop);        // right        top
         
-        resultPath.lineTo(leftMiddleLineX, upperLineYSecond);
+        if (drawHead) {
+            drawArrowHead(
+                    resultPath,
+                    horizontalLength,
+                    topArrowHeadY,
+                    arrowTipX,
+                    bottomArrowHeadY
+            );
+        } else {
+            // prolong rectangular section instead of a head
+            resultPath.lineTo(width, upperLineYTop);
+            resultPath.lineTo(width, upperLineYBottom);
+            
+        }
         
-        //resultPath.lineTo(baseLength, upperLineYSecond);
-        //resultPath.lineTo(baseLength, upperArrowHeadY);
-        
-        //resultPath.lineTo(width, secondHeight );
-        //resultPath.lineTo(baseLength, lowerArrowHeadY);
-        
-        //resultPath.lineTo(baseLength, lowerLineYSecond);
-        
-        resultPath.lineTo(width, upperLineYSecond);
-        
-        resultPath.lineTo(width, lowerLineYSecond);
-
-        resultPath.lineTo(rightMiddleLineX, lowerLineYSecond);
-        
-        resultPath.lineTo(rightMiddleLineX, lowerLineY);
-        resultPath.lineTo(0, lowerLineY);
-        resultPath.lineTo(0, upperLineY);
+        //                                                              X          Y
+        resultPath.lineTo(horizontalLength, upperLineYBottom);     // right      top
+        resultPath.lineTo(middleLineXRight, upperLineYBottom);     // middle     top
+        resultPath.lineTo(middleLineXRight, height);               // middle    bottom
+        resultPath.lineTo(0, height);                              //  left     bottom
+        resultPath.lineTo(0, height - arrowWidth);                 //  return to start
 
         return resultPath;
-
     }
-    
-    public static Path drawRightUpRightArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
+
+    private static Path drawLeftUpLeft(Canvas canvas, boolean drawHead, int arrowWidth, int arrowHeadWidth) {
         Path resultPath = new Path(canvas.getDisplay());
         int width = canvas.getBounds().width;
         int height = canvas.getBounds().height;
-        float baseLength = width - 0.1f * width;
+        float horizontalLength = ARROW_HEAD_SIZE + TARGET_MARGIN;
+        
+        // left edge of the middle line.
+        float middleLineXLeft = (width / 2) - (arrowWidth / 2);
+        // right edge of the middle line.
+        float middleLineXRight = (width / 2) + (arrowWidth / 2);  
 
-        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
-        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
-        
-        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
-        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
+        // upper edge of top line
+        float upperLineYTop = (arrowHeadWidth / 2) - (arrowWidth / 2);
+        // lower edge of top line
+        float upperLineYBottom = (arrowHeadWidth / 2) + (arrowHeadWidth / 2) - (arrowWidth / 2);
 
-       
-        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
-        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
+        // corner of arrow space top
+        float topArrowHeadY = 0;
+        // corner of arrow space bottom 
+        float bottomArrowHeadY = arrowHeadWidth;
+        float arrowTipX = TARGET_MARGIN;
         
-
-        float lowerArrowHeadY = (height / 2) + (arrowHeadWidth / 2) - (secondHeight / 2);
-        float upperArrowHeadY = (height / 2) - (arrowHeadWidth / 2) - (secondHeight / 2);
-
-        resultPath.moveTo(0, upperLineY);
-        resultPath.lineTo(leftMiddleLineX, upperLineY);
+        //                                                              X          Y
+        resultPath.moveTo(width, height - arrowWidth);             // right      bottom
+        resultPath.lineTo(middleLineXRight, height - arrowWidth);  // middle     bottom
+        resultPath.lineTo(middleLineXRight, upperLineYTop);        // middle       top 
+        resultPath.lineTo(horizontalLength, upperLineYTop);        // left         top
         
-        resultPath.lineTo(leftMiddleLineX, upperLineYSecond);
+        if (drawHead) {
+            drawArrowHead(
+                    resultPath,
+                    horizontalLength,
+                    topArrowHeadY,
+                    arrowTipX,
+                    bottomArrowHeadY
+            );
+        } else {
+            // prolong rectangular section instead of a head
+            resultPath.lineTo(0, upperLineYTop);
+            resultPath.lineTo(0, upperLineYBottom);
+            
+        }
         
-		//resultPath.lineTo(width, upperLineYSecond);
-        //resultPath.lineTo(width, lowerLineYSecond);
-		
-		resultPath.lineTo(baseLength, upperLineYSecond);
-		resultPath.lineTo(baseLength, upperArrowHeadY);
-
-        resultPath.lineTo(baseLength + arrowHeadSize, height/2 - secondHeight/2);
-        resultPath.lineTo(baseLength, lowerArrowHeadY);
-        
-        resultPath.lineTo(baseLength, lowerLineYSecond);
-		
-        resultPath.lineTo(rightMiddleLineX, lowerLineYSecond);
-        
-        resultPath.lineTo(rightMiddleLineX, lowerLineY);
-        resultPath.lineTo(0, lowerLineY);
-        resultPath.lineTo(0, upperLineY);
+        //                                                              X          Y
+        resultPath.lineTo(horizontalLength, upperLineYBottom);     // left        top
+        resultPath.lineTo(middleLineXLeft, upperLineYBottom);      // middle      top
+        resultPath.lineTo(middleLineXLeft, height);                // middle    bottom
+        resultPath.lineTo(width, height);                          // right     bottom
+        resultPath.lineTo(width, height - arrowWidth);             //  return to start
 
         return resultPath;
-
     }
-    public static Path drawLeftUpLeftArrow(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
-        Path resultPath = new Path(canvas.getDisplay());
-        int width = canvas.getBounds().width;
-        int height = canvas.getBounds().height;
-        float baseLength = 0.2f * width;
 
-        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
-        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
-        
-        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
-        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
-
-       
-        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
-        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
-        
-
-        float lowerArrowHeadY = (height / 2) - (secondHeight /2) - (arrowHeadWidth / 2);
-        float upperArrowHeadY = (height / 2) - (secondHeight/2) + (arrowHeadWidth / 2);
-
-        resultPath.moveTo(width, upperLineY);
-        resultPath.lineTo(rightMiddleLineX, upperLineY);
-        
-        resultPath.lineTo(rightMiddleLineX, upperLineYSecond);
-        
-		//resultPath.lineTo(0, upperLineYSecond);
-        //resultPath.lineTo(0, lowerLineYSecond);
-		
-		resultPath.lineTo(baseLength, upperLineYSecond);
-		resultPath.lineTo(baseLength, upperArrowHeadY);
-
-        resultPath.lineTo(baseLength - arrowHeadSize, height/2 - secondHeight/2 );
-        resultPath.lineTo(baseLength, lowerArrowHeadY);
-        
-        resultPath.lineTo(baseLength, lowerLineYSecond);
-		
-        resultPath.lineTo(leftMiddleLineX, lowerLineYSecond);
-        
-        resultPath.lineTo(leftMiddleLineX, lowerLineY);
-        resultPath.lineTo(width, lowerLineY);
-        resultPath.lineTo(width, upperLineY);
-
-        return resultPath;
-
+    private static Path drawArrowHead(Path target, float baseX, float upperBaseY, float tipX, float lowerBaseY) {
+        target.lineTo(baseX, upperBaseY);
+        target.lineTo(tipX, upperBaseY + (lowerBaseY - upperBaseY) / 2);
+        target.lineTo(baseX, lowerBaseY);
+        return target;
     }
-    public static Path drawLeftUpLeftArrowHeadless(Canvas canvas, int arrowWidth, int arrowHeadWidth, int secondHeight) {
-        Path resultPath = new Path(canvas.getDisplay());
-        int width = canvas.getBounds().width;
-        int height = canvas.getBounds().height;
-        float baseLength = 0.2f * width;
-
-        float lowerLineY = (height / 2) + (arrowWidth / 2) + (secondHeight / 2);
-        float upperLineY = (height / 2) - (arrowWidth / 2) + (secondHeight / 2);
-        
-        float leftMiddleLineX = (width / 2) - (arrowWidth / 2);
-        float rightMiddleLineX = (width / 2) + (arrowWidth / 2);
-
-       
-        float upperLineYSecond = (height / 2) - (arrowWidth / 2) - (secondHeight / 2);
-        float lowerLineYSecond = (height / 2) + (arrowWidth / 2)  - (secondHeight / 2);
-        
-
-        float lowerArrowHeadY = (height / 2) - (secondHeight /2) - (arrowHeadWidth / 2);
-        float upperArrowHeadY = (height / 2) - (secondHeight/2) + (arrowHeadWidth / 2);
-
-        resultPath.moveTo(width, upperLineY);
-        resultPath.lineTo(rightMiddleLineX, upperLineY);
-        
-        resultPath.lineTo(rightMiddleLineX, upperLineYSecond);
-        
-		resultPath.lineTo(0, upperLineYSecond);
-        resultPath.lineTo(0, lowerLineYSecond);
-
-		
-        resultPath.lineTo(leftMiddleLineX, lowerLineYSecond);
-        
-        resultPath.lineTo(leftMiddleLineX, lowerLineY);
-        resultPath.lineTo(width, lowerLineY);
-        resultPath.lineTo(width, upperLineY);
-
-        return resultPath;
-
-    }
-    
-
 
 
 

@@ -1,17 +1,22 @@
 package org.jcryptool.visual.signalencryption.ui;
 
+import java.util.NoSuchElementException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 
+import static org.jcryptool.visual.signalencryption.ui.SignalEncryptionViewDoubleRatchetConstants.*;
+
 public class Layout {
 
     private Layout() {
-        // Private constructor to prevent instantiation of this class.
+        // Private constructor to prevent instantiation of this class with only static methods.
     }
 
-    public static GridLayout gl_algorithmComposite() {
-        return new GridLayout(6, false);
+    public static GridLayout gl_algorithmGroup() {
+        var gl_algorithmGroup = new GridLayout(6, false);
+        gl_algorithmGroup.horizontalSpacing = 0;
+        return gl_algorithmGroup;
     }
 
     public static GridLayout gl_stepsComposite() {
@@ -19,11 +24,26 @@ public class Layout {
     }
 
     public static GridLayout gl_arrowSpaceComposite() {
-        return new GridLayout(1, false);
+        var arrowSpaceLayout = new GridLayout(1, false);
+        arrowSpaceLayout.marginWidth = 0;  // The arrow should "dock" onto the boxes
+        arrowSpaceLayout.marginTop = calculateConnectingArrowMargin();
+        arrowSpaceLayout.verticalSpacing = 0;
+        return arrowSpaceLayout;
     }
 
-    public static GridLayout gl_sendingReceivingChainComposite() {
-        return new GridLayout(4, false);
+    public static GridLayout gl_sendingReceivingChainComposite(int alignment) {
+        var gl_sendingReceivingChainComposite = new GridLayout(4, false);
+        gl_sendingReceivingChainComposite.marginWidth = 0;
+        if (alignment == SWT.LEFT) {
+            gl_sendingReceivingChainComposite.marginRight = HORIZONTAL_SPACING;
+        } else if (alignment == SWT.RIGHT) {
+            gl_sendingReceivingChainComposite.marginLeft = HORIZONTAL_SPACING;
+        } else {
+            throw new NoSuchElementException(
+                    "PROGRAMMING ERROR: This method takes SWT.LEFT or SWT.RIGHT as argument, "
+                    + "nothing else.");
+        }
+        return gl_sendingReceivingChainComposite;
     }
 
     public static GridLayout gl_rootChainComposite() {
@@ -42,12 +62,16 @@ public class Layout {
         return new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
     }
 
-    public static GridData gd_algorithmComposite() {
-        return new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+    public static GridData gd_algorithmGroup() {
+        var gd_algorithmGroup = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+        gd_algorithmGroup.heightHint = ALGORITHM_HEIGHT; 
+        return gd_algorithmGroup;
     }
 
     public static GridData gd_arrowSpaceComposite() {
-        return new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+        var gd_arrowSpaceComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+        gd_arrowSpaceComposite.minimumHeight = ALGORITHM_HEIGHT;
+        return gd_arrowSpaceComposite;
     }
 
     public static GridData gd_Messagebox() {
@@ -68,8 +92,9 @@ public class Layout {
     // style data for the labels within the algorithm
     public static GridData gd_algorithmLabels() {
         var gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-        gd_algorithmLabels.widthHint = 150;
-        gd_algorithmLabels.heightHint = 60;
+        gd_algorithmLabels.widthHint = BOX_WIDTH;
+        gd_algorithmLabels.heightHint = BOX_HEIGHT;
+        gd_algorithmLabels.horizontalIndent = HORIZONTAL_SPACING;
         return gd_algorithmLabels;
     }
 
@@ -97,4 +122,46 @@ public class Layout {
         return gd_longDescriptionTexts;
     }
 
+    public static int calculateConnectingArrowHeight() {
+    // The distance to calculate is explained by this chart:
+    //
+    //        +--------------+
+    //        |      BOX     |      —
+    //        +--------------+      |
+    //         verticalSpacing      |
+    //                |             |
+    //       Arrow    |             |  target: total height
+    //                |             |
+    //                ▾             |
+    //         verticalSpacing      |
+    //        +--------------+      |
+    //        |      BOX     |      —
+    //        +--------------+
+    // We can take one single box height as we need it two times halved to get the box centers.
+    // As this has a 1px border, we add +1 for each border (in total 4)
+    // The vertical spacing has to be taken twice (applied at arrow start and arrow end).
+    // A major part is the vertical arrow height itself.
+    // Finally, in order for the connecting arrow to be centered, half its thickness must be
+    // at each end, so one arrow thickness is added.
+    return BOX_HEIGHT + 4 + gl_algorithmGroup().verticalSpacing * 2 +
+        UP_DOWN_ARROW_SIZE + ARROW_THICKNESS;
+    }
+
+    private static int calculateConnectingArrowMargin() {
+        // The distance to calculate is explained by this chart:
+        //
+        //      --Group Top Border-------   —
+        //           marginTop              |
+        //        verticalSpacing           |  target: total height
+        //        +--------------+          |
+        //        |      BOX     |          — 
+        //        +--------------+ 
+        //
+        // TODO: The unknown group height is explained in more detail in its docstring.
+        // Find out if there is a clean, platform independent solution to calculate the correct
+        // offset.
+        var layout = Layout.gl_diffieHellmanComposite();
+        return layout.marginTop + layout.verticalSpacing + (BOX_HEIGHT / 2) -
+            (ARROW_HEAD_THICKNESS/ 2) + UNKNOWN_GROUP_HEIGHT;
+    }
 }

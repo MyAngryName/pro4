@@ -36,7 +36,9 @@ public class Layout {
         gl_sendingReceivingChainComposite.marginWidth = 0;
         if (alignment == SWT.LEFT) {
             gl_sendingReceivingChainComposite.marginRight = HORIZONTAL_SPACING;
+            gl_sendingReceivingChainComposite.marginLeft = 0;
         } else if (alignment == SWT.RIGHT) {
+            gl_sendingReceivingChainComposite.marginRight = 0;
             gl_sendingReceivingChainComposite.marginLeft = HORIZONTAL_SPACING;
         } else {
             throw new NoSuchElementException(
@@ -122,7 +124,7 @@ public class Layout {
         return gd_longDescriptionTexts;
     }
 
-    public static int calculateConnectingArrowHeight() {
+    public static int calculateConnectingArrowHeight(int borderWidth) {
     // The distance to calculate is explained by this chart:
     //
     //        +--------------+
@@ -143,7 +145,7 @@ public class Layout {
     // A major part is the vertical arrow height itself.
     // Finally, in order for the connecting arrow to be centered, half its thickness must be
     // at each end, so one arrow thickness is added.
-    return BOX_HEIGHT + 4 + gl_algorithmGroup().verticalSpacing * 2 +
+    return BOX_HEIGHT + borderWidth * 4 + gl_algorithmGroup().verticalSpacing * 2 +
         UP_DOWN_ARROW_SIZE + ARROW_THICKNESS;
     }
 
@@ -160,8 +162,16 @@ public class Layout {
         // TODO: The unknown group height is explained in more detail in its docstring.
         // Find out if there is a clean, platform independent solution to calculate the correct
         // offset.
+        int unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_DEFAULT;
+        var os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("linux")) {
+            unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_LINUX;
+        } else if (os.contains("win")) {
+            unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_WINDOWS;
+        }
+
         var layout = Layout.gl_diffieHellmanComposite();
         return layout.marginTop + layout.verticalSpacing + (BOX_HEIGHT / 2) -
-            (ARROW_HEAD_THICKNESS/ 2) + UNKNOWN_GROUP_HEIGHT;
+            (ARROW_HEAD_THICKNESS/ 2) + unknownGroupHeight;
     }
 }

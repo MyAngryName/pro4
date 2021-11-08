@@ -399,15 +399,16 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
         // arrow up
         arr_bobSpace1 = new Canvas(cmp_bobArrowSpace1, SWT.DOUBLE_BUFFERED);
         arr_bobSpace1.setLayoutData(SignalEncryptionArrows.canvasData(
-               SWT.FILL,
-               SWT.FILL,
-               false,
-               false,
-               1,
-               1,
-               ARROW_CANVAS_WIDTH,
-               Layout.calculateConnectingArrowHeight())
-        );
+                SWT.FILL,
+                SWT.FILL,
+                false,
+                false,
+                1,
+                1,
+                ARROW_CANVAS_WIDTH,
+                // Note that we need the border width of any text, so we use an initialized one.
+                Layout.calculateConnectingArrowHeight(txt_aliceDiffieHellman1.getBorderWidth())
+        ));
         arr_bobSpace1.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
@@ -432,8 +433,9 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 1,
                 1,
                 ARROW_CANVAS_WIDTH,
-                Layout.calculateConnectingArrowHeight())
-        );
+                // Note that we need the border width of any text, so we use an initialized one.
+                Layout.calculateConnectingArrowHeight(txt_aliceDiffieHellman1.getBorderWidth())
+        ));
         arr_bobSpace2.addPaintListener(new PaintListener() {
             @Override
             public void paintControl(PaintEvent event) {
@@ -868,7 +870,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 1,
                 1,
                 ARROW_CANVAS_WIDTH,
-                Layout.calculateConnectingArrowHeight()
+                // Note that we need the border width of any text, so we use an initialized one.
+                Layout.calculateConnectingArrowHeight(txt_aliceDiffieHellman1.getBorderWidth())
         ));
         arr_aliceSpace1.addPaintListener(new PaintListener() {
             @Override
@@ -894,7 +897,8 @@ public class SignalEncryptionViewDoubleRatchet extends Composite {
                 1,
                 1,
                 ARROW_CANVAS_WIDTH,
-                Layout.calculateConnectingArrowHeight()
+                // Note that we need the border width of any text, so we use an initialized one.
+                Layout.calculateConnectingArrowHeight(txt_aliceDiffieHellman1.getBorderWidth())
         ));
         arr_aliceSpace2.addPaintListener(new PaintListener() {
             @Override

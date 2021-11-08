@@ -81,5 +81,15 @@ public class SignalEncryptionViewDoubleRatchetConstants {
      * This value may accidentally cover other size factors as well (which it
      * shouldn't), so it should be replaced by something more robust if possible.
      */
-    public static final int UNKNOWN_GROUP_HEIGHT = 17;
+    public static final int UNKNOWN_GROUP_HEIGHT_DEFAULT = 13;
+    
+    /**
+     * See {@link UNKNOWN_GROUP_HEIGHT_DEFAULT}
+     */
+    public static final int UNKNOWN_GROUP_HEIGHT_LINUX = 17;
+
+    /**
+     * See {@link UNKNOWN_GROUP_HEIGHT_DEFAULT}
+     */
+    public static final int UNKNOWN_GROUP_HEIGHT_WINDOWS = 13;
 }

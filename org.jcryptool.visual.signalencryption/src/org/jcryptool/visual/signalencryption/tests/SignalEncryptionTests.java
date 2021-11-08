@@ -1,11 +1,9 @@
 package org.jcryptool.visual.signalencryption.tests;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.UnsupportedEncodingException;
 
 import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
 import org.whispersystems.libsignal.InvalidKeyIdException;
@@ -13,18 +11,11 @@ import org.whispersystems.libsignal.InvalidMessageException;
 import org.whispersystems.libsignal.InvalidVersionException;
 import org.whispersystems.libsignal.LegacyMessageException;
 import org.whispersystems.libsignal.NoSessionException;
-import org.whispersystems.libsignal.SessionBuilder;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.UntrustedIdentityException;
-import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.protocol.CiphertextMessage;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.protocol.SignalMessage;
-import org.whispersystems.libsignal.ratchet.ChainKey;
-import org.whispersystems.libsignal.ratchet.MessageKeys;
-import org.whispersystems.libsignal.state.SessionRecord;
-import org.whispersystems.libsignal.state.SessionState;
-import org.whispersystems.libsignal.state.SessionStore;
 
 
 public class SignalEncryptionTests {
@@ -42,7 +33,7 @@ public class SignalEncryptionTests {
     private SessionCipher bob;
 
     
-    @Test
+    //@Test
     void shouldEncryptAndDecrypMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, 
     LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
         

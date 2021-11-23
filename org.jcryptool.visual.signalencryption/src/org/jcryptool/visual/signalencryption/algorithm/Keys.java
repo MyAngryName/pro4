@@ -1,6 +1,6 @@
 package org.jcryptool.visual.signalencryption.algorithm;
 
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
+import org.jcryptool.visual.signalencryption.ui.AlgorithmState.STATE;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.ecc.ECPrivateKey;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
@@ -36,7 +36,7 @@ public class Keys {
         this.messageKeys     = sendingChainKey.getMessageKeys();
         this.rootKey         = sessionState.getRootKey();
         this.senderEphemeral = sessionState.getSenderRatchetKey();
-        if (currentState == STATE.PARAMETER) {
+        if (currentState == STATE.INITIALIZING) {
             this.receivingChainKey = null;
         }else {
             this.receivingChainKey = sessionState.getReceiverChainKey(senderEphemeral);

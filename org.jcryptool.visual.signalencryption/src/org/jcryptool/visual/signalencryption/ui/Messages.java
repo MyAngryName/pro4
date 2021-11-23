@@ -106,6 +106,9 @@ public class Messages extends NLS {
     public static String SignalEncryption_bobSendingChainLabel4;
     public static String SignalEncryption_bobSendingChainLabel5;
     
+    public static String SignalEncryption_aliceDefaultMessage;
+    public static String SignalEncryption_bobDefaultMessage;
+    
     public static String SignalEncryption_aliceReceivingChainLabel1;
     public static String SignalEncryption_aliceReceivingChainLabel2;
     public static String SignalEncryption_aliceReceivingChainLabel3;

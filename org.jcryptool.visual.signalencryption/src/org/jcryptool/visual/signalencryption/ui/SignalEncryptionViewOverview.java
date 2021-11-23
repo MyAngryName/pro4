@@ -1,9 +1,6 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -13,16 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.ui.part.ViewPart;
 import org.jcryptool.core.util.ui.TitleAndDescriptionComposite;
-import org.jcryptool.visual.signalencryption.ui.SignalEncryptionAlgorithmState.STATE;
-import org.jcryptool.visual.signalencryption.util.ToHex;
-import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
-import org.whispersystems.libsignal.util.Hex;
 
 
 public class SignalEncryptionViewOverview extends Composite {
@@ -92,9 +80,6 @@ public class SignalEncryptionViewOverview extends Composite {
     private Text value_f_bob;
     private Text value_g_bob;
     
-    private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
-    private SignalEncryptionAlgorithmState signalEncryptionState;
-
     private Button btn_regenerate;
     
     //Variables for the used keys
@@ -120,16 +105,17 @@ public class SignalEncryptionViewOverview extends Composite {
     private String bobSenderMsgKey;
 
     private Button btn_prekeysignalmessage;
-    private SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite;
+    private DoubleRatchetView doubleRatchetTabComposite;
     
     /**
      * 
      **/
-    public SignalEncryptionViewOverview(final Composite parent, int style, 
-            SignalEncryptionAlgorithmState signalEncryptionState, SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite) {
+    public SignalEncryptionViewOverview(
+            final Composite parent,
+            final int style, 
+            DoubleRatchetView doubleRatchetTabComposite
+    ) {
         super(parent, style);
-        this.signalEncryptionState = signalEncryptionState;
-        this.signalEncryptionAlgorithm = signalEncryptionState.getSignalEncryptionAlgorithm();
         this.doubleRatchetTabComposite = doubleRatchetTabComposite;
         setLayout(new GridLayout());
 
@@ -354,18 +340,18 @@ public class SignalEncryptionViewOverview extends Composite {
 
     }
     public void generateBoth() {
-        signalEncryptionState.generateBoth();
+        AlgorithmState.get().generateBothPartiesKeys();
         doubleRatchetTabComposite.resetAll();
         setParameter();
         textReset();
     }
     public void generateAlice() {
-        signalEncryptionState.generateAlice();
+        AlgorithmState.get().generateAliceKeys();
         setParameter();
         textReset();
     }
     public void generateBob() {
-        signalEncryptionState.generateBob();
+        AlgorithmState.get().generateBobKeys();
         setParameter();
         textReset();
     }
@@ -385,6 +371,7 @@ public class SignalEncryptionViewOverview extends Composite {
         value_g_bob.setText(bobSenderMsgKey);
     }
     public void setParameter() {
+        var signalEncryptionState = AlgorithmState.get();
         aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
         aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
         aliceRootKey = signalEncryptionState.getaliceRootKey();
@@ -398,26 +385,5 @@ public class SignalEncryptionViewOverview extends Composite {
         bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
         bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
         bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
-        
-
-        
     }
-    /*
-     *     public void textReset() {
-        value_b_alice_private.setText(signalEncryptionState.getAliceRatchetPrivateKey()); 
-        value_b_alice_public.setText(signalEncryptionState.getAliceRatchetPublicKey()); 
-        value_d_alice.setText(signalEncryptionState.getaliceRootKey());
-        value_e_alice.setText(signalEncryptionState.getAliceSendingChainKey());
-        value_f_alice.setText(signalEncryptionState.getAliceSenderMsgKey());
-        value_g_alice.setText(signalEncryptionState.getAliceReceivingChainKey());
-
-        value_b_bob_private.setText(signalEncryptionState.getBobRatchetPrivateKey()); 
-        value_b_bob_public.setText(signalEncryptionState.getBobRatchetPublicKey()); 
-        value_d_bob.setText(signalEncryptionState.getBobRootKey());
-        value_e_bob.setText(signalEncryptionState.getBobSendingChainKey());
-        value_f_bob.setText(signalEncryptionState.getBobReceivingChainKey());
-        value_g_bob.setText(signalEncryptionState.getBobSenderMsgKey());
-    }
-     */
-    
 }

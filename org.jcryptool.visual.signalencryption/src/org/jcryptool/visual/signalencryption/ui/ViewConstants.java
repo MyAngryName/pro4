@@ -1,9 +1,15 @@
 package org.jcryptool.visual.signalencryption.ui;
 
-/**
- * Holds various config constants for the Double Ratchet tab.
- */
-public class SignalEncryptionViewDoubleRatchetConstants {
+public class ViewConstants {
+
+
+	// height of the plug-in as a whole (this is important for the scrolling of
+	// the plug-in)
+	public static final int PLUGIN_HEIGTH = 680;
+
+	// width of the plug-in as a whole (this is important for the scrolling of
+	// the plug-in)
+	public static final int PLUGIN_WIDTH = 900;
 
     /**
      * Estimated height of the algorithm composite.
@@ -39,6 +45,7 @@ public class SignalEncryptionViewDoubleRatchetConstants {
      * The height hint of arrows which go either up or down
      */
     public static final int UP_DOWN_ARROW_SIZE = 60;
+
     /**
      * The default canvas width hint of all arrows
      */
@@ -82,7 +89,7 @@ public class SignalEncryptionViewDoubleRatchetConstants {
      * shouldn't), so it should be replaced by something more robust if possible.
      */
     public static final int UNKNOWN_GROUP_HEIGHT_DEFAULT = 13;
-    
+
     /**
      * See {@link UNKNOWN_GROUP_HEIGHT_DEFAULT}
      */
@@ -92,4 +99,5 @@ public class SignalEncryptionViewDoubleRatchetConstants {
      * See {@link UNKNOWN_GROUP_HEIGHT_DEFAULT}
      */
     public static final int UNKNOWN_GROUP_HEIGHT_WINDOWS = 13;
+
 }

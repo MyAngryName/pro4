@@ -28,9 +28,7 @@ import org.jcryptool.core.util.ui.auto.SmoothScroller;
 public class SignalEncryptionView extends ViewPart {
 	
 	// Constants
-	public static final String ID = "org.jcryptool.visual.huffmanCoding.ui.SignalEncryptionView"; //$NON-NLS-1$
-//	public final static int OVERVIEW = 0;
-//	public final static int DOUBLERATCHET = 1;
+	public static final String ID = "org.jcryptool.visual.huffmanCoding.ui.SignalEncryptionView";
 		
 	// Main UI components
 	private Composite parent;
@@ -39,15 +37,14 @@ public class SignalEncryptionView extends ViewPart {
 	private TabItem tbtmOverview;
 	private TabItem tbtmDoubleRatchet;
 	private SignalEncryptionView mainView;
-	private SignalEncryptionViewDoubleRatchet doubleRatchetView;
+	private DoubleRatchetView doubleRatchetView;
 	
 	// Tab-Handling
     private int previousTab = 0;
 	private SignalEncryptionViewOverview overViewTabComposite;
-	private SignalEncryptionViewDoubleRatchet doubleRatchetTabComposite;
+	private DoubleRatchetView doubleRatchetTabComposite;
 	
-	private SignalEncryptionAlgorithm signalEncryptionAlgorithm;
-	private SignalEncryptionAlgorithmState signalEncryptionState;
+	private EncryptionAlgorithm signalEncryptionAlgorithm;
 	
 	
 	public SignalEncryptionView() {
@@ -89,17 +86,14 @@ public class SignalEncryptionView extends ViewPart {
 		});
 		
 		//init first tab
-		Singleton singleton = Singleton.getInstance();
-		singleton.reset();
-	    signalEncryptionState = new SignalEncryptionAlgorithmState();
-        doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
-		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, signalEncryptionState, doubleRatchetTabComposite);	
+        doubleRatchetTabComposite = new DoubleRatchetView(tabFolder, SWT.NONE);
+		overViewTabComposite = new SignalEncryptionViewOverview(tabFolder, SWT.NONE, doubleRatchetTabComposite);	
 
         tbtmOverview.setControl(overViewTabComposite);
 		                     
 		
         scrolledComposite.setContent(tabFolder);
-        scrolledComposite.setMinSize(tabFolder.computeSize(SignalEncryptionConstants.PLUGIN_WIDTH,SignalEncryptionConstants.PLUGIN_HEIGTH));
+        scrolledComposite.setMinSize(tabFolder.computeSize(ViewConstants.PLUGIN_WIDTH,ViewConstants.PLUGIN_HEIGTH));
 		
 		// This makes the ScrolledComposite scrolling, when the mouse 
 		// is on a Text with one or more of the following tags: SWT.READ_ONLY,
@@ -123,7 +117,7 @@ public class SignalEncryptionView extends ViewPart {
            previousTab = 0;
            break; 
          case 1:
-             //doubleRatchetTabComposite = new SignalEncryptionViewDoubleRatchet(tabFolder, SWT.NONE, signalEncryptionState);
+             //doubleRatchetTabComposite = new DoubleRatchetView(tabFolder, SWT.NONE, signalEncryptionState);
              tbtmDoubleRatchet.setControl(doubleRatchetTabComposite);
              previousTab = 1;
         default:

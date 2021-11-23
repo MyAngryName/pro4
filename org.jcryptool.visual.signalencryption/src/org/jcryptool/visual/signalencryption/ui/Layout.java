@@ -5,8 +5,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 
-import static org.jcryptool.visual.signalencryption.ui.SignalEncryptionViewDoubleRatchetConstants.*;
-
 public class Layout {
 
     private Layout() {
@@ -35,11 +33,11 @@ public class Layout {
         var gl_sendingReceivingChainComposite = new GridLayout(4, false);
         gl_sendingReceivingChainComposite.marginWidth = 0;
         if (alignment == SWT.LEFT) {
-            gl_sendingReceivingChainComposite.marginRight = HORIZONTAL_SPACING;
+            gl_sendingReceivingChainComposite.marginRight = ViewConstants.HORIZONTAL_SPACING;
             gl_sendingReceivingChainComposite.marginLeft = 0;
         } else if (alignment == SWT.RIGHT) {
             gl_sendingReceivingChainComposite.marginRight = 0;
-            gl_sendingReceivingChainComposite.marginLeft = HORIZONTAL_SPACING;
+            gl_sendingReceivingChainComposite.marginLeft = ViewConstants.HORIZONTAL_SPACING;
         } else {
             throw new NoSuchElementException(
                     "PROGRAMMING ERROR: This method takes SWT.LEFT or SWT.RIGHT as argument, "
@@ -66,13 +64,13 @@ public class Layout {
 
     public static GridData gd_algorithmGroup() {
         var gd_algorithmGroup = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
-        gd_algorithmGroup.heightHint = ALGORITHM_HEIGHT; 
+        gd_algorithmGroup.heightHint = ViewConstants.ALGORITHM_HEIGHT; 
         return gd_algorithmGroup;
     }
 
     public static GridData gd_arrowSpaceComposite() {
         var gd_arrowSpaceComposite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
-        gd_arrowSpaceComposite.minimumHeight = ALGORITHM_HEIGHT;
+        gd_arrowSpaceComposite.minimumHeight = ViewConstants.ALGORITHM_HEIGHT;
         return gd_arrowSpaceComposite;
     }
 
@@ -94,9 +92,9 @@ public class Layout {
     // style data for the labels within the algorithm
     public static GridData gd_algorithmLabels() {
         var gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-        gd_algorithmLabels.widthHint = BOX_WIDTH;
-        gd_algorithmLabels.heightHint = BOX_HEIGHT;
-        gd_algorithmLabels.horizontalIndent = HORIZONTAL_SPACING;
+        gd_algorithmLabels.widthHint = ViewConstants.BOX_WIDTH;
+        gd_algorithmLabels.heightHint = ViewConstants.BOX_HEIGHT;
+        gd_algorithmLabels.horizontalIndent = ViewConstants.HORIZONTAL_SPACING;
         return gd_algorithmLabels;
     }
 
@@ -145,8 +143,8 @@ public class Layout {
     // A major part is the vertical arrow height itself.
     // Finally, in order for the connecting arrow to be centered, half its thickness must be
     // at each end, so one arrow thickness is added.
-    return BOX_HEIGHT + borderWidth * 4 + gl_algorithmGroup().verticalSpacing * 2 +
-        UP_DOWN_ARROW_SIZE + ARROW_THICKNESS;
+    return ViewConstants.BOX_HEIGHT + borderWidth * 4 + gl_algorithmGroup().verticalSpacing * 2 +
+        ViewConstants.UP_DOWN_ARROW_SIZE + ViewConstants.ARROW_THICKNESS;
     }
 
     private static int calculateConnectingArrowMargin() {
@@ -162,16 +160,16 @@ public class Layout {
         // TODO: The unknown group height is explained in more detail in its docstring.
         // Find out if there is a clean, platform independent solution to calculate the correct
         // offset.
-        int unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_DEFAULT;
+        int unknownGroupHeight = ViewConstants.UNKNOWN_GROUP_HEIGHT_DEFAULT;
         var os = System.getProperty("os.name").toLowerCase();
         if (os.contains("linux")) {
-            unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_LINUX;
+            unknownGroupHeight = ViewConstants.UNKNOWN_GROUP_HEIGHT_LINUX;
         } else if (os.contains("win")) {
-            unknownGroupHeight = UNKNOWN_GROUP_HEIGHT_WINDOWS;
+            unknownGroupHeight = ViewConstants.UNKNOWN_GROUP_HEIGHT_WINDOWS;
         }
 
         var layout = Layout.gl_diffieHellmanComposite();
-        return layout.marginTop + layout.verticalSpacing + (BOX_HEIGHT / 2) -
-            (ARROW_HEAD_THICKNESS/ 2) + unknownGroupHeight;
+        return layout.marginTop + layout.verticalSpacing + (ViewConstants.BOX_HEIGHT / 2) -
+            (ViewConstants.ARROW_HEAD_THICKNESS/ 2) + unknownGroupHeight;
     }
 }

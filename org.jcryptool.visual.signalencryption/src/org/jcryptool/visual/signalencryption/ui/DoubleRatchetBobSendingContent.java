@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Path;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -115,14 +116,19 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
     public Composite buildAlgorithmContent(Composite parent, COMMUNICATION_STATE state) {
         var cmp_bobSendingAlgorithm = new Composite(parent, SWT.NONE);
         cmp_bobSendingAlgorithm.setLayout(Layout.gl_algorithmGroup());
-        cmp_bobSendingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
+        var layout = Layout.gd_algorithmGroup();
+        layout.horizontalAlignment = SWT.RIGHT;
+        cmp_bobSendingAlgorithm.setLayoutData(layout);
         
-        grp_bobDiffieHellman = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace1 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobRootChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace2 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobSendingChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        //var spacer = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
+        //spacer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+        UiUtils.insertExcessiveSpacers(cmp_bobSendingAlgorithm, 1);
         grp_bobMessagebox = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobSendingChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace2 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobRootChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace1 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobDiffieHellman = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
         
         createBobDiffieHellmanChain();
         createBobRootChain();
@@ -137,8 +143,14 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         grp_bobSendingChain.setLayout(Layout.gl_sendingReceivingChainComposite(SWT.LEFT));
         grp_bobSendingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
         grp_bobSendingChain.setText(SendingChainDescription);
+        
+        UiUtils.insertSpacers(grp_bobSendingChain, 1);
 
-        // arrow down
+        txt_bobSendingChain1 = new Text(grp_bobSendingChain,
+                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain1.setText(bobSendingChainLabel1);
+
         arr_bobSendingChainArrow4 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
         arr_bobSendingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
                 SWT.FILL, SWT.FILL, false, false, 2, 1, ViewConstants.ARROW_CANVAS_WIDTH
@@ -147,7 +159,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightArrow(
+                Path path = ArrowCanvas.drawLeftArrow(
                         arr_bobSendingChainArrow4, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -155,12 +167,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobSendingChain1 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain1.setText(bobSendingChainLabel1);
-        
-        UiUtils.insertSpacers(grp_bobSendingChain, 3);
+        UiUtils.insertSpacers(grp_bobSendingChain, 1);
 
         // arrow down
         arr_bobSendingChainArrow1 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
@@ -179,13 +186,14 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        UiUtils.insertSpacers(grp_bobSendingChain, 1);
+        UiUtils.insertSpacers(grp_bobSendingChain, 3);
 
-        txt_bobSendingChain2 = new Text(grp_bobSendingChain,
+        
+        txt_bobSendingChain3 = new Text(grp_bobSendingChain,
                 SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain2.setText(bobSendingChainLabel2);
-
+        txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain3.setText(bobSendingChainLabel3);
+        
         // arrow right
         arr_bobSendingChainArrow2 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
         arr_bobSendingChainArrow2.setLayoutData(ArrowCanvas.canvasData(
@@ -195,21 +203,25 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightArrow(
+                Path path = ArrowCanvas.drawLeftArrow(
                         arr_bobSendingChainArrow2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
                 path.dispose();
             }
         });
-
-        txt_bobSendingChain3 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain3.setText(bobSendingChainLabel3);
         
-        UiUtils.insertSpacers(grp_bobSendingChain, 3);
+        txt_bobSendingChain2 = new Text(grp_bobSendingChain,
+                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain2.setText(bobSendingChainLabel2);
 
+        txt_bobSendingChain4 = new Text(grp_bobSendingChain,
+                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain4.setText(bobSendingChainLabel4);
+
+        
         // arrow down
         arr_bobSendingChainArrow3 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
         arr_bobSendingChainArrow3.setLayoutData(ArrowCanvas.canvasData(
@@ -219,7 +231,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownRightArrow(
+                Path path = ArrowCanvas.drawDownLeftArrow(
                         arr_bobSendingChainArrow3, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -227,12 +239,8 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobSendingChain4 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain4.setText(bobSendingChainLabel4);
 
-        UiUtils.insertSpacers(grp_bobSendingChain, 2);
+        UiUtils.insertSpacers(grp_bobSendingChain, 3);
 
         txt_bobSendingChain5 = new Text(grp_bobSendingChain,
                 SWT.BORDER | SWT.WRAP | SWT.CENTER);
@@ -369,7 +377,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightUpRightArrow(
+                Path path = ArrowCanvas.drawLeftUpLeftArrow(
                         arr_bobSpace1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -396,7 +404,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightUpRightLine(
+                Path path = ArrowCanvas.drawLeftUpLeftLine(
                         arr_bobSpace2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);

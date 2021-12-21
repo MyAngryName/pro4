@@ -1,6 +1,7 @@
 package org.jcryptool.visual.signalencryption.util;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -21,6 +22,19 @@ public class UiUtils {
     public static void insertSpacers(Composite parent, int number) {
         for (int i = 0; i < number; ++i) {
             var label = new Label(parent, SWT.NONE);
+            label.setVisible(false);
+        }
+    }
+    
+    /**
+     * Insert invisible spacing widgets into the composite container which grab excess space.
+     * @param parent
+     * @param number
+     */
+    public static void insertExcessiveSpacers(Composite parent, int number) {
+        for (int i = 0; i < number; ++i) {
+            var label = new Label(parent, SWT.NONE);
+            label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             label.setVisible(false);
         }
     }

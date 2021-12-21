@@ -12,7 +12,7 @@ public class Layout {
     }
 
     public static GridLayout gl_algorithmGroup() {
-        var gl_algorithmGroup = new GridLayout(6, false);
+        var gl_algorithmGroup = new GridLayout(8, false);
         gl_algorithmGroup.horizontalSpacing = 0;
         return gl_algorithmGroup;
     }

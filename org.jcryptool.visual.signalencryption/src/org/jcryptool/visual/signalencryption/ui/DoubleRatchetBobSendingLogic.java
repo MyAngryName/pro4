@@ -42,7 +42,7 @@ public class DoubleRatchetBobSendingLogic {
                 aliceContent.txt_aliceDiffieHellman3.setVisible(false);
                 aliceContent.cmp_aliceArrowSpace1.setVisible(false);
                 aliceContent.cmp_aliceArrowSpace2.setVisible(false);
-                aliceContent.txt_alicePlainText.setVisible(false);
+                aliceContent.grp_aliceDecryptedMessage.setVisible(false);
 
                 swtParent.grp_bobAlgorithm.setVisible(false);
                 bobContent.grp_bobDiffieHellman.setVisible(false);
@@ -457,7 +457,7 @@ public class DoubleRatchetBobSendingLogic {
                 aliceContent.txt_aliceReceivingStep8.setVisible(true);
 
                 // Hide these Elements
-                aliceContent.txt_alicePlainText.setVisible(false);
+                aliceContent.grp_aliceDecryptedMessage.setVisible(false);
                 aliceContent.txt_aliceReceivingStep9.setVisible(false);
             }
 
@@ -502,7 +502,7 @@ public class DoubleRatchetBobSendingLogic {
                 aliceContent.txt_aliceDiffieHellman3.setVisible(true);
                 aliceContent.cmp_aliceArrowSpace1.setVisible(true);
                 aliceContent.cmp_aliceArrowSpace2.setVisible(true);
-                aliceContent.txt_alicePlainText.setVisible(true);
+                aliceContent.grp_aliceDecryptedMessage.setVisible(true);
 
                 swtParent.grp_bobAlgorithm.setVisible(true);
                 swtParent.grp_bobSteps.setVisible(true);

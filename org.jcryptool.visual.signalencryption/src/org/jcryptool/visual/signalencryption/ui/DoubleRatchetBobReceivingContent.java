@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.jcryptool.core.util.colors.ColorService;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 
 public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityContent {
@@ -77,6 +78,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Group grp_bobSpace1;
     Group grp_bobDiffieHellman;
     Group grp_bobMessagebox;
+    Group grp_bobDecryptedMessage;
     
     Composite cmp_bobDiffieHellman;
     Composite cmp_bobRootChain;
@@ -124,16 +126,18 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         cmp_bobSendingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
         grp_bobMessagebox = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobReceivingChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace2 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobRootChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace1 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
         grp_bobDiffieHellman = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace1 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobRootChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        cmp_bobArrowSpace2 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobReceivingChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobDecryptedMessage = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
         
         createBobReceivingChain();
         createBobRootChain();
         createBobDiffieHellmanChain();
-        createBobMessagebox();
+        createBobEncryptedMessagebox();
+        createBobDecryptedMessagebox();
         createBobArrowSpaces();
         return cmp_bobSendingAlgorithm;
     }
@@ -143,13 +147,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         grp_bobReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
         grp_bobReceivingChain.setText(ReceivingChainDescription);
         
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1);
-
-        txt_bobReceivingChain1 = new Text(grp_bobReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobReceivingChain1.setText(bobReceivingChainLabel1);
-
+        
         arr_bobReceivingChainArrow4 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
         arr_bobReceivingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
                 SWT.FILL, SWT.FILL, false, false, 2, 1, ViewConstants.ARROW_CANVAS_WIDTH
@@ -158,7 +156,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawLeftArrow(
+                Path path = ArrowCanvas.drawRightArrow(
                         arr_bobReceivingChainArrow4, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -166,7 +164,12 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             }
         });
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1);
+        txt_bobReceivingChain1 = new Text(grp_bobReceivingChain,
+                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobReceivingChain1.setText(bobReceivingChainLabel1);
+
+        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
         
         // arrow down
         arr_bobReceivingChainArrow1 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -185,12 +188,12 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             }
         });
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
-
-        txt_bobReceivingChain2 = new Text(grp_bobReceivingChain,
+        UiUtils.insertSpacers(grp_bobReceivingChain, 1);
+        
+        txt_bobReceivingChain3 = new Text(grp_bobReceivingChain,
                 SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobReceivingChain2.setText(bobReceivingChainLabel2);
+        txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobReceivingChain3.setText(bobReceivingChainLabel3);
 
         // arrow left
         arr_bobReceivingChainArrow2 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -201,7 +204,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawLeftArrow(
+                Path path = ArrowCanvas.drawRightArrow(
                         arr_bobReceivingChainArrow2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -209,15 +212,14 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             }
         });
 
-        txt_bobReceivingChain3 = new Text(grp_bobReceivingChain,
+        txt_bobReceivingChain2 = new Text(grp_bobReceivingChain,
                 SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobReceivingChain3.setText(bobReceivingChainLabel3);
+        txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobReceivingChain2.setText(bobReceivingChainLabel2);
 
-        txt_bobReceivingChain4 = new Text(grp_bobReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
-        txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobReceivingChain4.setText(bobReceivingChainLabel4);
+
+        
+        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
 
         // arrow left
         arr_bobReceivingChainArrow3 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -228,7 +230,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownLeftArrow(
+                Path path = ArrowCanvas.drawDownRightArrow(
                         arr_bobReceivingChainArrow3, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -236,7 +238,12 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             }
         });
         
-        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
+        txt_bobReceivingChain4 = new Text(grp_bobReceivingChain,
+                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobReceivingChain4.setText(bobReceivingChainLabel4);
+        
+        UiUtils.insertSpacers(grp_bobReceivingChain, 2);
 
         txt_bobReceivingChain5 = new Text(grp_bobReceivingChain,
                 SWT.BORDER | SWT.WRAP | SWT.CENTER);
@@ -351,9 +358,11 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
     }
         private void createBobArrowSpaces() {
+        
         cmp_bobArrowSpace1.setLayout(Layout.gl_arrowSpaceComposite());
         cmp_bobArrowSpace1.setLayoutData(Layout.gd_arrowSpaceComposite());
-
+        
+        //System.out.print(calculateConnectingArrowMargin());
         // arrow up
         arr_bobSpace1 = new Canvas(cmp_bobArrowSpace1, SWT.DOUBLE_BUFFERED);
         arr_bobSpace1.setLayoutData(ArrowCanvas.canvasData(
@@ -371,7 +380,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawLeftUpLeftArrow(
+                Path path = ArrowCanvas.drawRightUpRightArrow(
                         arr_bobSpace1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -398,7 +407,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
             @Override
             public void paintControl(PaintEvent event) {
                 event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawLeftUpLeftLine(
+                Path path = ArrowCanvas.drawRightUpRightLine(
                         arr_bobSpace2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
                 );
                 event.gc.fillPath(path);
@@ -407,29 +416,31 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         });
     }
 
-    private void createBobMessagebox() {
-
+    private void createBobEncryptedMessagebox() {
         grp_bobMessagebox.setLayout(Layout.gl_messageboxGroup());
         grp_bobMessagebox.setLayoutData(Layout.gd_messageboxComposite());
         grp_bobMessagebox.setText(MessageboxDescription);
 
-        txt_bobCipherText = new Text(grp_bobMessagebox,
-                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
+        txt_bobCipherText = new Text(
+                grp_bobMessagebox,
+                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
+        );
         txt_bobCipherText.setText(MessageboxCipherText);
         txt_bobCipherText.setLayoutData(Layout.gd_Messagebox());
-
-        txt_bobPlainText = new Text(grp_bobMessagebox,
-                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
+        txt_bobCipherText.setEditable(false);
+    }
+    
+    private void createBobDecryptedMessagebox() {
+        grp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
+        grp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
+        grp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
+        txt_bobPlainText = new Text(
+                grp_bobDecryptedMessage,
+                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
+        );
         txt_bobPlainText.setText(MessageboxPlainText);
         txt_bobPlainText.setLayoutData(Layout.gd_Messagebox());
-        txt_bobPlainText.addListener(SWT.Modify, new Listener() {
-
-            @Override
-            public void handleEvent(Event e) {
-                txt_bobPlainText.setTextLimit(256);
-            }
-        });
-        txt_bobPlainText.setEditable(true);
+        txt_bobPlainText.setEditable(false);
     }
 
 }

@@ -42,7 +42,7 @@ public class DoubleRatchetAliceSendingLogic {
                 bobContent.txt_bobDiffieHellman3.setVisible(false);
                 bobContent.cmp_bobArrowSpace1.setVisible(false);
                 bobContent.cmp_bobArrowSpace2.setVisible(false);
-                bobContent.txt_bobPlainText.setVisible(false);
+                bobContent.grp_bobDecryptedMessage.setVisible(false);
 
                 swtParent.grp_aliceAlgorithm.setVisible(false);
                 aliceContent.grp_aliceMessagebox.setVisible(false);
@@ -98,7 +98,14 @@ public class DoubleRatchetAliceSendingLogic {
 
             @Override
             public DoubleRatchetStep back(DoubleRatchetView swtParent) {
-                return STEP_0;
+                if (AlgorithmState.get().getCommunication().isBeginning()) {
+                    return STEP_0;
+                } else {
+                    swtParent.switchSenderReceiver();
+                    AlgorithmState.get().getCommunication().prev();
+                    BobSendingStep.STEP_9.switchState(swtParent);
+                    return BobSendingStep.STEP_9;
+                }
             }
         },
         /**
@@ -143,15 +150,9 @@ public class DoubleRatchetAliceSendingLogic {
 
             @Override
             public DoubleRatchetStep back(DoubleRatchetView swtParent) {
-                if (AlgorithmState.get().getCommunication().isBeginning()) {
-                    STEP_0.switchState(swtParent);
-                    return STEP_0;
-                } else {
-                    swtParent.switchSenderReceiver();
-                    AlgorithmState.get().getCommunication().prev();
-                    BobSendingStep.STEP_9.switchState(swtParent);
-                    return BobSendingStep.STEP_9;
-                }
+                STEP_0.switchState(swtParent);
+                return STEP_0;
+                
             }
         },
         /**
@@ -481,7 +482,7 @@ public class DoubleRatchetAliceSendingLogic {
                 bobContent.txt_bobReceivingStep8.setVisible(true);
 
                 // Hide these Elements
-                bobContent.txt_bobPlainText.setVisible(false);
+                bobContent.grp_bobDecryptedMessage.setVisible(false);
                 bobContent.txt_bobReceivingStep9.setVisible(false);
             }
 
@@ -526,7 +527,7 @@ public class DoubleRatchetAliceSendingLogic {
                 bobContent.txt_bobDiffieHellman3.setVisible(true);
                 bobContent.cmp_bobArrowSpace1.setVisible(true);
                 bobContent.cmp_bobArrowSpace2.setVisible(true);
-                bobContent.txt_bobPlainText.setVisible(true);
+                bobContent.grp_bobDecryptedMessage.setVisible(true);
 
                 swtParent.grp_aliceAlgorithm.setVisible(true);
                 swtParent.grp_aliceSteps.setVisible(true);

@@ -72,6 +72,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
     Group grp_aliceSpace1;
     Group grp_aliceDiffieHellman;
     Group grp_aliceMessagebox;
+    Group grp_aliceDecryptedMessage;
     
     Composite cmp_aliceDiffieHellman;
     Composite cmp_aliceRootChain;
@@ -121,17 +122,20 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         cmp_aliceSendingAlgorithm.setLayout(Layout.gl_algorithmGroup());
         cmp_aliceSendingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
-        grp_aliceMessagebox = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
+        UiUtils.insertExcessiveSpacers(cmp_aliceSendingAlgorithm, 1);
+        grp_aliceDecryptedMessage = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         grp_aliceReceivingChain = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         cmp_aliceArrowSpace2 = new Composite(cmp_aliceSendingAlgorithm, SWT.NONE);
         grp_aliceRootChain = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         cmp_aliceArrowSpace1 = new Composite(cmp_aliceSendingAlgorithm, SWT.NONE);
         grp_aliceDiffieHellman = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
+        grp_aliceMessagebox = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         
         createAliceReceivingChain();
         createAliceRootChain();
         createAliceDiffieHellmanChain();
-        createAliceMessagebox();
+        createAliceEncryptedMessagebox();
+        createAliceDecryptedMessagebox();
         createAliceArrowSpaces();
         return cmp_aliceSendingAlgorithm;
     }
@@ -405,7 +409,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         });
     }
 
-    private void createAliceMessagebox() {
+    private void createAliceEncryptedMessagebox() {
         grp_aliceMessagebox.setLayout(Layout.gl_messageboxGroup());
         grp_aliceMessagebox.setLayoutData(Layout.gd_messageboxComposite());
         grp_aliceMessagebox.setText(MessageboxDescription);
@@ -414,16 +418,17 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_aliceCipherText.setText(MessageboxCipherText);
         txt_aliceCipherText.setLayoutData(Layout.gd_Messagebox());
+    }
 
-        txt_alicePlainText = new Text(grp_aliceMessagebox,
+
+    private void createAliceDecryptedMessagebox() {
+        grp_aliceDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
+        grp_aliceDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
+        grp_aliceDecryptedMessage.setText("Entschlüsselte Nachricht");
+        
+        txt_alicePlainText = new Text(grp_aliceDecryptedMessage,
                 SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
         txt_alicePlainText.setText(MessageboxPlainText);
         txt_alicePlainText.setLayoutData(Layout.gd_Messagebox());
-        txt_alicePlainText.setTextLimit(256);
-        txt_alicePlainText.setEditable(true);
     }
-
-   
-
-
 }

@@ -102,6 +102,8 @@ public class DoubleRatchetBobSendingLogic {
             @Override
             protected void switchState(DoubleRatchetView swtParent) {
                 var bobContent = swtParent.getBobSendingContent();
+                // On this transition, update all key details as well
+                updateValueDisplayInformation(swtParent);
 
                 // Show these elements
                 swtParent.grp_bobAlgorithm.setVisible(true);
@@ -331,7 +333,8 @@ public class DoubleRatchetBobSendingLogic {
 
                 // TODO: Rework this state as it is basically pointless.
                 if (communication.isBeginning()) {
-                    AlgorithmState.get().setCurrent(AlgorithmState.STATE.BOB_SEND_MSG);
+                    // TODO replace state
+                    //AlgorithmState.get().setState(AlgorithmState.STATE.BOB_SEND_MSG);
                 }
             }
 
@@ -550,6 +553,8 @@ public class DoubleRatchetBobSendingLogic {
                 } else {
                     LogUtil.logError(new SignalAlgorithmException(), true);
                 }
+                // On this transition, update all key details as well
+                updateValueDisplayInformation(swtParent);
             }
 
             @Override
@@ -604,5 +609,34 @@ public class DoubleRatchetBobSendingLogic {
                     "Sorry, that shouldn't have happened, must restart", e, true);
             view.resetAll();
         }
+    }
+    
+    private static void updateValueDisplayInformation(DoubleRatchetView view) {
+        var aliceContent = view.getAliceReceivingContent();
+        var algState = AlgorithmState.get();
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceReceivingChain5, algState.getAliceReceivingChainKey()
+        );
+        PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, algState.getaliceRootKey());
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceDiffieHellman3, algState.getAliceRatchetPrivateKey()
+        );
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceDiffieHellman2, algState.getAliceRatchetPublicKey()
+        );
+        
+        var bobContent = view.getBobSendingContent();
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobSendingChain5, algState.getBobSendingChainKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobRootChain3, algState.getBobRootKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobDiffieHellman3, algState.getBobRatchetPrivateKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobDiffieHellman2, algState.getBobRatchetPublicKey()
+        );
     }
 }

@@ -93,7 +93,7 @@ public class Layout {
     public static GridData gd_algorithmLabels() {
         var gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gd_algorithmLabels.widthHint = ViewConstants.BOX_WIDTH;
-        gd_algorithmLabels.heightHint = ViewConstants.BOX_HEIGHT;
+        //gd_algorithmLabels.heightHint = ViewConstants.BOX_HEIGHT;
         gd_algorithmLabels.horizontalIndent = ViewConstants.HORIZONTAL_SPACING;
         return gd_algorithmLabels;
     }

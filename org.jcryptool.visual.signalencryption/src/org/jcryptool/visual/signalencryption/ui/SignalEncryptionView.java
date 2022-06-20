@@ -28,7 +28,7 @@ import org.jcryptool.core.util.ui.auto.SmoothScroller;
 public class SignalEncryptionView extends ViewPart {
 	
 	// Constants
-	public static final String ID = "org.jcryptool.visual.huffmanCoding.ui.SignalEncryptionView";
+	public static final String ID = "org.jcryptool.visual.signalencryption";
 		
 	// Main UI components
 	private Composite parent;
@@ -137,6 +137,7 @@ public class SignalEncryptionView extends ViewPart {
      * resets the view, it's needed by JCrypTool
      */
     public void resetView() {
+        AlgorithmState.destroy();
         Control[] children = parent.getChildren();
         for (Control control : children) {
             control.dispose();

@@ -1,5 +1,7 @@
 package org.jcryptool.visual.signalencryption.ui;
 
+import java.util.Optional;
+
 import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
 import org.jcryptool.visual.signalencryption.ui.AlgorithmState;
 import org.jcryptool.visual.signalencryption.ui.AlgorithmState.STATE;
@@ -7,6 +9,7 @@ import org.jcryptool.visual.signalencryption.algorithm.Keys;
 import org.jcryptool.visual.signalencryption.util.ToHex;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.SessionStore;
 
@@ -18,8 +21,8 @@ public class EncryptionAlgorithm {
     private SessionCipher bobSessionCipher;
     private SessionCipher aliceSessionCipher;
 
-    private Keys aliceKeys;
-    private Keys bobKeys;
+    //private Keys aliceKeys;
+    //private Keys bobKeys;
     private Keys aliceKeysParameter;
     private Keys bobKeysParameter;
     private Keys alicePreKeys;
@@ -33,10 +36,7 @@ public class EncryptionAlgorithm {
     private SignalProtocolAddress aliceAddress;
     private SignalProtocolAddress bobAddress;
     
-    private AlgorithmState signalEncryptionState;
-
-    
-    public EncryptionAlgorithm(STATE state) {
+    public EncryptionAlgorithm() {
         this.session = new AliceBobSessionBuilder();
         session.createSessionBoth();
         this.bobSessionCipher = session.getBobSessionCipher();
@@ -47,17 +47,15 @@ public class EncryptionAlgorithm {
         
         this.aliceAddress = session.getAliceAddress();
         this.bobAddress = session.getBobAddress();
-        
-
-        this.aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
-        this.bobKeys = new Keys(bobSessionStore, aliceAddress, state);   
     }
 
-    public Keys getAliceKeys() {
-        return aliceKeys;
+    public Keys getAliceKeys(STATE state) {
+        ECPublicKey theirRatchetKey = bobSessionStore.loadSession(aliceAddress).getSessionState().getSenderRatchetKey();
+        return new Keys(aliceSessionStore, bobAddress, Optional.of(theirRatchetKey), state);
     }
-    public Keys getBobKeys() {
-        return bobKeys;
+    public Keys getBobKeys(STATE state) {
+        ECPublicKey theirRatchetKey = aliceSessionStore.loadSession(bobAddress).getSessionState().getSenderRatchetKey();
+        return new Keys(bobSessionStore, aliceAddress, Optional.of(theirRatchetKey), state);   
     }
     public PreKeyBundle getAlicePreKeyBundle() {
         return session.getAlicePreKeyBundle();
@@ -84,9 +82,6 @@ public class EncryptionAlgorithm {
         
         aliceAddress = session.getAliceAddress();
         bobAddress = session.getBobAddress();
-
-        aliceKeys = new Keys(aliceSessionStore, bobAddress, state);
-        bobKeys = new Keys(bobSessionStore, aliceAddress, state);
     }
     
     public void generateAlice(STATE currentState) {
@@ -95,7 +90,6 @@ public class EncryptionAlgorithm {
         aliceSessionCipher = session.getAliceSessionCipher();
         aliceSessionStore = session.getAliceSessionStore();
         aliceAddress = session.getAliceAddress();
-        aliceKeys = new Keys(aliceSessionStore, bobAddress, currentState);
     }
     
     public void generateBob(STATE state) {
@@ -104,7 +98,6 @@ public class EncryptionAlgorithm {
         bobSessionCipher = session.getBobSessionCipher();
         bobSessionStore = session.getBobSessionStore();
         bobAddress = session.getBobAddress();
-        bobKeys = new Keys(bobSessionStore, aliceAddress, state);
     }
     
     

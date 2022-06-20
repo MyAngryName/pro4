@@ -32,9 +32,6 @@ public class SignalCommunication {
     private EncryptionAlgorithm algorithm;
     private int i;
 
-    private MessageContext initialising;
-    private MessageContext preKeySignalMessage;
-
     /**
      * Interface between UI "frontend" and algorithm "backend".
      * 
@@ -42,11 +39,8 @@ public class SignalCommunication {
      * a simple-to-use class with methods similar to an iterator.
      */
     public SignalCommunication() {
-        algorithm = new EncryptionAlgorithm(STATE.INITIALIZING);
+        algorithm = new EncryptionAlgorithm();
         messageContexts = new LinkedList<>();
-
-        initialising = createBaseMessageContext().aliceIsSending().build();
-        preKeySignalMessage = createPreKeyMessageContext().build();
 
         messageContexts.add(createFullMessageContext().aliceIsSending().build());
         i = 0;
@@ -128,6 +122,10 @@ public class SignalCommunication {
         return i == 0;
     }
 
+    public boolean isBobsFirstMessage() {
+        return i == 1;
+    }
+
     /**
      * Check the state of the pointer.
      * 
@@ -192,24 +190,21 @@ public class SignalCommunication {
         return createBaseMessageContext()
                 .aliceSendingChainKey(toHex(aliceKeys().getChainKey().getKey()))
                 .aliceSenderMsgKey(toHex(aliceKeys().getMessageKeys().getCipherKey().getEncoded()))
-                .bobRatchedPrivateKey(toHex(bobKeys().getRatchetPrivateKey().serialize()))
+                .aliceRatchetPrivateKey(toHex(aliceKeys().getRatchetPrivateKey().serialize()))
+                .aliceRatchetPublicKey(toHex(aliceKeys().getRatchetPublicKey().serialize()))
+                .bobRatchetPrivateKey(toHex(bobKeys().getRatchetPrivateKey().serialize()))
+                .bobRatchetPublicKey(toHex(bobKeys().getRatchetPublicKey().serialize()))
                 .bobRootKey(toHex(bobKeys().getRootKey().getKeyBytes()))
                 .bobReceivingChainKey(toHex(bobKeys().getChainKey().getKey()))
                 .bobSenderMsgKey(toHex(bobKeys().getMessageKeys().getCipherKey().getEncoded()));
     }
 
-    private MessageContext.Builder createPreKeyMessageContext() {
-        return createBaseMessageContext().aliceIsSending()
-                .aliceSendingChainKey(toHex(aliceKeys().getChainKey().getKey()))
-                .aliceSenderMsgKey(toHex(aliceKeys().getMessageKeys().getCipherKey().getEncoded()));
-    }
-
     private MessageContext.Builder createBaseMessageContext() {
         return new MessageContext.Builder()
-                .aliceRatchedPrivateKey(toHex(aliceKeys().getRatchetPrivateKey().serialize()))
-                .aliceRatchedPublicKey(toHex(aliceKeys().getRatchetPublicKey().serialize()))
+                .aliceRatchetPrivateKey(toHex(aliceKeys().getRatchetPrivateKey().serialize()))
+                .aliceRatchetPublicKey(toHex(aliceKeys().getRatchetPublicKey().serialize()))
                 .aliceRootKey(toHex(aliceKeys().getRootKey().getKeyBytes()))
-                .bobRatchedPublicKey(toHex(bobKeys().getRatchetPublicKey().serialize()));
+                .bobRatchetPublicKey(toHex(bobKeys().getRatchetPublicKey().serialize()));
     }
 
     /**
@@ -223,23 +218,25 @@ public class SignalCommunication {
      * Small helper method to shorten lines by giving direct access to keys.
      */
     private Keys aliceKeys() {
-        return algorithm.getAliceKeys();
+        if (isBeginning() || i <= 1) {
+            return algorithm.getAliceKeys(STATE.INITIALIZING);
+        } else {
+            return algorithm.getAliceKeys(STATE.PRE_KEY_SIGNAL_MESSAGE);   
+        }
+        
     }
 
     /**
      * Small helper method to shorten lines by giving direct access to keys.
      */
     private Keys bobKeys() {
-        return algorithm.getBobKeys();
+        if (isBeginning() || isBobsFirstMessage()) {
+            return algorithm.getBobKeys(STATE.INITIALIZING);
+        } else {
+            return algorithm.getBobKeys(STATE.PRE_KEY_SIGNAL_MESSAGE);   
+        }
     }
 
-    public MessageContext getInitialisingContext() {
-        return initialising;
-    }
-
-    public MessageContext getPreKeySignalMessageContext() {
-        return preKeySignalMessage;
-    }
 
     /**
      * Helper method to encrypt and decrypt a given message.

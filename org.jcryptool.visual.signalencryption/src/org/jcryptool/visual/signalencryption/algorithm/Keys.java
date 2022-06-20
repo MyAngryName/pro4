@@ -1,5 +1,9 @@
 package org.jcryptool.visual.signalencryption.algorithm;
 
+import java.util.Optional;
+
+import org.jcryptool.core.logging.utils.LogUtil;
+import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
 import org.jcryptool.visual.signalencryption.ui.AlgorithmState.STATE;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.ecc.ECPrivateKey;
@@ -29,7 +33,12 @@ public class Keys {
     private SessionStore sessionStore;
     private SignalProtocolAddress remoteAddress;
 
-    public Keys(SessionStore sessionStore, SignalProtocolAddress remoteAddress, STATE currentState) {
+    public Keys(
+            SessionStore sessionStore,
+            SignalProtocolAddress remoteAddress,
+            Optional<ECPublicKey> theirEphemeralKey,
+            STATE currentState
+    ) {
         this.sessionRecord   = sessionStore.loadSession(remoteAddress);
         this.sessionState    = sessionRecord.getSessionState();
         this.sendingChainKey = sessionState.getSenderChainKey();
@@ -38,8 +47,12 @@ public class Keys {
         this.senderEphemeral = sessionState.getSenderRatchetKey();
         if (currentState == STATE.INITIALIZING) {
             this.receivingChainKey = null;
-        }else {
-            this.receivingChainKey = sessionState.getReceiverChainKey(senderEphemeral);
+        } else {
+            try {
+                this.receivingChainKey = sessionState.getReceiverChainKey(theirEphemeralKey.orElseThrow(() -> new SignalAlgorithmException()));
+            } catch (SignalAlgorithmException e) {
+                LogUtil.logError(e);
+            }
         }
         this.ratchetPublicKey = sessionState.getSenderRatchetKey();
         this.ratchetPrivateKey = sessionState.getSenderRatchetKeyPair().getPrivateKey();

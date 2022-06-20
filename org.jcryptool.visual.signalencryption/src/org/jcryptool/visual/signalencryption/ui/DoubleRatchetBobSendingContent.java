@@ -4,7 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -12,6 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
+import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
 public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityContent {
     
@@ -23,18 +23,17 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
     Text txt_bobSendingStep5;
  
     
-    Text txt_bobRootChain1;
-    Text txt_bobRootChain2;
-    Text txt_bobRootChain3;
-    Text txt_bobSendingChain1;
-    Text txt_bobSendingChain2;
-    Text txt_bobSendingChain3;
-    Text txt_bobSendingChain4;
-    Text txt_bobSendingChain5;
-    
-    Text txt_bobDiffieHellman1;
-    Text txt_bobDiffieHellman2;
-    Text txt_bobDiffieHellman3;
+    FlowChartNode txt_bobRootChain1;
+    FlowChartNode txt_bobRootChain2;
+    FlowChartNode txt_bobRootChain3;
+    FlowChartNode txt_bobSendingChain1;
+    FlowChartNode txt_bobSendingChain2;
+    FlowChartNode txt_bobSendingChain3;
+    FlowChartNode txt_bobSendingChain4;
+    FlowChartNode txt_bobSendingChain5;
+    FlowChartNode txt_bobDiffieHellman1;
+    FlowChartNode txt_bobDiffieHellman2;
+    FlowChartNode txt_bobDiffieHellman3;
     
     Text txt_bobPlainText;
     Text txt_bobCipherText;
@@ -146,10 +145,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         
         UiUtils.insertSpacers(grp_bobSendingChain, 1);
 
-        txt_bobSendingChain1 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain1 = new FlowChartNode.Builder(grp_bobSendingChain)
+                .title(bobSendingChainLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain1.setText(bobSendingChainLabel1);
 
         arr_bobSendingChainArrow4 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
         arr_bobSendingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
@@ -189,10 +189,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         UiUtils.insertSpacers(grp_bobSendingChain, 3);
 
         
-        txt_bobSendingChain3 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain3 =  new FlowChartNode.Builder(grp_bobSendingChain)
+                .title(bobSendingChainLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain3.setText(bobSendingChainLabel3);
         
         // arrow right
         arr_bobSendingChainArrow2 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
@@ -211,15 +212,17 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
         
-        txt_bobSendingChain2 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain2 =  new FlowChartNode.Builder(grp_bobSendingChain)
+                .title(bobSendingChainLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain2.setText(bobSendingChainLabel2);
 
-        txt_bobSendingChain4 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain4 =  new FlowChartNode.Builder(grp_bobSendingChain)
+                .title(bobSendingChainLabel4)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain4.setText(bobSendingChainLabel4);
 
         
         // arrow down
@@ -242,10 +245,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         UiUtils.insertSpacers(grp_bobSendingChain, 3);
 
-        txt_bobSendingChain5 = new Text(grp_bobSendingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobSendingChain5 =  new FlowChartNode.Builder(grp_bobSendingChain)
+                .title(bobSendingChainLabel5)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobSendingChain5.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobSendingChain5.setText(bobSendingChainLabel5);
     }
 
 
@@ -254,9 +258,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         grp_bobRootChain.setLayout(Layout.gl_rootChainComposite());
         grp_bobRootChain.setLayoutData(Layout.gd_rootChainComposite());
 
-        txt_bobRootChain1 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
+                .title(bobRootChainLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobRootChain1.setText(bobRootChainLabel1);
 
         // arrow down
         arr_bobRootChainArrow1 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
@@ -275,9 +281,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobRootChain2 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
+                .title(bobRootChainLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobRootChain2.setText(bobRootChainLabel2);
 
         // arrow down
         arr_bobRootChainArrow2 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
@@ -296,9 +304,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobRootChain3 = new Text(grp_bobRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
+                .title(bobRootChainLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobRootChain3.setText(bobRootChainLabel3);
 
     }
 
@@ -307,9 +317,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         grp_bobDiffieHellman.setLayout(Layout.gl_diffieHellmanComposite());
         grp_bobDiffieHellman.setLayoutData(Layout.gd_diffieHellmanComposite());
 
-        txt_bobDiffieHellman1 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman1 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+                .title(bobDiffieHellmanLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobDiffieHellman1.setText(bobDiffieHellmanLabel1);
 
         // arrow down
         arr_bobDiffieHellmanArrow1 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -328,9 +340,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobDiffieHellman2 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+                .title(bobDiffieHellmanLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobDiffieHellman2.setText(bobDiffieHellmanLabel2);
 
         // arrow up
         arr_bobDiffieHellmanArrow2 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -349,9 +363,11 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
             }
         });
 
-        txt_bobDiffieHellman3 = new Text(grp_bobDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+                .title(bobDiffieHellmanLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_bobDiffieHellman3.setText(bobDiffieHellmanLabel3);
 
     }
     

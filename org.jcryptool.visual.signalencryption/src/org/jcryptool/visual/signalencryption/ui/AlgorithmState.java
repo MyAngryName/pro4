@@ -10,14 +10,12 @@ public class AlgorithmState {
     
     private static AlgorithmState instance;
     private STATE currentState = STATE.INITIALIZING;
-    private MessageContext currentContext;
     
-    private static EncryptionAlgorithm signalEncryptionAlgorithm;
-    private static SignalCommunication communication;
+    private EncryptionAlgorithm signalEncryptionAlgorithm;
+    private SignalCommunication communication;
     
     private AlgorithmState() {
         communication = new SignalCommunication();
-        currentContext = communication.getInitialisingContext();
     }
     
     public static AlgorithmState get() {
@@ -25,6 +23,10 @@ public class AlgorithmState {
             instance = new AlgorithmState();
         }
         return instance;
+    }
+    
+    public static void destroy() {
+        instance = null;
     }
     
     
@@ -105,22 +107,22 @@ public class AlgorithmState {
     }
     
     private MessageContext current() {
-        return currentContext;
+        return getCommunication().current();
     }
     
-    public void setCurrent(STATE state) {
-        switch (state) {
-        case INITIALIZING:
-            currentContext = communication.getInitialisingContext();
-            break;
-        case PRE_KEY_SIGNAL_MESSAGE:
-            currentContext = communication.getPreKeySignalMessageContext();
-            break;
-        default:
-            currentContext = communication.current();
-            break;
-        }
-    }
+    //public void setState(STATE state) {
+    //    switch (state) {
+    //    case INITIALIZING:
+    //        currentContext = communication.getInitialisingContext();
+    //        break;
+    //    case PRE_KEY_SIGNAL_MESSAGE:
+    //        currentContext = communication.getPreKeySignalMessageContext();
+    //        break;
+    //    default:
+    //        currentContext = communication.current();
+    //        break;
+    //    }
+    //}
     
     public SignalCommunication getCommunication() {
         return communication;

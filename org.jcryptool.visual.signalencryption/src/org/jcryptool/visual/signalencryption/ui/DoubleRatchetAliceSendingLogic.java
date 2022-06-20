@@ -2,6 +2,7 @@ package org.jcryptool.visual.signalencryption.ui;
 
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.visual.signalencryption.SignalEncryptionPlugin;
+import org.jcryptool.visual.signalencryption.ui.AlgorithmState.STATE;
 import org.jcryptool.visual.signalencryption.ui.DoubleRatchetBobSendingLogic.BobSendingStep;
 import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
 import org.jcryptool.visual.signalencryption.util.ToHex;
@@ -84,7 +85,10 @@ public class DoubleRatchetAliceSendingLogic {
                 if (AlgorithmState.get().getCommunication().isBeginning()) {
                     aliceContent.txt_aliceSendingStep0
                             .setText(Messages.SignalEncryption_aliceDescriptionText0);
+                    // TODO replace state
+                    //AlgorithmState.get().setState(STATE.PRE_KEY_SIGNAL_MESSAGE);
                 } else {
+                    //AlgorithmState.get().setState(STATE.ALICE_SEND_MSG);
                     aliceContent.txt_aliceSendingStep0
                             .setText("Alice sendet eine Nachricht an Bob");
                 }
@@ -116,6 +120,8 @@ public class DoubleRatchetAliceSendingLogic {
             @Override
             protected void switchState(DoubleRatchetView swtParent) {
                 var aliceContent = swtParent.getAliceSendingContent();
+                // On this transition, update all key details as well
+                updateValueDisplayInformation(swtParent);
 
                 // Show these elements
                 swtParent.grp_aliceAlgorithm.setVisible(true);
@@ -345,7 +351,8 @@ public class DoubleRatchetAliceSendingLogic {
 
                 // TODO: Rework this state as it is basically pointless.
                 if (communication.isBeginning()) {
-                    AlgorithmState.get().setCurrent(AlgorithmState.STATE.ALICE_SEND_MSG);
+                    // TODO replace State
+                    //AlgorithmState.get().setState(AlgorithmState.STATE.ALICE_SEND_MSG);
                 }
             }
 
@@ -582,6 +589,8 @@ public class DoubleRatchetAliceSendingLogic {
                 } else {
                     LogUtil.logError(new SignalAlgorithmException(), true);
                 }
+                // On this transition, update all key steps as well
+                updateValueDisplayInformation(swtParent);
             }
 
             @Override
@@ -636,5 +645,34 @@ public class DoubleRatchetAliceSendingLogic {
                     "Sorry, that shouldn't have happened, must restart", e, true);
             view.resetAll();
         }
+    }
+    
+    private static void updateValueDisplayInformation(DoubleRatchetView view) {
+        var aliceContent = view.getAliceSendingContent();
+        var algState = AlgorithmState.get();
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceSendingChain5, algState.getAliceSendingChainKey()
+        );
+        PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, algState.getaliceRootKey());
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceDiffieHellman3, algState.getAliceRatchetPrivateKey()
+        );
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceDiffieHellman2, algState.getAliceRatchetPublicKey()
+        );
+        
+        var bobContent = view.getBobReceivingContent();
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobReceivingChain5, algState.getBobReceivingChainKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobRootChain3, algState.getBobRootKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobDiffieHellman3, algState.getBobRatchetPrivateKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobDiffieHellman2, algState.getBobRatchetPublicKey()
+        );
     }
 }

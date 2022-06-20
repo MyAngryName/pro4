@@ -7,9 +7,9 @@ import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
+import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
 public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityContent {
     
@@ -27,18 +27,17 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
     Text txt_aliceReceivingStep8;
     Text txt_aliceReceivingStep9;
     
-    Text txt_aliceRootChain1;
-    Text txt_aliceRootChain2;
-    Text txt_aliceRootChain3;
-    Text txt_aliceReceivingChain1;
-    Text txt_aliceReceivingChain2;
-    Text txt_aliceReceivingChain3;
-    Text txt_aliceReceivingChain4;
-    Text txt_aliceReceivingChain5;
-    
-    Text txt_aliceDiffieHellman1;
-    Text txt_aliceDiffieHellman2;
-    Text txt_aliceDiffieHellman3;
+    FlowChartNode txt_aliceRootChain1;
+    FlowChartNode txt_aliceRootChain2;
+    FlowChartNode txt_aliceRootChain3;
+    FlowChartNode txt_aliceReceivingChain1;
+    FlowChartNode txt_aliceReceivingChain2;
+    FlowChartNode txt_aliceReceivingChain3;
+    FlowChartNode txt_aliceReceivingChain4;
+    FlowChartNode txt_aliceReceivingChain5;
+    FlowChartNode txt_aliceDiffieHellman1;
+    FlowChartNode txt_aliceDiffieHellman2;
+    FlowChartNode txt_aliceDiffieHellman3;
     
     Text txt_alicePlainText;
     Text txt_aliceCipherText;
@@ -147,10 +146,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         
         UiUtils.insertSpacers(grp_aliceReceivingChain, 1);
 
-        txt_aliceReceivingChain1 = new Text(grp_aliceReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceReceivingChain1 = new FlowChartNode.Builder(grp_aliceReceivingChain)
+                .title(aliceReceivingChainLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceReceivingChain1.setText(aliceReceivingChainLabel1);
 
         arr_aliceReceivingChainArrow4 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
         arr_aliceReceivingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
@@ -189,10 +189,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         UiUtils.insertSpacers(grp_aliceReceivingChain, 3);
 
-        txt_aliceReceivingChain2 = new Text(grp_aliceReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceReceivingChain2 = new FlowChartNode.Builder(grp_aliceReceivingChain)
+                .title(aliceReceivingChainLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceReceivingChain2.setText(aliceReceivingChainLabel2);
 
         // arrow left
         arr_aliceReceivingChainArrow2 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -211,15 +212,17 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
             }
         });
 
-        txt_aliceReceivingChain3 = new Text(grp_aliceReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceReceivingChain3 = new FlowChartNode.Builder(grp_aliceReceivingChain)
+                .title(aliceReceivingChainLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceReceivingChain3.setText(aliceReceivingChainLabel3);
 
-        txt_aliceReceivingChain4 = new Text(grp_aliceReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceReceivingChain4 = new FlowChartNode.Builder(grp_aliceReceivingChain)
+                .title(aliceReceivingChainLabel4)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceReceivingChain4.setText(aliceReceivingChainLabel4);
 
         // arrow left
         arr_aliceReceivingChainArrow3 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -240,10 +243,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         
         UiUtils.insertSpacers(grp_aliceReceivingChain, 3);
 
-        txt_aliceReceivingChain5 = new Text(grp_aliceReceivingChain,
-                SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceReceivingChain5 =new FlowChartNode.Builder(grp_aliceReceivingChain)
+                .title(aliceReceivingChainLabel5)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceReceivingChain5.setText(aliceReceivingChainLabel5);
 
     }
 
@@ -252,9 +256,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         grp_aliceRootChain.setLayout(Layout.gl_rootChainComposite());
         grp_aliceRootChain.setLayoutData(Layout.gd_rootChainComposite());
 
-        txt_aliceRootChain1 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)
+                .title(aliceRootChainLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceRootChain1.setText(aliceRootChainLabel1);
 
         // arrow down
         arr_aliceRootChainArrow1 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
@@ -273,9 +279,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
             }
         });
 
-        txt_aliceRootChain2 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain2 = new FlowChartNode.Builder(grp_aliceRootChain)
+                .title(aliceRootChainLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceRootChain2.setText(aliceRootChainLabel2);
 
         // arrow down
         arr_aliceRootChainArrow2 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
@@ -294,9 +302,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
             }
         });
 
-        txt_aliceRootChain3 = new Text(grp_aliceRootChain, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceRootChain3 = new FlowChartNode.Builder(grp_aliceRootChain)
+                .title(aliceRootChainLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceRootChain3.setText(aliceRootChainLabel3);
 
     }
 
@@ -305,9 +315,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
         grp_aliceDiffieHellman.setLayout(Layout.gl_diffieHellmanComposite());
         grp_aliceDiffieHellman.setLayoutData(Layout.gd_diffieHellmanComposite());
 
-        txt_aliceDiffieHellman1 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman1 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
+                .title(aliceDiffieHellmanLabel1)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceDiffieHellman1.setText(aliceDiffieHellmanLabel1);
 
         // arrow down
         arr_aliceDiffieHellmanArrow1 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -326,9 +338,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
             }
         });
 
-        txt_aliceDiffieHellman2 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman2 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
+                .title(aliceDiffieHellmanLabel2)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceDiffieHellman2.setText(aliceDiffieHellmanLabel2);
 
         // arrow up
         arr_aliceDiffieHellmanArrow2 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -347,9 +361,11 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
             }
         });
 
-        txt_aliceDiffieHellman3 = new Text(grp_aliceDiffieHellman, SWT.BORDER | SWT.WRAP | SWT.CENTER);
+        txt_aliceDiffieHellman3 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
+                .title(aliceDiffieHellmanLabel3)
+                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .buildOperationNode();
         txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
-        txt_aliceDiffieHellman3.setText(aliceDiffieHellmanLabel3);
 
     }
         private void createAliceArrowSpaces() {

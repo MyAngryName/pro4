@@ -246,12 +246,12 @@ public class MessageContext {
             return this;
         }
 
-        public Builder aliceRatchedPrivateKey(String key) {
+        public Builder aliceRatchetPrivateKey(String key) {
             this.aliceRatchetPrivateKey = key;
             return this;
         }
 
-        public Builder aliceRatchedPublicKey(String key) {
+        public Builder aliceRatchetPublicKey(String key) {
             this.aliceRatchetPrivateKey = key;
             return this;
         }
@@ -276,12 +276,12 @@ public class MessageContext {
             return this;
         }
 
-        public Builder bobRatchedPrivateKey(String key) {
+        public Builder bobRatchetPrivateKey(String key) {
             this.bobRatchetPrivateKey = key;
             return this;
         }
 
-        public Builder bobRatchedPublicKey(String key) {
+        public Builder bobRatchetPublicKey(String key) {
             this.bobRatchetPrivateKey = key;
             return this;
         }

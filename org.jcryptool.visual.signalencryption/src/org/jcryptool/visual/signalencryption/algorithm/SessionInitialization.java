@@ -54,8 +54,8 @@ public class SessionInitialization {
         
         return sessionCipher;
         }
-    
-    
+
+
     public SessionStore getSessionStore() {
         return signalSession.getSessionStore();
     }
@@ -63,11 +63,4 @@ public class SessionInitialization {
     public SignalProtocolAddress getRemoteAddress() {
         return remoteAddress;
     }
-    
-    
-    
-
-    
-    
-    
 }

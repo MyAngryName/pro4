@@ -103,7 +103,7 @@ public class DoubleRatchetBobSendingLogic {
             protected void switchState(DoubleRatchetView swtParent) {
                 var bobContent = swtParent.getBobSendingContent();
                 // On this transition, update all key details as well
-                updateValueDisplayInformation(swtParent);
+                updateSendingKeyDisplayInformation(swtParent);
 
                 // Show these elements
                 swtParent.grp_bobAlgorithm.setVisible(true);
@@ -327,9 +327,11 @@ public class DoubleRatchetBobSendingLogic {
                 var communication = AlgorithmState.get().getCommunication();
                 var ciphertextOptional = communication.current().getCiphertextMessage();
                 var ciphertextAsBytes = ciphertextOptional.orElse("An error occured".getBytes());
-                var ciphertextAsString = ToHex.toString(ciphertextAsBytes);
+                var ciphertextAsString = ToHex.toHexString(ciphertextAsBytes);
                 aliceContent.txt_aliceCipherText.setText(ciphertextAsString);
                 bobContent.txt_bobCipherText.setText(ciphertextAsString);
+                
+                updateReceivingKeyDisplayInformation(swtParent);
 
                 // TODO: Rework this state as it is basically pointless.
                 if (communication.isBeginning()) {
@@ -554,7 +556,8 @@ public class DoubleRatchetBobSendingLogic {
                     LogUtil.logError(new SignalAlgorithmException(), true);
                 }
                 // On this transition, update all key details as well
-                updateValueDisplayInformation(swtParent);
+                updateSendingKeyDisplayInformation(swtParent);
+                updateReceivingKeyDisplayInformation(swtParent);
             }
 
             @Override
@@ -611,12 +614,9 @@ public class DoubleRatchetBobSendingLogic {
         }
     }
     
-    private static void updateValueDisplayInformation(DoubleRatchetView view) {
+    private static void updateSendingKeyDisplayInformation(DoubleRatchetView view) {
         var aliceContent = view.getAliceReceivingContent();
         var algState = AlgorithmState.get();
-        PopupUtil.updatePopupFor(
-                aliceContent.txt_aliceReceivingChain5, algState.getAliceReceivingChainKey()
-        );
         PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, algState.getaliceRootKey());
         PopupUtil.updatePopupFor(
                 aliceContent.txt_aliceDiffieHellman3, algState.getAliceRatchetPrivateKey()
@@ -627,7 +627,10 @@ public class DoubleRatchetBobSendingLogic {
         
         var bobContent = view.getBobSendingContent();
         PopupUtil.updatePopupFor(
-                bobContent.txt_bobSendingChain5, algState.getBobSendingChainKey()
+                bobContent.txt_bobSendingChain5, algState.getSendingChainKey()
+        );
+        PopupUtil.updatePopupFor(
+                bobContent.txt_bobSendingChain5, algState.getSenderMsgKey()
         );
         PopupUtil.updatePopupFor(
                 bobContent.txt_bobRootChain3, algState.getBobRootKey()
@@ -637,6 +640,16 @@ public class DoubleRatchetBobSendingLogic {
         );
         PopupUtil.updatePopupFor(
                 bobContent.txt_bobDiffieHellman2, algState.getBobRatchetPublicKey()
+        );
+    }
+    private static void updateReceivingKeyDisplayInformation(DoubleRatchetView view) {
+        var aliceContent = view.getAliceReceivingContent();
+        var algState = AlgorithmState.get();
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceReceivingChain5, algState.getReceivingChainKey()
+        );
+        PopupUtil.updatePopupFor(
+                aliceContent.txt_aliceReceivingChain4, algState.getReceiverMsgKey()
         );
     }
 }

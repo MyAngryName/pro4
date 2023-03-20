@@ -2,8 +2,19 @@ package org.jcryptool.visual.signalencryption.communication;
 
 import java.util.Optional;
 
+import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 import org.jcryptool.visual.signalencryption.ui.Messages;
-import org.whispersystems.libsignal.protocol.CiphertextMessage;
+import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.ecc.ECPrivateKey;
+import org.whispersystems.libsignal.ecc.ECPublicKey;
+import org.whispersystems.libsignal.protocol.SignalMessage;
+import org.whispersystems.libsignal.ratchet.ChainKey;
+import org.whispersystems.libsignal.ratchet.MessageKeys;
+import org.whispersystems.libsignal.ratchet.RootKey;
+
+import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.ALICE;
+import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.BOB;
+import static org.jcryptool.visual.signalencryption.util.ToHex.toHexString;
 
 /**
  * Dataclass for Double-Ratchet and message information for one message
@@ -14,306 +25,281 @@ import org.whispersystems.libsignal.protocol.CiphertextMessage;
  */
 public class MessageContext {
 
-    private static final String MESSAGE_NO_SESSION = "Keine Sitzung begonnen";
+	private static final String MESSAGE_NO_SESSION = "Keine Sitzung begonnen";
 
-    private boolean isAliceSending;
-    private String message;
-    private String decryptedMessage;
-    private byte[] ciphertextMessage;
+	private final CommunicationEntity sendingEntity;
+	private String message;
+	private SignalMessage rawMessage;
+	private String decryptedMessage;
+	private byte[] ciphertextMessage;
 
-    private String aliceRatchetPublicKey;
-    private String aliceRatchetPrivateKey;
+	private final String aliceRatchetPublicKey;
+	private final String aliceRatchetPrivateKey;
 
-    private String bobRatchetPublicKey;
-    private String bobRatchetPrivateKey;
+	private final String bobRatchetPublicKey;
+	private final String bobRatchetPrivateKey;
 
-    private String aliceRootKey;
-    private String bobRootKey;
+	private final String aliceRootKey;
+	private final String bobRootKey;
 
-    private String aliceSendingChainKey;
-    private String bobSendingChainKey;
+	private final String sendingChainKey;
+	private final String senderMsgKey;
 
-    private String aliceReceivingChainKey;
-    private String bobReceivingChainKey;
+	private String receivingChainKey;
+	private String receiverMsgKey;
 
-    private String aliceSenderMsgKey;
-    private String bobSenderMsgKey;
+	/**
+	 * Dataclass for Double-Ratchet and message information for one message
+	 * exchange.
+	 * 
+	 * @param isAliceSending         Whether Alice is sending (true) or Bob is
+	 *                               sending (false).
+	 * @param message                A plain String message, can be changed as long
+	 *                               as the encrypted value is not set.
+	 * @param aliceRatchetPrivateKey Key as hex string.
+	 * @param aliceRatchetPublicKey  Key as hex string.
+	 * @param aliceRootKey           Key as hex string.
+	 * @param aliceSendingChainKey   Key as hex string.
+	 * @param aliceSenderMsgKey      Key as hex string.
+	 * @param bobRatchetPrivateKey   Key as hex string.
+	 * @param bobRatchetPublicKey    Key as hex string.
+	 * @param bobRootKey             Key as hex string.
+	 * @param bobSendingChainKey     Key as hex string.
+	 * @param bobSenderMsgKey        Key as hex string.
+	 */
+	private MessageContext(CommunicationEntity sendingEntity, String message, String aliceRatchetPrivateKey,
+			String aliceRatchetPublicKey, String aliceRootKey, String bobRatchetPrivateKey, String bobRatchetPublicKey,
+			String bobRootKey, String sendingChainKey, String senderMsgKey) {
+		this.sendingEntity = sendingEntity;
+		this.message = message;
 
-    /**
-     * Dataclass for Double-Ratchet and message information for one message
-     * exchange.
-     * 
-     * @param isAliceSending         Whether Alice is sending (true) or Bob is
-     *                               sending (false).
-     * @param message                A plain String message, can be changed as long
-     *                               as the encrypted value is not set.
-     * @param aliceRatchetPrivateKey Key as hex string.
-     * @param aliceRatchedPublicKey  Key as hex string.
-     * @param aliceRootKey           Key as hex string.
-     * @param aliceSendingChainKey   Key as hex string.
-     * @param aliceReceivingChainKey Key as hex string.
-     * @param aliceSenderMsgKey      Key as hex string.
-     * @param bobRatchetPrivateKey   Key as hex string.
-     * @param bobRatchetPublicKey    Key as hex string.
-     * @param bobRootKey             Key as hex string.
-     * @param bobSendingChainKey     Key as hex string.
-     * @param bobReceivingChainKey   Key as hex string.
-     * @param bobSenderMsgKey        Key as hex string.
-     */
-    private MessageContext(boolean isAliceSending, String message, String aliceRatchetPrivateKey,
-            String aliceRatchedPublicKey, String aliceRootKey, String aliceSendingChainKey,
-            String aliceReceivingChainKey, String aliceSenderMsgKey, String bobRatchetPrivateKey,
-            String bobRatchetPublicKey, String bobRootKey, String bobSendingChainKey,
-            String bobReceivingChainKey, String bobSenderMsgKey
+		this.aliceRatchetPrivateKey = aliceRatchetPrivateKey;
+		this.aliceRatchetPublicKey = aliceRatchetPublicKey;
+		this.aliceRootKey = aliceRootKey;
 
-    ) {
-        this.isAliceSending = isAliceSending;
-        this.message = message;
+		this.bobRatchetPrivateKey = bobRatchetPrivateKey;
+		this.bobRatchetPublicKey = bobRatchetPublicKey;
+		this.bobRootKey = bobRootKey;
 
-        this.aliceRatchetPrivateKey = aliceRatchetPrivateKey;
-        this.aliceRatchetPublicKey = aliceRatchedPublicKey;
-        this.aliceRootKey = aliceRootKey;
-        this.aliceSendingChainKey = aliceSendingChainKey;
-        this.aliceReceivingChainKey = aliceReceivingChainKey;
-        this.aliceSenderMsgKey = aliceSenderMsgKey;
+		this.sendingChainKey = sendingChainKey;
+		this.senderMsgKey = senderMsgKey;
+	}
 
-        this.bobRatchetPrivateKey = bobRatchetPrivateKey;
-        this.bobRatchetPublicKey = bobRatchetPublicKey;
-        this.bobSendingChainKey = bobSendingChainKey;
-        this.bobReceivingChainKey = bobReceivingChainKey;
-        this.bobRootKey = bobRootKey;
-        this.bobSenderMsgKey = bobSenderMsgKey;
-    }
+	public static MessageContext createWithKeysFromSessionStore(SessionManager sessionManager,
+			SignalProtocolAddress aliceAddress, SignalProtocolAddress bobAddress, CommunicationEntity sendingEntity) {
+		var aliceSessionRecord = sessionManager.getAliceSessionStore().loadSession(bobAddress);
+		var aliceSessionState = aliceSessionRecord.getSessionState();
+		var aliceRootKey = aliceSessionState.getRootKey();
+		var aliceRatchetPublicKey = aliceSessionState.getSenderRatchetKey();
+		var aliceRatchetPrivateKey = aliceSessionState.getSenderRatchetKeyPair().getPrivateKey();
 
-    public boolean isAlreadyEncrypted() {
-        return getCiphertextMessage().isPresent();
-    }
+		var bobSessionRecord = sessionManager.getBobSessionStore().loadSession(aliceAddress);
+		var bobSessionState = bobSessionRecord.getSessionState();
+		var bobRootKey = bobSessionState.getRootKey();
+		var bobRatchetPublicKey = bobSessionState.getSenderRatchetKey();
+		var bobRatchetPrivateKey = bobSessionState.getSenderRatchetKeyPair().getPrivateKey();
 
-    public boolean isAliceSending() {
-        return isAliceSending;
-    }
+		ChainKey sendingChainKey;
 
-    /**
-     * Update the object with a new message.
-     * 
-     * @param message the string to set.
-     * 
-     * @throws IllegalStateException if the message for this object is already
-     *                               encrypted.
-     * @see #isAlreadyEncrypted()
-     */
-    public void setMessage(String message) {
-        if (isAlreadyEncrypted()) {
-            throw new IllegalStateException(
-                    "setMessage() cannot be called after already having encrypted it.");
-        }
-        this.message = message;
+		if (sendingEntity == ALICE) {
+			sendingChainKey = aliceSessionState.getSenderChainKey();
+		} else {
+			sendingChainKey = bobSessionState.getSenderChainKey();
+		}
+		MessageKeys sendingMsgKeys = sendingChainKey.getMessageKeys();
 
-    }
+		return new MessageContext.Builder(sendingEntity).aliceRatchetPublicKey(aliceRatchetPublicKey)
+				.aliceRatchetPrivateKey(aliceRatchetPrivateKey).aliceRootKey(aliceRootKey)
+				.bobRatchetPublicKey(bobRatchetPublicKey).bobRatchetPrivateKey(bobRatchetPrivateKey)
+				.bobRootKey(bobRootKey).sendingChainKey(sendingChainKey).senderMsgKey(sendingMsgKeys).build();
 
-    public Optional<byte[]> getCiphertextMessage() {
-        if (ciphertextMessage == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(ciphertextMessage);
-        }
-    }
+	}
 
-    /**
-     * Set the encrypted message and its decrypted counterpart in one go.
-     * 
-     * Make sure to actually encrypt/decrypt and not just pass the undecrypted
-     * message again, since that would be cheating.
-     * 
-     * Since the encryption can't be rolled back, a change to the message afterwards
-     * brings it in an inconsistent state. That's why
-     * {@link #setEncryptedMessageAndSeal(byte[], String)} will throw an exception
-     * if it is called more than once.
-     * 
-     * @param encryptedMessage
-     * @param decryptedMessage
-     * 
-     * @throws An {@link IllegalStateException} if already encrypted.
-     * @see #isAlreadyEncrypted()
-     */
-    public void setEncryptedMessageAndSeal(byte[] encryptedMessage, String decryptedMessage) {
-        if (isAlreadyEncrypted()) {
-            throw new IllegalStateException("This message is already encrypted");
-        }
-        this.ciphertextMessage = encryptedMessage;
-        this.decryptedMessage = decryptedMessage;
-    }
+	public boolean isAlreadyEncrypted() {
+		return getCiphertextMessage().isPresent();
+	}
 
-    public Optional<String> getDecryptedMessage() {
-        return Optional.of(decryptedMessage);
-    }
+	public boolean isAliceSending() {
+		return sendingEntity == ALICE;
+	}
 
-    public String getAliceRatchetPrivateKey() {
-        return aliceRatchetPrivateKey;
-    }
+	public boolean isBobSending() {
+		return sendingEntity == BOB;
+	}
 
-    public String getAliceRatchetPublicKey() {
-        return aliceRatchetPublicKey;
-    }
+	/**
+	 * Update the object with a new message.
+	 * 
+	 * @param message the string to set.
+	 * 
+	 * @throws IllegalStateException if the message for this object is already
+	 *                               encrypted.
+	 * @see #isAlreadyEncrypted()
+	 */
+	public void setMessage(String message) {
+		if (isAlreadyEncrypted()) {
+			throw new IllegalStateException("setMessage() cannot be called after already having encrypted it.");
+		}
+		this.message = message;
 
-    public String getaliceRootKey() {
-        return aliceRootKey;
-    }
+	}
 
-    public String getAliceSendingChainKey() {
-        return aliceSendingChainKey;
-    }
+	public Optional<byte[]> getCiphertextMessage() {
+		if (ciphertextMessage == null) {
+			return Optional.empty();
+		} else {
+			return Optional.of(ciphertextMessage);
+		}
+	}
 
-    public String getAliceSenderMsgKey() {
-        return aliceSenderMsgKey;
-    }
+	/**
+	 * Set the encrypted message and its decrypted counterpart in one go.
+	 * 
+	 * Make sure to actually encrypt/decrypt and not just pass the undecrypted
+	 * message again, since that would be cheating.
+	 * 
+	 * Since the encryption can't be rolled back, a change to the message afterwards
+	 * brings it in an inconsistent state. That's why
+	 * {@link #setEncryptedMessageAndSeal(byte[], String)} will throw an exception
+	 * if it is called more than once.
+	 * 
+	 * @param encryptedMessage
+	 * @param decryptedMessage
+	 * 
+	 * @throws An {@link IllegalStateException} if already encrypted.
+	 * @see #isAlreadyEncrypted()
+	 */
+	public void setEncryptedMessageAndSeal(byte[] encryptedMessage, String decryptedMessage) {
+		if (isAlreadyEncrypted()) {
+			throw new IllegalStateException("This message is already encrypted");
+		}
+		this.ciphertextMessage = encryptedMessage;
+		this.decryptedMessage = decryptedMessage;
+	}
 
-    public String getAliceReceivingChainKey() {
-        return aliceReceivingChainKey;
-    }
+	public void setReceivingKeys(ChainKey receivingChainKey, MessageKeys receiverMsgKeys) {
+		this.receivingChainKey = toHexString(receivingChainKey.getNextChainKey().getKey());
+		this.receiverMsgKey = toHexString(receiverMsgKeys.getCipherKey().getEncoded());
+	}
 
-    public String getBobRatchetPrivateKey() {
-        return bobRatchetPrivateKey;
-    }
+	public void setReceivingKeys(String receivingChainKey, String receiverMsgKeys) {
+		this.receivingChainKey = receivingChainKey;
+		this.receiverMsgKey = receiverMsgKeys;
+	}
 
-    public String getBobRatchetPublicKey() {
-        return bobRatchetPublicKey;
-    }
+	public Optional<String> getDecryptedMessage() {
+		return Optional.of(decryptedMessage);
+	}
 
-    public String getBobRootKey() {
-        return bobRootKey;
-    }
+	public String getAliceRatchetPrivateKey() {
+		return aliceRatchetPrivateKey;
+	}
 
-    public String getBobSendingChainKey() {
-        return bobSendingChainKey;
-    }
+	public String getAliceRatchetPublicKey() {
+		return aliceRatchetPublicKey;
+	}
 
-    public String getBobReceivingChainKey() {
-        return bobReceivingChainKey;
-    }
+	public String getaliceRootKey() {
+		return aliceRootKey;
+	}
 
-    public String getBobSenderMsgKey() {
-        return bobSenderMsgKey;
-    }
+	public String getSendingChainKey() {
+		return sendingChainKey;
+	}
 
-    public String getMessage() {
-        return message.toString();
-    }
+	public String getSenderMsgKey() {
+		return senderMsgKey;
+	}
 
-    public static class Builder {
-        private boolean sendingFlagAlreadyFlipped;
-        private boolean isAliceSending = true;
-        private String message = Messages.SignalEncryption_aliceDefaultMessage;
-        private String aliceRatchetPrivateKey = MESSAGE_NO_SESSION;
-        private String aliceRatchedPublicKey = MESSAGE_NO_SESSION;
-        private String aliceRootKey = MESSAGE_NO_SESSION;
-        private String aliceSendingChainKey = MESSAGE_NO_SESSION;
-        private String aliceReceivingChainKey = MESSAGE_NO_SESSION;
-        private String aliceSenderMsgKey = MESSAGE_NO_SESSION;
-        private String bobRatchetPrivateKey = MESSAGE_NO_SESSION;
-        private String bobRatchedPublicKey = MESSAGE_NO_SESSION;
-        private String bobRootKey = MESSAGE_NO_SESSION;
-        private String bobSendingChainKey = MESSAGE_NO_SESSION;
-        private String bobReceivingChainKey = MESSAGE_NO_SESSION;
-        private String bobSenderMsgKey = MESSAGE_NO_SESSION;
+	public String getBobRatchetPrivateKey() {
+		return bobRatchetPrivateKey;
+	}
 
-        private static final String DEFAULT_MESSAGE_ALICE = Messages.SignalEncryption_aliceDefaultMessage;
-        private static final String DEFAULT_MESSAGE_BOB = Messages.SignalEncryption_bobDefaultMessage;
+	public String getBobRatchetPublicKey() {
+		return bobRatchetPublicKey;
+	}
 
-        public Builder() {
+	public String getBobRootKey() {
+		return bobRootKey;
+	}
 
-        }
+	public Optional<String> getReceivingChainKey() {
+		return Optional.of(receivingChainKey);
+	}
 
-        public Builder aliceIsSending() {
-            if (sendingFlagAlreadyFlipped) {
-                throw new IllegalArgumentException(
-                        "Both aliceIsSending and bobIsSending has been called in the builder.");
-            }
-            sendingFlagAlreadyFlipped = true;
-            isAliceSending = true;
-            message = DEFAULT_MESSAGE_ALICE;
-            return this;
-        }
+	public Optional<String> getReceiverMsgKey() {
+		return Optional.of(receiverMsgKey);
+	}
 
-        public Builder bobIsSending() {
-            if (sendingFlagAlreadyFlipped) {
-                throw new IllegalArgumentException(
-                        "Both aliceIsSending and bobIsSending has been called in the builder.");
-            }
-            sendingFlagAlreadyFlipped = true;
-            isAliceSending = false;
-            message = DEFAULT_MESSAGE_BOB;
-            return this;
-        }
+	public String getMessage() {
+		return message.toString();
+	}
 
-        public Builder aliceRatchetPrivateKey(String key) {
-            this.aliceRatchetPrivateKey = key;
-            return this;
-        }
+	public static class Builder {
+		private CommunicationEntity sendingEntity = ALICE;
+		private String message = Messages.SignalEncryption_aliceDefaultMessage;
+		private String aliceRatchetPrivateKey = MESSAGE_NO_SESSION;
+		private String aliceRatchetPublicKey = MESSAGE_NO_SESSION;
+		private String aliceRootKey = MESSAGE_NO_SESSION;
+		private String bobRatchetPrivateKey = MESSAGE_NO_SESSION;
+		private String bobRatchetPublicKey = MESSAGE_NO_SESSION;
+		private String bobRootKey = MESSAGE_NO_SESSION;
+		private String sendingChainKey = MESSAGE_NO_SESSION;
+		private String senderMsgKey = MESSAGE_NO_SESSION;
 
-        public Builder aliceRatchetPublicKey(String key) {
-            this.aliceRatchetPrivateKey = key;
-            return this;
-        }
+		private static final String DEFAULT_MESSAGE_ALICE = Messages.SignalEncryption_aliceDefaultMessage;
+		private static final String DEFAULT_MESSAGE_BOB = Messages.SignalEncryption_bobDefaultMessage;
 
-        public Builder aliceRootKey(String key) {
-            this.aliceRootKey = key;
-            return this;
-        }
+		public Builder(CommunicationEntity sendingEntity) {
+			this.sendingEntity = sendingEntity;
+			this.message = sendingEntity == ALICE ? DEFAULT_MESSAGE_ALICE : DEFAULT_MESSAGE_BOB;
+		}
 
-        public Builder aliceSendingChainKey(String key) {
-            this.aliceSendingChainKey = key;
-            return this;
-        }
+		public Builder aliceRatchetPrivateKey(ECPrivateKey key) {
+			this.aliceRatchetPrivateKey = toHexString(key.serialize());
+			return this;
+		}
 
-        public Builder aliceReceivingChainKey(String key) {
-            this.aliceReceivingChainKey = key;
-            return this;
-        }
+		public Builder aliceRatchetPublicKey(ECPublicKey key) {
+			this.aliceRatchetPrivateKey = toHexString(key.serialize());
+			return this;
+		}
 
-        public Builder aliceSenderMsgKey(String key) {
-            this.aliceSenderMsgKey = key;
-            return this;
-        }
+		public Builder aliceRootKey(RootKey key) {
+			this.aliceRootKey = toHexString(key.getKeyBytes());
+			return this;
+		}
 
-        public Builder bobRatchetPrivateKey(String key) {
-            this.bobRatchetPrivateKey = key;
-            return this;
-        }
+		public Builder bobRatchetPrivateKey(ECPrivateKey key) {
+			this.bobRatchetPrivateKey = toHexString(key.serialize());
+			return this;
+		}
 
-        public Builder bobRatchetPublicKey(String key) {
-            this.bobRatchetPrivateKey = key;
-            return this;
-        }
+		public Builder bobRatchetPublicKey(ECPublicKey key) {
+			this.bobRatchetPublicKey = toHexString(key.serialize());
+			return this;
+		}
 
-        public Builder bobRootKey(String key) {
-            this.bobRootKey = key;
-            return this;
-        }
+		public Builder bobRootKey(RootKey key) {
+			this.bobRootKey = toHexString(key.getKeyBytes());
+			return this;
+		}
 
-        public Builder bobSendingChainKey(String key) {
-            this.bobSendingChainKey = key;
-            return this;
-        }
+		public Builder sendingChainKey(ChainKey key) {
+			this.sendingChainKey = toHexString(key.getNextChainKey().getKey());
+			return this;
+		}
 
-        public Builder bobReceivingChainKey(String key) {
-            this.bobReceivingChainKey = key;
-            return this;
-        }
+		public Builder senderMsgKey(MessageKeys key) {
+			this.senderMsgKey = toHexString(key.getCipherKey().getEncoded());
+			return this;
+		}
 
-        public Builder bobSenderMsgKey(String key) {
-            this.bobSenderMsgKey = key;
-            return this;
-        }
+		public MessageContext build() {
+			return new MessageContext(sendingEntity, message, aliceRatchetPrivateKey, aliceRatchetPublicKey,
+					aliceRootKey, bobRatchetPrivateKey, bobRatchetPublicKey, bobRootKey, sendingChainKey, senderMsgKey);
+		}
 
-        public MessageContext build() {
-            return new MessageContext(isAliceSending, message, aliceRatchetPrivateKey,
-                    aliceRatchedPublicKey, aliceRootKey, aliceSendingChainKey,
-                    aliceReceivingChainKey, aliceSenderMsgKey, bobRatchetPrivateKey,
-                    bobRatchedPublicKey, bobRootKey, bobSendingChainKey, bobReceivingChainKey,
-                    bobSenderMsgKey);
-        }
-
-    }
+	}
 
 }

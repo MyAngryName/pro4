@@ -7,7 +7,7 @@ import org.whispersystems.libsignal.state.PreKeyBundle;
 import org.whispersystems.libsignal.state.SessionStore;
 
 
-public class AliceBobSessionBuilder {
+public class SessionManager {
     
     private ParameterInitialization aliceParameter;
     private ParameterInitialization bobParameter;

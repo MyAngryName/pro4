@@ -2,7 +2,7 @@ package org.jcryptool.visual.signalencryption.tests;
 
 import java.io.UnsupportedEncodingException;
 
-import org.jcryptool.visual.signalencryption.algorithm.AliceBobSessionBuilder;
+import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 //import org.junit.jupiter.api.Test;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
@@ -27,7 +27,7 @@ public class SignalEncryptionTests {
     private CiphertextMessage encryptedMessageBob;
     private SignalMessage preKeySignalMessageBob;
     
-    private AliceBobSessionBuilder sessionBuilder;
+    private SessionManager sessionBuilder;
     
     private SessionCipher alice;
     private SessionCipher bob;
@@ -37,7 +37,7 @@ public class SignalEncryptionTests {
     void shouldEncryptAndDecrypMessages() throws UnsupportedEncodingException, UntrustedIdentityException, InvalidMessageException, 
     LegacyMessageException, DuplicateMessageException, NoSessionException, InvalidVersionException, InvalidKeyIdException, InvalidKeyException {
         
-        sessionBuilder = new AliceBobSessionBuilder();
+        sessionBuilder = new SessionManager();
         
         sessionBuilder.createSessionBoth();
         alice = sessionBuilder.getAliceSessionCipher();

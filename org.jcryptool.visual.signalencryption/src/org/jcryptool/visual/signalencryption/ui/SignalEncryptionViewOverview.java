@@ -24,17 +24,14 @@ public class SignalEncryptionViewOverview extends Composite {
 
     // Groups
     private Group keyTableGroup;
-    private Group descriptionGroup;
 
     // GridLayouts
     private GridLayout gl_overViewComposite;
     private GridLayout gl_keyTableGroup;
-    private GridLayout gl_descriptionGroup;
 
     // GridData
     private GridData gd_overViewComposite;
     private GridData gd_keyTableGroup;
-    private GridData gd_descriptionGroup;
     private GridData gd_text;
     private GridData gd_value;
 
@@ -46,7 +43,6 @@ public class SignalEncryptionViewOverview extends Composite {
 
     private Label label_b_private;
     private Label label_b_public;
-    private Label label_c;
     private Label label_d;
     private Label label_e;
     private Label label_f;
@@ -56,29 +52,17 @@ public class SignalEncryptionViewOverview extends Composite {
 
     private Text text_b_private;
     private Text text_b_public;
-    private Text text_c;
     private Text text_d;
-    private Text text_e;
-    private Text text_f;
-    private Text text_g;
 
     // TableValues
     private Text value_b_alice_private;
     private Text value_b_alice_public;
-    private Text value_c_alice;
     private Text value_d_alice;
-    private Text value_e_alice;
-    private Text value_f_alice;
-    private Text value_g_alice;
 
     // TableValues
     private Text value_b_bob_private;
     private Text value_b_bob_public;
-    private Text value_c_bob;
     private Text value_d_bob;
-    private Text value_e_bob;
-    private Text value_f_bob;
-    private Text value_g_bob;
     
     private Button btn_regenerate;
     
@@ -89,22 +73,18 @@ public class SignalEncryptionViewOverview extends Composite {
     private String bobRatchetPublicKey;
     private String bobRatchetPrivateKey;
     
-    private String aliceSharedKey;
-    private String bobSharedKey;
-    
     private String aliceRootKey;
     private String bobRootKey;
     
-    private String aliceSendingChainKey;
-    private String bobSendingChainKey;
+    //private String aliceSendingChainKey;
+    //private String bobSendingChainKey;
     
-    private String aliceReceivingChainKey;
-    private String bobReceivingChainKey;
+    //private String aliceReceivingChainKey;
+    //private String bobReceivingChainKey;
     
-    private String aliceSenderMsgKey;
-    private String bobSenderMsgKey;
+    //private String aliceSenderMsgKey;
+    //private String bobSenderMsgKey;
 
-    private Button btn_prekeysignalmessage;
     private DoubleRatchetView doubleRatchetTabComposite;
     
     /**
@@ -126,8 +106,7 @@ public class SignalEncryptionViewOverview extends Composite {
     }
 
     private void createDescriptionGroup() {
-        gl_descriptionGroup = new GridLayout(1, false);
-        gd_descriptionGroup = new GridData(SWT.FILL, SWT.FILL, true, true);
+        //gd_descriptionGroup = new GridData(SWT.FILL, SWT.FILL, true, true);
     }
 
     private void createTable() {
@@ -219,54 +198,6 @@ public class SignalEncryptionViewOverview extends Composite {
         value_d_bob.setLayoutData(gd_value);
         value_d_bob.setText(bobRootKey);
 
-        //Fourth line of the table - Sending Chain Key
-        label_e = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_e.setText(Messages.SignalEncryption_KeyName_Sending);
-
-        text_e = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        text_e.setLayoutData(gd_text);
-        text_e.setText(Messages.SignalEncryption_DescText_Sending);
-
-        value_e_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_e_alice.setLayoutData(gd_value);
-        value_e_alice.setText(aliceSendingChainKey);
-        
-        value_e_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_e_bob.setLayoutData(gd_value);
-        value_e_bob.setText(bobSendingChainKey);
-
-        //Fifth line of the table - Receiving Chain Keys
-        label_f = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_f.setText(Messages.SignalEncryption_KeyName_Receiving);
-
-        text_f = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        text_f.setLayoutData(gd_text);
-        text_f.setText(Messages.SignalEncryption_DescText_Receiving);
-
-        value_f_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_f_alice.setLayoutData(gd_value);
-        value_f_alice.setText(aliceReceivingChainKey);
-        
-        value_f_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_f_bob.setLayoutData(gd_value);
-        value_f_bob.setText(bobReceivingChainKey);
-
-        //Sixt line of the table - Messages Keys
-        label_g = new Label(keyTableGroup, SWT.READ_ONLY);
-        label_g.setText(Messages.SignalEncryption_KeyName_MsgKey);
-
-        text_g = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        text_g.setLayoutData(gd_text);
-        text_g.setText(Messages.SignalEncryption_DescText_MsgKey);
-
-        value_g_alice = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_g_alice.setLayoutData(gd_value);
-        value_g_alice.setText(aliceSenderMsgKey);
-        
-        value_g_bob = new Text(keyTableGroup, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        value_g_bob.setLayoutData(gd_value);
-        value_g_bob.setText(bobSenderMsgKey);
-        
         //Button for generating all keys new
         btn_regenerate = new Button(keyTableGroup, SWT.PUSH);
         btn_regenerate.setText(Messages.SignalEncryption_btn_generateBoth);
@@ -359,31 +290,31 @@ public class SignalEncryptionViewOverview extends Composite {
         value_b_alice_private.setText(aliceRatchetPrivateKey); 
         value_b_alice_public.setText(aliceRatchetPublicKey); 
         value_d_alice.setText(aliceRootKey);
-        value_e_alice.setText(aliceSendingChainKey);
-        value_f_alice.setText(aliceReceivingChainKey);
-        value_g_alice.setText(aliceSenderMsgKey);
+        //value_e_alice.setText(aliceSendingChainKey);
+        //value_f_alice.setText(aliceReceivingChainKey);
+        //value_g_alice.setText(aliceSenderMsgKey);
 
         value_b_bob_private.setText(bobRatchetPrivateKey); 
         value_b_bob_public.setText(bobRatchetPublicKey); 
         value_d_bob.setText(bobRootKey);
-        value_e_bob.setText(bobSendingChainKey);
-        value_f_bob.setText(bobReceivingChainKey);
-        value_g_bob.setText(bobSenderMsgKey);
+        //value_e_bob.setText(bobSendingChainKey);
+        //value_f_bob.setText(bobReceivingChainKey);
+        //value_g_bob.setText(bobSenderMsgKey);
     }
     public void setParameter() {
         var signalEncryptionState = AlgorithmState.get();
         aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
         aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
         aliceRootKey = signalEncryptionState.getaliceRootKey();
-        aliceSendingChainKey = signalEncryptionState.getAliceSendingChainKey();
-        aliceSenderMsgKey = signalEncryptionState.getAliceSenderMsgKey();
-        aliceReceivingChainKey = signalEncryptionState.getAliceReceivingChainKey();
+        //aliceSendingChainKey = signalEncryptionState.getAliceSendingChainKey();
+        //aliceSenderMsgKey = signalEncryptionState.getAliceSenderMsgKey();
+        //aliceReceivingChainKey = signalEncryptionState.getAliceReceivingChainKey();
         
         bobRatchetPrivateKey = signalEncryptionState.getBobRatchetPrivateKey();
         bobRatchetPublicKey = signalEncryptionState.getBobRatchetPublicKey();
         bobRootKey = signalEncryptionState.getBobRootKey();
-        bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
-        bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
-        bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
+        //bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
+        //bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
+        //bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();
     }
 }

@@ -3,6 +3,7 @@ package org.jcryptool.visual.signalencryption.ui;
 import java.util.function.BiFunction;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -17,11 +18,18 @@ public class PopupUtil {
     public static BiFunction<Composite, Integer, Composite> createShowValueFunction(String title, String value) {
         return (parent, style) -> {
             var composite = new Composite(parent, style);
-            var txt = new Text(composite, SWT.CENTER);
-            composite.setLayout(new GridLayout(1, true));
+            var txt = new StyledText(composite, SWT.CENTER | SWT.BORDER | SWT.CURSOR_NO | SWT.WRAP);
+            txt.setCaret(null);
+            txt.setEditable(false);
+            
+            var layout = new GridLayout(1, true);
+            layout.marginHeight = 0;
+            layout.marginWidth = 0;
+            
+            composite.setLayout(layout);
             composite.setLayoutData(GridDataBuilder.with(SWT.FILL, SWT.FILL, true, true).get());
-            txt.setText(String.format("%s = %s", title, value));
-            txt.setLayoutData(GridDataBuilder.with(SWT.FILL,SWT.FILL, true, true).get());
+            txt.setText(String.format("%s", value));
+            txt.setLayoutData(GridDataBuilder.with(SWT.FILL, SWT.FILL, true, true).get());
             return composite;
         };
     }

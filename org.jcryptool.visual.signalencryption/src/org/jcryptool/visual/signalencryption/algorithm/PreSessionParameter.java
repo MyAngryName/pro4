@@ -93,7 +93,4 @@ public class PreSessionParameter {
     public SignalProtocolAddress getRemoteAddress() {
         return remoteAddress;
     }
-    
-    
-    
 }

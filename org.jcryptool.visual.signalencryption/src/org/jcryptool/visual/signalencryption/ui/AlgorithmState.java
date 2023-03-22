@@ -58,49 +58,10 @@ public class AlgorithmState {
 		return signalEncryptionAlgorithm;
 	}
 
-	public String getAliceRatchetPrivateKey() {
-		return current().getAliceRatchetPrivateKey();
-	}
-
-	public String getAliceRatchetPublicKey() {
-		return current().getAliceRatchetPublicKey();
-	}
-
-	public String getaliceRootKey() {
-		return current().getaliceRootKey();
-	}
-
-	public String getBobRatchetPrivateKey() {
-		return current().getBobRatchetPrivateKey();
-	}
-
-	public String getBobRatchetPublicKey() {
-		return current().getBobRatchetPublicKey();
-	}
-
-	public String getBobRootKey() {
-		return current().getBobRootKey();
-	}
-
 	public boolean allowMessageEntering() {
 		return !communication.current().isAlreadyEncrypted();
 	}
 
-	public String getSendingChainKey() {
-		return current().getSendingChainKey();
-	}
-
-	public String getSenderMsgKey() {
-		return current().getSenderMsgKey();
-	}
-
-	public String getReceivingChainKey() {
-		return safelyGetOptional(current().getReceivingChainKey());
-	}
-
-	public String getReceiverMsgKey() {
-		return safelyGetOptional(current().getReceiverMsgKey());
-	}
 
 	public String getAliceEncryptedMessage() {
 		if (currentState == STATE.INITIALIZING) {
@@ -108,17 +69,6 @@ public class AlgorithmState {
 		} else {
 			return ToHex.toHexString(communication.current().getCiphertextMessage().orElse(new byte[] {}));
 		}
-	}
-
-	private static <T> T safelyGetOptional(Optional<T> target) {
-		if (!target.isPresent()) {
-			LogUtil.logError(new IllegalStateException("An internal value was empty."), true);
-		}
-		return target.get();
-	}
-
-	private MessageContext current() {
-		return getCommunication().current();
 	}
 
 	public SignalCommunication getCommunication() {

@@ -615,41 +615,24 @@ public class DoubleRatchetBobSendingLogic {
     }
     
     private static void updateSendingKeyDisplayInformation(DoubleRatchetView view) {
-        var aliceContent = view.getAliceReceivingContent();
-        var algState = AlgorithmState.get();
-        PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, algState.getaliceRootKey());
-        PopupUtil.updatePopupFor(
-                aliceContent.txt_aliceDiffieHellman3, algState.getAliceRatchetPrivateKey()
-        );
-        PopupUtil.updatePopupFor(
-                aliceContent.txt_aliceDiffieHellman2, algState.getAliceRatchetPublicKey()
-        );
-        
         var bobContent = view.getBobSendingContent();
-        PopupUtil.updatePopupFor(
-                bobContent.txt_bobSendingChain5, algState.getSendingChainKey()
-        );
-        PopupUtil.updatePopupFor(
-                bobContent.txt_bobSendingChain5, algState.getSenderMsgKey()
-        );
-        PopupUtil.updatePopupFor(
-                bobContent.txt_bobRootChain3, algState.getBobRootKey()
-        );
-        PopupUtil.updatePopupFor(
-                bobContent.txt_bobDiffieHellman3, algState.getBobRatchetPrivateKey()
-        );
-        PopupUtil.updatePopupFor(
-                bobContent.txt_bobDiffieHellman2, algState.getBobRatchetPublicKey()
-        );
-    }
-    private static void updateReceivingKeyDisplayInformation(DoubleRatchetView view) {
+        var ctx = AlgorithmState.get().getCommunication().current();
+        PopupUtil.updatePopupFor(bobContent.txt_bobSendingChain5, ctx.senderChainChainKey());
+        PopupUtil.updatePopupFor(bobContent.txt_bobSendingChain5, ctx.senderChainMessageKey());
+        PopupUtil.updatePopupFor(bobContent.txt_bobRootChain3, ctx.senderRootChainKey());
+		PopupUtil.updatePopupFor(bobContent.txt_bobDiffieHellman3, ctx.diffieHellmanSenderPrivateKey());
+		PopupUtil.updatePopupFor(bobContent.txt_bobDiffieHellman2, ctx.diffieHellmanSenderAgreedKey());
+		PopupUtil.updatePopupFor(bobContent.txt_bobDiffieHellman2, ctx.diffieHellmanSenderPublicKey());
         var aliceContent = view.getAliceReceivingContent();
-        var algState = AlgorithmState.get();
-        PopupUtil.updatePopupFor(
-                aliceContent.txt_aliceReceivingChain5, algState.getReceivingChainKey()
-        );
-        PopupUtil.updatePopupFor(
-                aliceContent.txt_aliceReceivingChain4, algState.getReceiverMsgKey()
-        );
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, ctx.receiverRootChainKey());
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman3, ctx.diffieHellmanReceiverPrivateKey());
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman2, ctx.diffieHellmanReceiverAgreedKey());
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman1, ctx.diffieHellmanReceiverPublicKey());
     }
+	private static void updateReceivingKeyDisplayInformation(DoubleRatchetView view) {
+		var aliceContent = view.getAliceReceivingContent();
+		var ctx = AlgorithmState.get().getCommunication().current();
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceReceivingChain5, ctx.receiverChainChainKey());
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceReceivingChain4, ctx.receiverChainMessageKey());
+	}
 }

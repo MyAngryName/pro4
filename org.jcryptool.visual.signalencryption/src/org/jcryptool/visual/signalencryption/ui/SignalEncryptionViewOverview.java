@@ -302,17 +302,17 @@ public class SignalEncryptionViewOverview extends Composite {
         //value_g_bob.setText(bobSenderMsgKey);
     }
     public void setParameter() {
-        var signalEncryptionState = AlgorithmState.get();
-        aliceRatchetPrivateKey = signalEncryptionState.getAliceRatchetPrivateKey();
-        aliceRatchetPublicKey = signalEncryptionState.getAliceRatchetPublicKey();
-        aliceRootKey = signalEncryptionState.getaliceRootKey();
+        var signalEncryptionState = AlgorithmState.get().getCommunication().begin();
+        aliceRatchetPrivateKey = signalEncryptionState.diffieHellmanSenderPrivateKey();
+        aliceRatchetPublicKey = signalEncryptionState.diffieHellmanReceiverPublicKey();
+        aliceRootKey = signalEncryptionState.senderRootChainKey();
         //aliceSendingChainKey = signalEncryptionState.getAliceSendingChainKey();
         //aliceSenderMsgKey = signalEncryptionState.getAliceSenderMsgKey();
         //aliceReceivingChainKey = signalEncryptionState.getAliceReceivingChainKey();
         
-        bobRatchetPrivateKey = signalEncryptionState.getBobRatchetPrivateKey();
-        bobRatchetPublicKey = signalEncryptionState.getBobRatchetPublicKey();
-        bobRootKey = signalEncryptionState.getBobRootKey();
+        bobRatchetPrivateKey = signalEncryptionState.diffieHellmanReceiverPrivateKey();
+        bobRatchetPublicKey = signalEncryptionState.diffieHellmanSenderPublicKey();
+        bobRootKey = signalEncryptionState.receiverRootChainKey();
         //bobSendingChainKey = signalEncryptionState.getBobSendingChainKey();
         //bobReceivingChainKey = signalEncryptionState.getBobReceivingChainKey();
         //bobSenderMsgKey = signalEncryptionState.getBobSenderMsgKey();

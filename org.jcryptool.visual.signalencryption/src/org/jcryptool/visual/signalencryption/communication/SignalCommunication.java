@@ -180,15 +180,15 @@ public class SignalCommunication {
 		if (isBeginning()) {
 			senderRatchetKey = cipherTextContext.getPreKeySignalMessage().get().getWhisperMessage()
 					.getSenderRatchetKey();
-			current().setReceivingKeys(current().getSendingChainKey(), current().getSenderMsgKey());
+			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
 		} else if (isBobsFirstMessage()) {
 			senderRatchetKey = cipherTextContext.getSignalMessage().get().getSenderRatchetKey();
-			current().setReceivingKeys(current().getSendingChainKey(), current().getSenderMsgKey());
+			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
 			// var x = sessionState.getReceiverChainKey(senderRatchetKey);
 			// x.getMessageKeys();
 		} else {
 			senderRatchetKey = cipherTextContext.getSignalMessage().get().getSenderRatchetKey();
-			current().setReceivingKeys(current().getSendingChainKey(), current().getSenderMsgKey());
+			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
 			// TODO: Get the actual receiving chain key (currently throws NullPointer)
 			// senderRatchetKey =
 			// cipherTextContext.getSignalMessage().get().getSenderRatchetKey();

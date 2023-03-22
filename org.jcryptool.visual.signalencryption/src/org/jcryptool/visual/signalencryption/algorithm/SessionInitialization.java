@@ -17,15 +17,13 @@ public class SessionInitialization {
     private SessionBuilder session;
     
     private PreKeyBundle remotePreKeyBundle;
-    
     private final SignalProtocolAddress remoteAddress;
     
     private SignedPreKeyStore signedPreKeyStore;
     private PreKeyStore preKeyStore;
     
     
-    public SessionInitialization(PreSessionParameter signalSession, 
-            PreKeyBundle remotePreKeyBundle) {
+    public SessionInitialization(PreSessionParameter signalSession, PreKeyBundle remotePreKeyBundle) {
         this.remotePreKeyBundle = remotePreKeyBundle;
         this.signalSession = signalSession;
         this.remoteAddress = signalSession.getRemoteAddress();
@@ -38,7 +36,10 @@ public class SessionInitialization {
         signedPreKeyStore = signalSession.getSignedPreKeyStore();
         preKeyStore = signalSession.getPreKeyStore();
         
-        signedPreKeyStore.storeSignedPreKey(signalSession.getParameter().getSignedPreKeyID(), signalSession.getParameter().getSignedPreKeyRecord());
+        signedPreKeyStore.storeSignedPreKey(
+        		signalSession.getParameter().getSignedPreKeyID(),
+        		signalSession.getParameter().getSignedPreKeyRecord()
+        		);
         preKeyStore.storePreKey(signalSession.getParameter().getPreKeyID(), signalSession.getPreKeyRecord());
         
         try {

@@ -45,28 +45,10 @@ public class DoubleRatchetAliceSendingLogic {
 				bobContent.grp_bobDecryptedMessage.setVisible(false);
 
 				swtParent.grp_aliceAlgorithm.setVisible(false);
-				aliceContent.grp_aliceMessagebox.setVisible(false);
-				aliceContent.grp_aliceDiffieHellman.setVisible(false);
-				aliceContent.grp_aliceRootChain.setVisible(false);
-				aliceContent.grp_aliceSendingChain.setVisible(false);
-				aliceContent.txt_aliceDiffieHellman1.setVisible(false);
-				aliceContent.txt_aliceDiffieHellman2.setVisible(false);
-				aliceContent.txt_aliceDiffieHellman3.setVisible(false);
-				aliceContent.txt_aliceRootChain1.setVisible(false);
-				aliceContent.txt_aliceRootChain2.setVisible(false);
-				aliceContent.txt_aliceRootChain3.setVisible(false);
-				aliceContent.txt_aliceSendingChain1.setVisible(false);
-				aliceContent.txt_aliceSendingChain2.setVisible(false);
-				aliceContent.txt_aliceSendingChain3.setVisible(false);
-				aliceContent.txt_aliceSendingChain4.setVisible(false);
-				aliceContent.txt_aliceSendingChain5.setVisible(false);
-				aliceContent.txt_aliceCipherText.setVisible(false);
-				aliceContent.cmp_aliceArrowSpace1.setVisible(false);
-				aliceContent.cmp_aliceArrowSpace2.setVisible(false);
-				aliceContent.grp_aliceMessagebox.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow1.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow2.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow3.setVisible(false);
+				aliceContent.setDiffieHellmanChainVisible(false);
+				aliceContent.setRootChainVisible(false);
+				aliceContent.setSendingChainVisible(false);
+				aliceContent.setMessageBoxVisible(false);
 
 				// Hide Steps
 				aliceContent.txt_aliceSendingStep1.setVisible(false);
@@ -122,23 +104,12 @@ public class DoubleRatchetAliceSendingLogic {
 
 				// Show these elements
 				swtParent.grp_aliceAlgorithm.setVisible(true);
-				aliceContent.grp_aliceDiffieHellman.setVisible(true);
-				aliceContent.txt_aliceDiffieHellman1.setVisible(true);
-				aliceContent.txt_aliceDiffieHellman2.setVisible(true);
-				aliceContent.txt_aliceDiffieHellman3.setVisible(true);
+				aliceContent.setDiffieHellmanChainVisible(true);
 				aliceContent.txt_aliceSendingStep1.setVisible(true);
 
 				// Hide these Elements
-				aliceContent.grp_aliceRootChain.setVisible(false);
-				aliceContent.txt_aliceRootChain1.setVisible(false);
-				aliceContent.txt_aliceRootChain2.setVisible(false);
-				aliceContent.txt_aliceRootChain3.setVisible(false);
-				aliceContent.grp_aliceRootChain.setVisible(false);
-				aliceContent.cmp_aliceArrowSpace1.setVisible(false);
+				aliceContent.setRootChainVisible(false);
 				aliceContent.txt_aliceSendingStep2.setVisible(false);
-				aliceContent.grp_aliceSendingChain.setVisible(false);
-				aliceContent.txt_aliceSendingChain1.setVisible(false);
-				aliceContent.cmp_aliceArrowSpace2.setVisible(false);
 
 				// Pick up user input text
 				aliceContent.txt_aliceCipherText.setText(AlgorithmState.get().getAliceEncryptedMessage());
@@ -167,26 +138,11 @@ public class DoubleRatchetAliceSendingLogic {
 				var aliceContent = swtParent.getAliceSendingContent();
 
 				// Show these labels
-				aliceContent.grp_aliceRootChain.setVisible(true);
-				aliceContent.txt_aliceRootChain1.setVisible(true);
-				aliceContent.txt_aliceRootChain2.setVisible(true);
-				aliceContent.txt_aliceRootChain3.setVisible(true);
-				aliceContent.grp_aliceRootChain.setVisible(true);
-				aliceContent.grp_aliceSendingChain.setVisible(true);
-				aliceContent.txt_aliceSendingChain1.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow4.setVisible(true);
-				aliceContent.cmp_aliceArrowSpace2.setVisible(true);
-				aliceContent.cmp_aliceArrowSpace1.setVisible(true);
+				aliceContent.setRootChainVisible(true);
 				aliceContent.txt_aliceSendingStep2.setVisible(true);
 
 				// Hide these Elements
-				aliceContent.txt_aliceSendingChain2.setVisible(false);
-				aliceContent.txt_aliceSendingChain3.setVisible(false);
-				aliceContent.txt_aliceSendingChain4.setVisible(false);
-				aliceContent.txt_aliceSendingChain5.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow1.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow2.setVisible(false);
-				aliceContent.arr_aliceSendingChainArrow3.setVisible(false);
+				aliceContent.setSendingChainVisible(false);
 				aliceContent.txt_aliceSendingStep3.setVisible(false);
 			}
 
@@ -213,17 +169,11 @@ public class DoubleRatchetAliceSendingLogic {
 				var bobContent = swtParent.getBobReceivingContent();
 
 				// Show these labels
-				aliceContent.txt_aliceSendingChain2.setVisible(true);
-				aliceContent.txt_aliceSendingChain3.setVisible(true);
-				aliceContent.txt_aliceSendingChain4.setVisible(true);
-				aliceContent.txt_aliceSendingChain5.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow1.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow2.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow3.setVisible(true);
+				aliceContent.setSendingChainVisible(true);
 				aliceContent.txt_aliceSendingStep3.setVisible(true);
 
 				// Hide these Elements
-				aliceContent.grp_aliceMessagebox.setVisible(false);
+				aliceContent.setMessageBoxVisible(false);
 				aliceContent.txt_aliceSendingStep4.setVisible(false);
 
 				bobContent.grp_bobReceivingChain.setVisible(false);
@@ -255,17 +205,14 @@ public class DoubleRatchetAliceSendingLogic {
 				var bobContent = swtParent.getBobReceivingContent();
 
 				// Show these labels
-				aliceContent.grp_aliceSendingChain.setVisible(true);
-				aliceContent.grp_aliceMessagebox.setVisible(true);
+				aliceContent.showOnlyMessagePlaintext();
 				aliceContent.txt_aliceSendingStep4.setVisible(true);
-				aliceContent.txt_alicePlainText.setVisible(true);
 
 				// Hide these Elements
 				swtParent.grp_bobAlgorithm.setVisible(false);
-				aliceContent.txt_aliceCipherText.setVisible(false);
+				aliceContent.txt_aliceSendingStep5.setVisible(false);
 				bobContent.txt_bobCipherText.setVisible(false);
 				bobContent.grp_bobMessagebox.setVisible(false);
-				aliceContent.txt_aliceSendingStep5.setVisible(false);
 				bobContent.txt_bobReceivingStep5.setVisible(false);
 
 				if (AlgorithmState.get().allowMessageEntering()) {
@@ -320,7 +267,7 @@ public class DoubleRatchetAliceSendingLogic {
 				var bobContent = swtParent.getBobReceivingContent();
 				// Show these elements
 				swtParent.grp_bobAlgorithm.setVisible(true);
-				aliceContent.txt_aliceCipherText.setVisible(true);
+				aliceContent.setMessageBoxVisible(true);
 				bobContent.txt_bobCipherText.setVisible(true);
 				bobContent.grp_bobMessagebox.setVisible(true);
 				aliceContent.txt_aliceSendingStep5.setVisible(true);
@@ -552,9 +499,9 @@ public class DoubleRatchetAliceSendingLogic {
 				aliceContent.cmp_aliceArrowSpace1.setVisible(true);
 				aliceContent.cmp_aliceArrowSpace2.setVisible(true);
 				aliceContent.grp_aliceMessagebox.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow1.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow2.setVisible(true);
-				aliceContent.arr_aliceSendingChainArrow3.setVisible(true);
+				//aliceContent.arr_aliceSendingChainArrow1.setVisible(true);
+				//aliceContent.arr_aliceSendingChainArrow2.setVisible(true);
+				//aliceContent.arr_aliceSendingChainArrow3.setVisible(true);
 
 				// Show Steps
 				aliceContent.txt_aliceSendingStep1.setVisible(true);

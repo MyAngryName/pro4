@@ -50,6 +50,13 @@ public class ViewConstants {
      * The default canvas width hint of all arrows
      */
     public static final int ARROW_CANVAS_WIDTH = 75;
+    
+    /**
+     * The distance from the constant node to the send/receive node
+     */
+    // TODO Investigate why the inline doesn't really get smaller when this is decreased
+    public static final int CONSTANT_INLINE = BOX_WIDTH / 3;
+    
 
     /**
      * Arrow line thickness
@@ -64,12 +71,12 @@ public class ViewConstants {
     /**
      * Arrow head size from base to the tip.
      */
-    public static final float ARROW_HEAD_SIZE = 12;
+    public static final int ARROW_HEAD_SIZE = 12;
 
     /**
      * Distance between tip of the arrow head and the border of the canvas
      */
-    public static final float TARGET_MARGIN = 2;
+    public static final int TARGET_MARGIN = 2;
 
     /**
      * Problematic variable used in the offset calculation for the connection

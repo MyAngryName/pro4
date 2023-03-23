@@ -13,7 +13,7 @@ public class Layout {
 
     public static GridLayout gl_algorithmGroup() {
         var gl_algorithmGroup = new GridLayout(8, false);
-        gl_algorithmGroup.horizontalSpacing = 0;
+        gl_algorithmGroup.horizontalSpacing = ViewConstants.ARROW_CANVAS_WIDTH;
         return gl_algorithmGroup;
     }
 
@@ -47,11 +47,11 @@ public class Layout {
     }
 
     public static GridLayout gl_rootChainComposite() {
-        return new GridLayout(1, false);
+    	return gl_diffieHellmanComposite();
     }
 
     public static GridLayout gl_diffieHellmanComposite() {
-        return new GridLayout(1, false);
+    	return new GridLayout(1, false);
     }
 
     public static GridLayout gl_messageboxGroup() {

@@ -8,6 +8,9 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.jcryptool.core.util.colors.ColorService;
+import org.jcryptool.visual.signalencryption.ui.Arrow.CornerLocationBuilder;
+import org.jcryptool.visual.signalencryption.ui.CompositeWithArrowSupport.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
@@ -54,20 +57,20 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     private String bobReceivingChainLabel4 = Messages.SignalEncryption_bobReceivingChainLabel4;
     private String bobReceivingChainLabel5 = Messages.SignalEncryption_bobReceivingChainLabel5;
 
-    protected Canvas arr_bobReceivingChainArrow1;
-    protected Canvas arr_bobReceivingChainArrow2;
-    protected Canvas arr_bobReceivingChainArrow3;
-    protected Canvas arr_bobReceivingChainArrow4;
+    protected Arrow arr_bobReceivingChainArrow1;
+    protected Arrow arr_bobReceivingChainArrow2;
+    protected Arrow arr_bobReceivingChainArrow3;
+    protected Arrow arr_bobReceivingChainArrow4;
     protected Canvas arr_bobSendingChainArrow1;
     protected Canvas arr_bobSendingChainArrow2;
     protected Canvas arr_bobSendingChainArrow3;
     protected Canvas arr_bobSendingChainArrow4;
-    protected Canvas arr_bobDiffieHellmanArrow1;
-    protected Canvas arr_bobDiffieHellmanArrow2;
-    protected Canvas arr_bobRootChainArrow1;
-    protected Canvas arr_bobRootChainArrow2;
-    protected Canvas arr_bobSpace1;
-    protected Canvas arr_bobSpace2;
+    protected Arrow arr_bobDiffieHellmanArrow1;
+    protected Arrow arr_bobDiffieHellmanArrow2;
+    protected Arrow arr_bobRootChainArrow1;
+    protected Arrow arr_bobRootChainArrow2;
+    protected Arrow arr_bobSpace1;
+    protected Arrow arr_bobSpace2;
 
     Group grp_bobReceivingChain;
     Group grp_bobSpace2;
@@ -77,10 +80,11 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Group grp_bobMessagebox;
     Group grp_bobDecryptedMessage;
     
+    CompositeWithArrowSupport cmp_bobReceivingAlgorithm;
     Composite cmp_bobDiffieHellman;
     Composite cmp_bobRootChain;
-    Composite cmp_bobArrowSpace1;
-    Composite cmp_bobArrowSpace2;
+    Arrow cmp_bobArrowSpace1;
+    Arrow cmp_bobArrowSpace2;
 
     private String MessageboxCipherText = "The Ciphertext";
     private String MessageboxDescription = Messages.SignalEncryption_MessageboxDescription;
@@ -118,25 +122,23 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
     @Override
     public Composite buildAlgorithmContent(Composite parent, COMMUNICATION_STATE state) {
-        var cmp_bobSendingAlgorithm = new Composite(parent, SWT.NONE);
-        cmp_bobSendingAlgorithm.setLayout(Layout.gl_algorithmGroup());
-        cmp_bobSendingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
+    	cmp_bobReceivingAlgorithm = new CompositeWithArrowSupport(parent, SWT.NONE);
+        cmp_bobReceivingAlgorithm.setLayout(Layout.gl_algorithmGroup());
+        cmp_bobReceivingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
-        grp_bobMessagebox = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobDiffieHellman = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace1 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobRootChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        cmp_bobArrowSpace2 = new Composite(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobReceivingChain = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
-        grp_bobDecryptedMessage = new Group(cmp_bobSendingAlgorithm, SWT.NONE);
+        grp_bobMessagebox = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        grp_bobDiffieHellman = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        grp_bobRootChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        grp_bobReceivingChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        grp_bobDecryptedMessage = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         
-        createBobReceivingChain();
-        createBobRootChain();
-        createBobDiffieHellmanChain();
         createBobEncryptedMessagebox();
+        createBobDiffieHellmanChain();
+        createBobRootChain();
+        createBobReceivingChain();
         createBobDecryptedMessagebox();
         createBobArrowSpaces();
-        return cmp_bobSendingAlgorithm;
+        return cmp_bobReceivingAlgorithm;
     }
 
     private void createBobReceivingChain() {
@@ -144,22 +146,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         grp_bobReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
         grp_bobReceivingChain.setText(ReceivingChainDescription);
         
-        
-        arr_bobReceivingChainArrow4 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
-        arr_bobReceivingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 2, 1, ViewConstants.ARROW_CANVAS_WIDTH
-        ));
-        arr_bobReceivingChainArrow4.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightArrow(
-                        arr_bobReceivingChainArrow4, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+	    UiUtils.insertSpacers(grp_bobReceivingChain, 2);
 
         txt_bobReceivingChain1 = new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel1)
@@ -167,90 +154,67 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
+	    UiUtils.insertSpacers(grp_bobReceivingChain, 2, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.CONSTANT_INLINE);
+	    UiUtils.insertSpacers(grp_bobReceivingChain, 2, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
         
-        // arrow down
-        arr_bobReceivingChainArrow1 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
-        arr_bobReceivingChainArrow1.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.ARROW_CANVAS_WIDTH
-        ));
-        arr_bobReceivingChainArrow1.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownArrow(
-                        arr_bobReceivingChainArrow1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
-
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1);
-        
-        txt_bobReceivingChain3 =  new FlowChartNode.Builder(grp_bobReceivingChain)
-                .title(bobReceivingChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
-
-        // arrow left
-        arr_bobReceivingChainArrow2 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
-        arr_bobReceivingChainArrow2.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.ARROW_CANVAS_WIDTH
-        ));
-        arr_bobReceivingChainArrow2.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightArrow(
-                        arr_bobReceivingChainArrow2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
-
         txt_bobReceivingChain2 =  new FlowChartNode.Builder(grp_bobReceivingChain)
-                .title(bobReceivingChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .title(bobReceivingChainLabel3)
+                .popupProvider(createShowValueFunction("Constant", "0"))
                 .buildOperationNode();
         txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
+        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.ARROW_CANVAS_WIDTH);
 
+        txt_bobReceivingChain3 =  new FlowChartNode.Builder(grp_bobReceivingChain)
+                .title(bobReceivingChainLabel2)
+                .popupProvider(createShowValueFunction("KDF function", "0"))
+                .buildOperationNode();
+        txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
         
-        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
+	    arr_bobReceivingChainArrow1 = Arrow
+	    	.from(txt_bobReceivingChain2).east()
+	    	.to(txt_bobReceivingChain3).west()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	    
+	    arr_bobReceivingChainArrow2 = Arrow
+	    	.from(txt_bobReceivingChain1).south()
+	    	.to(txt_bobReceivingChain3).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
 
-        // arrow left
-        arr_bobReceivingChainArrow3 = new Canvas(grp_bobReceivingChain, SWT.DOUBLE_BUFFERED);
-        arr_bobReceivingChainArrow3.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.ARROW_CANVAS_WIDTH
-        ));
-        arr_bobReceivingChainArrow3.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownRightArrow(
-                        arr_bobReceivingChainArrow3, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
-        
+        UiUtils.insertSpacers(grp_bobReceivingChain, 4);
+
         txt_bobReceivingChain4 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel4)
                 .popupProvider(createShowValueFunction("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
         
-        UiUtils.insertSpacers(grp_bobReceivingChain, 2);
+	    UiUtils.insertSpacers(grp_bobReceivingChain, 2);
 
         txt_bobReceivingChain5 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel5)
                 .popupProvider(createShowValueFunction("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
+        
+        arr_bobReceivingChainArrow3 = Arrow
+	    	.from(txt_bobReceivingChain3).south()
+	    	.to(txt_bobReceivingChain5).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	    arr_bobReceivingChainArrow4 = Arrow.fromAnchors()
+	    	.fromAnchorX(txt_bobReceivingChain1, Side.SOUTH)
+	    	.fromAnchorY(txt_bobReceivingChain4, Side.WEST)
+	    	.outgoingDirection(Side.EAST)
+	    	.toAnchorX(txt_bobReceivingChain4, Side.WEST)
+	    	.toAnchorY(txt_bobReceivingChain4, Side.WEST)
+	    	.incomingDirection(Side.WEST)
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.create();
+
 
     }
 
@@ -264,23 +228,8 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .popupProvider(createShowValueFunction("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
-
-        // arrow down
-        arr_bobRootChainArrow1 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
-        arr_bobRootChainArrow1.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.UP_DOWN_ARROW_SIZE
-         ));
-        arr_bobRootChainArrow1.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownArrow(
-                        arr_bobRootChainArrow1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+        
+        UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 
         txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
                 .title(bobRootChainLabel2)
@@ -288,28 +237,24 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
 
-        // arrow down
-        arr_bobRootChainArrow2 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
-        arr_bobRootChainArrow2.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.UP_DOWN_ARROW_SIZE
-        ));
-        arr_bobRootChainArrow2.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownArrow(
-                        arr_bobRootChainArrow2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
-
+        UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+        
         txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
                 .title(bobRootChainLabel3)
                 .popupProvider(createShowValueFunction("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
+        arr_bobRootChainArrow1 = Arrow
+        	.from(txt_bobRootChain1).south()
+        	.to(txt_bobRootChain2).north()
+        	.on(cmp_bobReceivingAlgorithm)
+        	.withDefaults();
+
+        arr_bobRootChainArrow2 = Arrow
+        	.from(txt_bobRootChain2).south()
+        	.to(txt_bobRootChain3).north()
+        	.on(cmp_bobReceivingAlgorithm)
+        	.withDefaults();
 
     }
 
@@ -323,23 +268,8 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .popupProvider(createShowValueFunction("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
-
-        // arrow down
-        arr_bobDiffieHellmanArrow1 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
-        arr_bobDiffieHellmanArrow1.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.UP_DOWN_ARROW_SIZE
-        ));
-        arr_bobDiffieHellmanArrow1.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawDownArrow(
-                        arr_bobDiffieHellmanArrow1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+        
+	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 
         txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
                 .title(bobDiffieHellmanLabel2)
@@ -347,22 +277,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
 
-        // arrow up
-        arr_bobDiffieHellmanArrow2 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
-        arr_bobDiffieHellmanArrow2.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL, SWT.FILL, false, false, 1, 1, ViewConstants.ARROW_CANVAS_WIDTH
-        ));
-        arr_bobDiffieHellmanArrow2.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawUpArrow(
-                        arr_bobDiffieHellmanArrow2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+        UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 
         txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
                 .title(bobDiffieHellmanLabel3)
@@ -370,64 +285,92 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 
+        arr_bobDiffieHellmanArrow1 = Arrow
+	    	.from(txt_bobDiffieHellman1).south()
+	    	.to(txt_bobDiffieHellman2).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	
+	    arr_bobDiffieHellmanArrow2 = Arrow
+	    	.from(txt_bobDiffieHellman3).north()
+	    	.to(txt_bobDiffieHellman2).south()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+
     }
         private void createBobArrowSpaces() {
         
-        cmp_bobArrowSpace1.setLayout(Layout.gl_arrowSpaceComposite());
-        cmp_bobArrowSpace1.setLayoutData(Layout.gd_arrowSpaceComposite());
+        //cmp_bobArrowSpace1.setLayout(Layout.gl_arrowSpaceComposite());
+        //cmp_bobArrowSpace1.setLayoutData(Layout.gd_arrowSpaceComposite());
         
+		cmp_bobArrowSpace1 = Arrow
+				.from(grp_bobDiffieHellman, txt_bobDiffieHellman2).east()
+				.to(grp_bobRootChain, txt_bobRootChain1).west()
+				.on(cmp_bobReceivingAlgorithm)
+				.withDefaults();
+		cmp_bobArrowSpace2 = Arrow
+				.from(grp_bobRootChain, txt_bobRootChain2).east()
+				.to(txt_bobReceivingChain1, txt_bobReceivingChain1).west()
+				.on(cmp_bobReceivingAlgorithm)
+				.breakBetween()
+	    	    	.first(grp_bobRootChain, Side.EAST)
+	    	    	.second(grp_bobReceivingChain, Side.WEST)
+	    	    	.at(CornerLocationBuilder.CENTER)
+	    	    .arrowId("cmp_bobArrowSpace2")
+				.withDefaults();
+
         //System.out.print(calculateConnectingArrowMargin());
         // arrow up
-        arr_bobSpace1 = new Canvas(cmp_bobArrowSpace1, SWT.DOUBLE_BUFFERED);
-        arr_bobSpace1.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL,
-                SWT.FILL,
-                false,
-                false,
-                1,
-                1,
-                ViewConstants.ARROW_CANVAS_WIDTH,
-                // Note that we need the border width of any text, so we use an initialized one.
-                Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
-        ));
-        arr_bobSpace1.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightUpRightArrow(
-                        arr_bobSpace1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
-        cmp_bobArrowSpace2.setLayout(Layout.gl_arrowSpaceComposite());
-        cmp_bobArrowSpace2.setLayoutData(Layout.gd_arrowSpaceComposite());
+        // arr_bobSpace1 = new Canvas(cmp_bobArrowSpace1, SWT.DOUBLE_BUFFERED);
+        // arr_bobSpace1.setLayoutData(ArrowCanvas.canvasData(
+        //         SWT.FILL,
+        //         SWT.FILL,
+        //         false,
+        //         false,
+        //         1,
+        //         1,
+        //         ViewConstants.ARROW_CANVAS_WIDTH,
+        //         // Note that we need the border width of any text, so we use an initialized one.
+        //         Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
+        // ));
+        // arr_bobSpace1.addPaintListener(new PaintListener() {
+        //     @Override
+        //     public void paintControl(PaintEvent event) {
+        //         event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+        //         Path path = ArrowCanvas.drawRightUpRightArrow(
+        //                 arr_bobSpace1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
+        //         );
+        //         event.gc.fillPath(path);
+        //         path.dispose();
+        //     }
+        // });
+        // cmp_bobArrowSpace2.setLayout(Layout.gl_arrowSpaceComposite());
+        // cmp_bobArrowSpace2.setLayoutData(Layout.gd_arrowSpaceComposite());
 
-        // arrow up
-        arr_bobSpace2 = new Canvas(cmp_bobArrowSpace2, SWT.DOUBLE_BUFFERED);
-        arr_bobSpace2.setLayoutData(ArrowCanvas.canvasData(
-                SWT.FILL,
-                SWT.FILL,
-                false,
-                false,
-                1,
-                1,
-                ViewConstants.ARROW_CANVAS_WIDTH,
-                // Note that we need the border width of any text, so we use an initialized one.
-                Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
-        ));
-        arr_bobSpace2.addPaintListener(new PaintListener() {
-            @Override
-            public void paintControl(PaintEvent event) {
-                event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-                Path path = ArrowCanvas.drawRightUpRightLine(
-                        arr_bobSpace2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-                );
-                event.gc.fillPath(path);
-                path.dispose();
-            }
-        });
+        // // arrow up
+        // arr_bobSpace2 = new Canvas(cmp_bobArrowSpace2, SWT.DOUBLE_BUFFERED);
+        // arr_bobSpace2.setLayoutData(ArrowCanvas.canvasData(
+        //         SWT.FILL,
+        //         SWT.FILL,
+        //         false,
+        //         false,
+        //         1,
+        //         1,
+        //         ViewConstants.ARROW_CANVAS_WIDTH,
+        //         // Note that we need the border width of any text, so we use an initialized one.
+        //         Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
+        // ));
+        // arr_bobSpace2.addPaintListener(new PaintListener() {
+        //     @Override
+        //     public void paintControl(PaintEvent event) {
+        //         event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
+        //         Path path = ArrowCanvas.drawRightUpRightLine(
+        //                 arr_bobSpace2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
+        //         );
+        //         event.gc.fillPath(path);
+        //         path.dispose();
+        //     }
+        // });
     }
 
     private void createBobEncryptedMessagebox() {

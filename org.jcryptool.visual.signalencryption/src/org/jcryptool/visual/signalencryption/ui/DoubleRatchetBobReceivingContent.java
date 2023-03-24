@@ -61,10 +61,6 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     protected Arrow arr_bobReceivingChainArrow2;
     protected Arrow arr_bobReceivingChainArrow3;
     protected Arrow arr_bobReceivingChainArrow4;
-    protected Canvas arr_bobSendingChainArrow1;
-    protected Canvas arr_bobSendingChainArrow2;
-    protected Canvas arr_bobSendingChainArrow3;
-    protected Canvas arr_bobSendingChainArrow4;
     protected Arrow arr_bobDiffieHellmanArrow1;
     protected Arrow arr_bobDiffieHellmanArrow2;
     protected Arrow arr_bobRootChainArrow1;
@@ -141,7 +137,119 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         return cmp_bobReceivingAlgorithm;
     }
 
-    private void createBobReceivingChain() {
+    private void createBobEncryptedMessagebox() {
+	    grp_bobMessagebox.setLayout(Layout.gl_messageboxGroup());
+	    grp_bobMessagebox.setLayoutData(Layout.gd_messageboxComposite());
+	    grp_bobMessagebox.setText(MessageboxDescription);
+	
+	    txt_bobCipherText = new Text(
+	            grp_bobMessagebox,
+	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
+	    );
+	    txt_bobCipherText.setText(MessageboxCipherText);
+	    txt_bobCipherText.setLayoutData(Layout.gd_Messagebox());
+	    txt_bobCipherText.setEditable(false);
+	}
+    
+    public void setEncryptedMessageBoxVisible(boolean visible) {
+    	grp_bobMessagebox.setVisible(visible);
+    }
+
+	private void createBobDiffieHellmanChain() {
+	    grp_bobDiffieHellman.setText(DiffieHellmanGroupDescription);
+	    grp_bobDiffieHellman.setLayout(Layout.gl_diffieHellmanComposite());
+	    grp_bobDiffieHellman.setLayoutData(Layout.gd_diffieHellmanComposite());
+	
+	    txt_bobDiffieHellman1 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+	            .title(bobDiffieHellmanLabel1)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
+	    
+	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	
+	    txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+	            .title(bobDiffieHellmanLabel2)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
+	
+	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	
+	    txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
+	            .title(bobDiffieHellmanLabel3)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
+	
+	    arr_bobDiffieHellmanArrow1 = Arrow
+	    	.from(txt_bobDiffieHellman1).south()
+	    	.to(txt_bobDiffieHellman2).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	
+	    arr_bobDiffieHellmanArrow2 = Arrow
+	    	.from(txt_bobDiffieHellman3).north()
+	    	.to(txt_bobDiffieHellman2).south()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	
+	}
+	
+    public void setDiffieHellmanChainVisible(boolean visible) {
+    	grp_bobDiffieHellman.setVisible(visible);
+    	arr_bobDiffieHellmanArrow1.setVisible(visible);
+    	arr_bobDiffieHellmanArrow2.setVisible(visible);
+    }
+
+	private void createBobRootChain() {
+	    grp_bobRootChain.setText(RootChainDescription);
+	    grp_bobRootChain.setLayout(Layout.gl_rootChainComposite());
+	    grp_bobRootChain.setLayoutData(Layout.gd_rootChainComposite());
+	
+	    txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
+	            .title(bobRootChainLabel1)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
+	    
+	    UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	
+	    txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
+	            .title(bobRootChainLabel2)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
+	
+	    UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    
+	    txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
+	            .title(bobRootChainLabel3)
+	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
+	            .buildOperationNode();
+	    txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
+	    arr_bobRootChainArrow1 = Arrow
+	    	.from(txt_bobRootChain1).south()
+	    	.to(txt_bobRootChain2).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	
+	    arr_bobRootChainArrow2 = Arrow
+	    	.from(txt_bobRootChain2).south()
+	    	.to(txt_bobRootChain3).north()
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+	
+	}
+	
+	public void setRootChainVisible(boolean visible) {
+		cmp_bobArrowSpace1.setVisible(visible);
+		grp_bobRootChain.setVisible(visible);
+		arr_bobRootChainArrow1.setVisible(visible);
+		arr_bobRootChainArrow2.setVisible(visible);
+	}
+
+	private void createBobReceivingChain() {
         grp_bobReceivingChain.setLayout(Layout.gl_sendingReceivingChainComposite(SWT.RIGHT));
         grp_bobReceivingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
         grp_bobReceivingChain.setText(ReceivingChainDescription);
@@ -214,95 +322,35 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	.incomingDirection(Side.WEST)
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.create();
-
-
     }
 
-    private void createBobRootChain() {
-        grp_bobRootChain.setText(RootChainDescription);
-        grp_bobRootChain.setLayout(Layout.gl_rootChainComposite());
-        grp_bobRootChain.setLayoutData(Layout.gd_rootChainComposite());
-
-        txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
-                .title(bobRootChainLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
-        
-        UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-
-        txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
-                .title(bobRootChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
-
-        UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-        
-        txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
-                .title(bobRootChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
-        arr_bobRootChainArrow1 = Arrow
-        	.from(txt_bobRootChain1).south()
-        	.to(txt_bobRootChain2).north()
-        	.on(cmp_bobReceivingAlgorithm)
-        	.withDefaults();
-
-        arr_bobRootChainArrow2 = Arrow
-        	.from(txt_bobRootChain2).south()
-        	.to(txt_bobRootChain3).north()
-        	.on(cmp_bobReceivingAlgorithm)
-        	.withDefaults();
-
+	public void setReceivingChainVisible(boolean visible) {
+		cmp_bobArrowSpace2.setVisible(visible);
+		grp_bobReceivingChain.setVisible(visible);
+		arr_bobReceivingChainArrow1.setVisible(visible);
+		arr_bobReceivingChainArrow2.setVisible(visible);
+		arr_bobReceivingChainArrow3.setVisible(visible);
+		arr_bobReceivingChainArrow4.setVisible(visible);
     }
-
-    private void createBobDiffieHellmanChain() {
-        grp_bobDiffieHellman.setText(DiffieHellmanGroupDescription);
-        grp_bobDiffieHellman.setLayout(Layout.gl_diffieHellmanComposite());
-        grp_bobDiffieHellman.setLayoutData(Layout.gd_diffieHellmanComposite());
-
-        txt_bobDiffieHellman1 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
-                .title(bobDiffieHellmanLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
-        
-	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-
-        txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
-                .title(bobDiffieHellmanLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
-
-        UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-
-        txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
-                .title(bobDiffieHellmanLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
-                .buildOperationNode();
-        txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
-
-        arr_bobDiffieHellmanArrow1 = Arrow
-	    	.from(txt_bobDiffieHellman1).south()
-	    	.to(txt_bobDiffieHellman2).north()
-	    	.on(cmp_bobReceivingAlgorithm)
-	    	.withDefaults();
 	
-	    arr_bobDiffieHellmanArrow2 = Arrow
-	    	.from(txt_bobDiffieHellman3).north()
-	    	.to(txt_bobDiffieHellman2).south()
-	    	.on(cmp_bobReceivingAlgorithm)
-	    	.withDefaults();
-
+    private void createBobDecryptedMessagebox() {
+	    grp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
+	    grp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
+	    grp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
+	    txt_bobPlainText = new Text(
+	            grp_bobDecryptedMessage,
+	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
+	    );
+	    txt_bobPlainText.setText(MessageboxPlainText);
+	    txt_bobPlainText.setLayoutData(Layout.gd_Messagebox());
+	    txt_bobPlainText.setEditable(false);
+	}
+    
+    public void setDecryptedMessageboxVisible(boolean visible) {
+    	grp_bobDecryptedMessage.setVisible(visible);
     }
-        private void createBobArrowSpaces() {
-        
-        //cmp_bobArrowSpace1.setLayout(Layout.gl_arrowSpaceComposite());
-        //cmp_bobArrowSpace1.setLayoutData(Layout.gd_arrowSpaceComposite());
-        
+
+	private void createBobArrowSpaces() {
 		cmp_bobArrowSpace1 = Arrow
 				.from(grp_bobDiffieHellman, txt_bobDiffieHellman2).east()
 				.to(grp_bobRootChain, txt_bobRootChain1).west()
@@ -318,86 +366,14 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	    	.at(CornerLocationBuilder.CENTER)
 	    	    .arrowId("cmp_bobArrowSpace2")
 				.withDefaults();
-
-        //System.out.print(calculateConnectingArrowMargin());
-        // arrow up
-        // arr_bobSpace1 = new Canvas(cmp_bobArrowSpace1, SWT.DOUBLE_BUFFERED);
-        // arr_bobSpace1.setLayoutData(ArrowCanvas.canvasData(
-        //         SWT.FILL,
-        //         SWT.FILL,
-        //         false,
-        //         false,
-        //         1,
-        //         1,
-        //         ViewConstants.ARROW_CANVAS_WIDTH,
-        //         // Note that we need the border width of any text, so we use an initialized one.
-        //         Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
-        // ));
-        // arr_bobSpace1.addPaintListener(new PaintListener() {
-        //     @Override
-        //     public void paintControl(PaintEvent event) {
-        //         event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-        //         Path path = ArrowCanvas.drawRightUpRightArrow(
-        //                 arr_bobSpace1, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-        //         );
-        //         event.gc.fillPath(path);
-        //         path.dispose();
-        //     }
-        // });
-        // cmp_bobArrowSpace2.setLayout(Layout.gl_arrowSpaceComposite());
-        // cmp_bobArrowSpace2.setLayoutData(Layout.gd_arrowSpaceComposite());
-
-        // // arrow up
-        // arr_bobSpace2 = new Canvas(cmp_bobArrowSpace2, SWT.DOUBLE_BUFFERED);
-        // arr_bobSpace2.setLayoutData(ArrowCanvas.canvasData(
-        //         SWT.FILL,
-        //         SWT.FILL,
-        //         false,
-        //         false,
-        //         1,
-        //         1,
-        //         ViewConstants.ARROW_CANVAS_WIDTH,
-        //         // Note that we need the border width of any text, so we use an initialized one.
-        //         Layout.calculateConnectingArrowHeight(txt_bobDiffieHellman1.getBorderWidth())
-        // ));
-        // arr_bobSpace2.addPaintListener(new PaintListener() {
-        //     @Override
-        //     public void paintControl(PaintEvent event) {
-        //         event.gc.setBackground(event.display.getSystemColor(SWT.COLOR_DARK_GRAY));
-        //         Path path = ArrowCanvas.drawRightUpRightLine(
-        //                 arr_bobSpace2, ViewConstants.ARROW_THICKNESS, ViewConstants.ARROW_HEAD_THICKNESS
-        //         );
-        //         event.gc.fillPath(path);
-        //         path.dispose();
-        //     }
-        // });
     }
-
-    private void createBobEncryptedMessagebox() {
-        grp_bobMessagebox.setLayout(Layout.gl_messageboxGroup());
-        grp_bobMessagebox.setLayoutData(Layout.gd_messageboxComposite());
-        grp_bobMessagebox.setText(MessageboxDescription);
-
-        txt_bobCipherText = new Text(
-                grp_bobMessagebox,
-                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
-        );
-        txt_bobCipherText.setText(MessageboxCipherText);
-        txt_bobCipherText.setLayoutData(Layout.gd_Messagebox());
-        txt_bobCipherText.setEditable(false);
-    }
-    
-    private void createBobDecryptedMessagebox() {
-        grp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
-        grp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
-        grp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
-        txt_bobPlainText = new Text(
-                grp_bobDecryptedMessage,
-                SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
-        );
-        txt_bobPlainText.setText(MessageboxPlainText);
-        txt_bobPlainText.setLayoutData(Layout.gd_Messagebox());
-        txt_bobPlainText.setEditable(false);
-    }
+	
+	public void setAllVisible(boolean visible) {
+		setEncryptedMessageBoxVisible(visible);
+		setDiffieHellmanChainVisible(visible);
+		setRootChainVisible(visible);
+		setReceivingChainVisible(visible);
+		setDecryptedMessageboxVisible(visible);
+	}
 
 }

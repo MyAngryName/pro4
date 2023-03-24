@@ -360,4 +360,11 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	    .arrowId("cmp_aliceArrowSpace2")
 				.withDefaults();
 	}
+	
+	public void setAllVisible(boolean visible) {
+		setDiffieHellmanChainVisible(visible);
+		setRootChainVisible(visible);
+		setSendingChainVisible(visible);
+		setMessageBoxVisible(visible);
+	}
 }

@@ -1,7 +1,6 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -263,7 +262,6 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	
-	    
 	    arr_aliceSendingChainArrow2 = Arrow
 	    	.from(txt_aliceSendingChain1).south()
 	    	.to(txt_aliceSendingChain3).north()
@@ -299,7 +297,6 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.toAnchorY(txt_aliceSendingChain4, Side.WEST)
 	    	.incomingDirection(Side.WEST)
 	    	.on(cmp_aliceSendingAlgorithm)
-	    	.arrowId("txt_aliceSendingChain4")
 	    	.create();
 	}
 

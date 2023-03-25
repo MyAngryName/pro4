@@ -1,4 +1,4 @@
-package org.jcryptool.visual.signalencryption.ui;
+package org.jcryptool.visual.signalencryption.graphics;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -6,7 +6,8 @@ import java.util.function.BiFunction;
 import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
-import org.jcryptool.visual.signalencryption.ui.CompositeWithArrowSupport.Side;
+import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
+import org.jcryptool.visual.signalencryption.ui.ViewConstants;
 
 public class Arrow {
 	
@@ -42,7 +43,7 @@ public class Arrow {
 	}
 
 	public Path path() {
-		return CompositeWithArrowSupport.createPath(properties);
+		return ComponentDrawComposite.createPath(properties);
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class Arrow {
 		final int lineWidth;
 		final int headWidth;
 		final int headSize;
-		final CompositeWithArrowSupport canvas;
+		final ComponentDrawComposite canvas;
 		final BiFunction<Point, Point, Integer> cornerPosition;
 
 		public ArrowProperties(
@@ -83,7 +84,7 @@ public class Arrow {
 				int lineWidth,
 				int headWidth,
 				int headSize,
-				CompositeWithArrowSupport canvas,
+				ComponentDrawComposite canvas,
 				BiFunction<Point, Point, Integer> cornerPosition
 			) {
 			this.xStart = xStart;
@@ -290,7 +291,7 @@ public class Arrow {
 			this.location = location;
 		}
 
-		PropertiesBuilder on(CompositeWithArrowSupport canvas) {
+		public PropertiesBuilder on(ComponentDrawComposite canvas) {
 			return new PropertiesBuilder(location, canvas);
 		}
 	}
@@ -302,7 +303,7 @@ public class Arrow {
 		final Anchor toY;
 		final Side outgoingSide;
 		final Side incomingSide;
-		final CompositeWithArrowSupport canvas;
+		final ComponentDrawComposite canvas;
 
 		private int lineWidth = ViewConstants.ARROW_THICKNESS;
 		private int headWidth = ViewConstants.ARROW_HEAD_THICKNESS;
@@ -310,7 +311,7 @@ public class Arrow {
 		private String id = null;
 		private BiFunction<Point, Point, Integer> cornerLocationSupplier = CORNER_AT_MIDDLE;
 
-		public PropertiesBuilder(ArrowLocationContext location, CompositeWithArrowSupport canvas) {
+		public PropertiesBuilder(ArrowLocationContext location, ComponentDrawComposite canvas) {
 			this.fromX = location.fromX;
 			this.fromY = location.fromY;
 			this.outgoingSide = location.outgoingDirection;
@@ -345,8 +346,8 @@ public class Arrow {
 			return new CornerLocationBuilder(this);
 		}
 		
-		Arrow withDefaults() {
-			// Override defaults and create
+		public Arrow withDefaults() {
+			// Reset the defaults and create
 			lineWidth(ViewConstants.ARROW_THICKNESS);
 			headWidth(ViewConstants.ARROW_HEAD_THICKNESS);
 			headSize(ViewConstants.ARROW_HEAD_SIZE);
@@ -377,8 +378,11 @@ public class Arrow {
 			this.side = side;
 		}
 		
-		public Point resolve(CompositeWithArrowSupport canvas) {
-		return new Point(side.getX(control, canvas), side.getY(control, canvas));
+		public Point resolve(ComponentDrawComposite canvas) {
+			return resolve(canvas, 0, 0);
+	}
+		public Point resolve(ComponentDrawComposite canvas, int xOffset, int yOffset) {
+		return new Point(side.getX(control, canvas) + xOffset, side.getY(control, canvas) + yOffset);
 	}
 	}
 	
@@ -395,10 +399,10 @@ public class Arrow {
 		
 		private final Anchor from;
 		private final Anchor to;
-		private final CompositeWithArrowSupport canvas;
+		private final ComponentDrawComposite canvas;
 		private final double split;
 		
-		public HorizontalBetweenProvider(Anchor from, Anchor to, CompositeWithArrowSupport canvas, double split) {
+		public HorizontalBetweenProvider(Anchor from, Anchor to, ComponentDrawComposite canvas, double split) {
 			this.from = from;
 			this.to = to;
 			this.canvas = canvas;

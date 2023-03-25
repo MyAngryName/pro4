@@ -47,15 +47,20 @@ public class ViewConstants {
     public static final int UP_DOWN_ARROW_SIZE = 60;
 
     /**
-     * The default canvas width hint of all arrows
+     * The default canvas width hint of all inter-group arrows
      */
-    public static final int ARROW_CANVAS_WIDTH = 75;
+    public static final int ARROW_CANVAS_WIDTH = 55;
+    
+    /**
+     * Distance between message group and icon start
+     */
+    public static final int MAIL_ICON_X_OFFSET = 35;
     
     /**
      * The distance from the constant node to the send/receive node
      */
     // TODO Investigate why the inline doesn't really get smaller when this is decreased
-    public static final int CONSTANT_INLINE = BOX_WIDTH / 3;
+    public static final int CONSTANT_INLINE = BOX_WIDTH / 4;
     
 
     /**

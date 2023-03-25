@@ -1,16 +1,13 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.jcryptool.core.util.colors.ColorService;
-import org.jcryptool.visual.signalencryption.ui.Arrow.CornerLocationBuilder;
-import org.jcryptool.visual.signalencryption.ui.CompositeWithArrowSupport.Side;
+import org.jcryptool.visual.signalencryption.graphics.Arrow;
+import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
+import org.jcryptool.visual.signalencryption.graphics.Arrow.CornerLocationBuilder;
+import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
@@ -76,7 +73,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Group grp_bobMessagebox;
     Group grp_bobDecryptedMessage;
     
-    CompositeWithArrowSupport cmp_bobReceivingAlgorithm;
+    ComponentDrawComposite cmp_bobReceivingAlgorithm;
     Composite cmp_bobDiffieHellman;
     Composite cmp_bobRootChain;
     Arrow cmp_bobArrowSpace1;
@@ -118,7 +115,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
     @Override
     public Composite buildAlgorithmContent(Composite parent, COMMUNICATION_STATE state) {
-    	cmp_bobReceivingAlgorithm = new CompositeWithArrowSupport(parent, SWT.NONE);
+    	cmp_bobReceivingAlgorithm = new ComponentDrawComposite(parent, SWT.NONE);
         cmp_bobReceivingAlgorithm.setLayout(Layout.gl_algorithmGroup());
         cmp_bobReceivingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
@@ -321,7 +318,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	.toAnchorY(txt_bobReceivingChain4, Side.WEST)
 	    	.incomingDirection(Side.WEST)
 	    	.on(cmp_bobReceivingAlgorithm)
-	    	.create();
+	    	.withDefaults();
     }
 
 	public void setReceivingChainVisible(boolean visible) {

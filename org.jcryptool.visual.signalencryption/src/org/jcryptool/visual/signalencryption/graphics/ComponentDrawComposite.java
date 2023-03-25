@@ -1,4 +1,4 @@
-package org.jcryptool.visual.signalencryption.ui;
+package org.jcryptool.visual.signalencryption.graphics;
 
 import static org.jcryptool.visual.signalencryption.ui.ViewConstants.ARROW_HEAD_SIZE;
 import static org.jcryptool.visual.signalencryption.ui.ViewConstants.TARGET_MARGIN;
@@ -15,28 +15,48 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jcryptool.visual.signalencryption.ui.Arrow.ArrowProperties;
+import org.jcryptool.visual.signalencryption.graphics.Arrow.ArrowProperties;
+import org.jcryptool.visual.signalencryption.ui.MailShapes;
+import org.jcryptool.visual.signalencryption.ui.ViewConstants;
 
-public class CompositeWithArrowSupport extends Canvas {
+public class ComponentDrawComposite extends Canvas {
 
 	private static final int MARGIN = ARROW_HEAD_SIZE + TARGET_MARGIN;
 	private static final Function<Integer, Integer> STRAIGHT_DIRECTION = i -> i;
 	private static final Function<Integer, Integer> OPPOSITE_DIRECTION = i -> -i;
 
 	private Set<Arrow> arrowsToDraw = new HashSet<>();
+	private Set<MailShapes> shapesToDraw = new HashSet<>();
+	private Set<Component> componentsToDraw = new HashSet<>();
 
-	public CompositeWithArrowSupport(Composite parent, int style) {
+	public ComponentDrawComposite(Composite parent, int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED); // we want this always double buffered for smooth interaction
 		this.addPaintListener(e -> paintControl(e));
 	}
 
 	private void paintControl(PaintEvent e) {
-		e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_DARK_RED));
+		//e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_DARK_RED));
+		e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_WIDGET_BORDER));
 		for (var arrow : arrowsToDraw) {
 			if (arrow.isVisible()) {
 				var path = arrow.path();
 				e.gc.fillPath(path);
 				path.dispose();
+			}
+		}
+		
+		for (var arrow : shapesToDraw) {
+			if (arrow.isVisible()) {
+				var path = arrow.path();
+				e.gc.drawPath(path);
+				e.gc.fillPath(path);
+				path.dispose();
+			}
+		}
+		
+		for (var component: componentsToDraw) {
+			if (component.isVisible()) {
+				component.draw(e.gc);
 			}
 		}
 	}
@@ -49,7 +69,22 @@ public class CompositeWithArrowSupport extends Canvas {
 		arrowsToDraw.remove(arrow);
 	}
 
+	public void addShape(MailShapes arrow) {
+		shapesToDraw.add(arrow);
+	}
+
+	public void removeShape(MailShapes arrow) {
+		shapesToDraw.remove(arrow);
+	}
 	
+	public <C extends Component> C addComponent(C component) {
+		componentsToDraw.add(component);
+		return component;
+	}
+
+	public void removeComponent(Component component) {
+		componentsToDraw.remove(component);
+	}
 
 	public static Path createPath(ArrowProperties props) {
 		checkSideValidity(props.startSide, props.endSide);

@@ -4,8 +4,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.jcryptool.visual.signalencryption.ui.Arrow.CornerLocationBuilder;
-import org.jcryptool.visual.signalencryption.ui.CompositeWithArrowSupport.Side;
+import org.jcryptool.visual.signalencryption.graphics.Arrow;
+import org.jcryptool.visual.signalencryption.graphics.Component;
+import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
+import org.jcryptool.visual.signalencryption.graphics.ImageComponent;
+import org.jcryptool.visual.signalencryption.graphics.Arrow.CornerLocationBuilder;
+import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
@@ -33,7 +37,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     Text txt_alicePlainText;
     Text txt_aliceCipherText;
 
-    CompositeWithArrowSupport cmp_aliceSendingAlgorithm;
+    ComponentDrawComposite cmp_aliceSendingAlgorithm;
     Composite cmp_aliceDiffieHellman;
     Composite cmp_aliceRootChain;
     Composite cmp_aliceSteps;
@@ -44,7 +48,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     Group grp_aliceRootChain;
     Group grp_aliceSendingChain;
     Group grp_aliceMessagebox;
-
+    
     private String msg_aliceSendingStep0 = Messages.SignalEncryption_aliceDescriptionText0;
     private String msg_aliceSendingStep1 = Messages.SignalEncryption_stepText1;
     private String msg_aliceSendingStep2 = Messages.SignalEncryption_stepText2;
@@ -84,6 +88,8 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     
     protected Arrow cmp_aliceArrowSpace1;
     protected Arrow cmp_aliceArrowSpace2;
+    
+    protected ImageComponent draw_outgoingMailIcon;
 
     @Override
     public Composite buildStepsContent(Composite parent, COMMUNICATION_STATE state) {
@@ -112,8 +118,8 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     }
 
     @Override
-    public CompositeWithArrowSupport buildAlgorithmContent(Composite parent, COMMUNICATION_STATE state) {
-        cmp_aliceSendingAlgorithm = new CompositeWithArrowSupport(parent, SWT.NONE);
+    public ComponentDrawComposite buildAlgorithmContent(Composite parent, COMMUNICATION_STATE state) {
+        cmp_aliceSendingAlgorithm = new ComponentDrawComposite(parent, SWT.NONE);
         cmp_aliceSendingAlgorithm.setLayout(Layout.gl_algorithmGroup());
         cmp_aliceSendingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
@@ -248,7 +254,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
 	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.ARROW_CANVAS_WIDTH);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.CONSTANT_INLINE);
 	
 	    txt_aliceSendingChain3 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel3)
@@ -297,7 +303,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.toAnchorY(txt_aliceSendingChain4, Side.WEST)
 	    	.incomingDirection(Side.WEST)
 	    	.on(cmp_aliceSendingAlgorithm)
-	    	.create();
+	    	.withDefaults();
 	}
 
     public void setSendingChainVisible(boolean visible) {
@@ -326,22 +332,34 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    txt_aliceCipherText.setText("Encrypted Message");
 	    txt_alicePlainText.setTextLimit(256);
 	    txt_alicePlainText.setEditable(true);
-	
+	    
+	    draw_outgoingMailIcon = ImageComponent.on(cmp_aliceSendingAlgorithm)
+	    	.relativeTo(txt_aliceCipherText, Side.EAST)
+	    	.offsetX(ViewConstants.MAIL_ICON_X_OFFSET)
+	    	.outgoingMail();
+	    
+	    // This one is a special spacer: it doesn't have any content but ensures that the image drawn
+	    // (which does NOT have a concept of layouting) has enough space to be drawn.
+	    // This is necessary because the icon is the last element of the view.
+	    var requiredWidth =  draw_outgoingMailIcon.imageWidth() + ViewConstants.MAIL_ICON_X_OFFSET - ViewConstants.ARROW_CANVAS_WIDTH;
+	    // TODO Investigate the resizing-bug regarding this control
+	    UiUtils.insertSpacers(cmp_aliceSendingAlgorithm, 1, requiredWidth - 5);
 	}
 	
 	public void setMessageBoxVisible(boolean visible) {
 		grp_aliceMessagebox.setVisible(visible);
 		txt_alicePlainText.setVisible(visible);
 		txt_aliceCipherText.setVisible(visible);
+		draw_outgoingMailIcon.setVisible(visible);
 	}
 	
 	public void showOnlyMessagePlaintext() {
 		setMessageBoxVisible(true);
 		txt_alicePlainText.setVisible(true);
 		txt_aliceCipherText.setVisible(false);
+		draw_outgoingMailIcon.setVisible(false);
 	}
 	
-
 	private void createAliceArrowSpaces() {
 		cmp_aliceArrowSpace1 = Arrow
 				.from(grp_aliceDiffieHellman, txt_aliceDiffieHellman2).east()

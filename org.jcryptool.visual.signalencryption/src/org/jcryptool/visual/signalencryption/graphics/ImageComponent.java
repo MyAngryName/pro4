@@ -7,8 +7,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.core.util.images.ImageService;
-import org.jcryptool.visual.signalencryption.graphics.Arrow.Anchor;
-import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
+import org.jcryptool.visual.signalencryption.graphics.Positioning.Anchor;
 import org.jcryptool.visual.signalencryption.ui.SignalEncryptionView;
 
 public class ImageComponent implements Component {
@@ -105,7 +104,7 @@ public class ImageComponent implements Component {
 			return this;
 		}
 
-		public ImageComponentBuilder relativeTo(Control control, Side side) {
+		public ImageComponentBuilder relativeTo(Control control, Positioning.Side side) {
 			this.anchor = new Anchor(control, side);
 			return this;
 		}

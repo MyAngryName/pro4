@@ -59,7 +59,6 @@ public class ViewConstants {
     /**
      * The distance from the constant node to the send/receive node
      */
-    // TODO Investigate why the inline doesn't really get smaller when this is decreased
     public static final int CONSTANT_INLINE = BOX_WIDTH / 4;
     
 

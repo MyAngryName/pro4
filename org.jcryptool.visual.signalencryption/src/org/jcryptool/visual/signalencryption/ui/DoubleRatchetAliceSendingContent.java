@@ -4,12 +4,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.jcryptool.visual.signalencryption.graphics.Arrow;
-import org.jcryptool.visual.signalencryption.graphics.Component;
+import org.jcryptool.visual.signalencryption.graphics.ArrowComponent;
 import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
 import org.jcryptool.visual.signalencryption.graphics.ImageComponent;
-import org.jcryptool.visual.signalencryption.graphics.Arrow.CornerLocationBuilder;
-import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
+import org.jcryptool.visual.signalencryption.graphics.Positioning.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
@@ -73,21 +71,21 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     private String MessageboxDescription = Messages.SignalEncryption_MessageboxDescription;
     private String SendingChainDescription = Messages.SignalEncryption_SendingChainDescription;
     
-    protected Arrow arr_aliceDiffieHellmanArrow1;
-    protected Arrow arr_aliceDiffieHellmanArrow2;
-    protected Arrow arr_aliceRootChainArrow1;
-    protected Arrow arr_aliceRootChainArrow2;
-    protected Arrow arr_aliceSendingChainArrow1;
-    protected Arrow arr_aliceSendingChainArrow2;
-    protected Arrow arr_aliceSendingChainArrow3;
-    protected Arrow arr_aliceSendingChainArrow4;
-    protected Arrow arr_aliceReceivingChainArrow1;
-    protected Arrow arr_aliceReceivingChainArrow2;
-    protected Arrow arr_aliceReceivingChainArrow3;
-    protected Arrow arr_aliceReceivingChainArrow4;
+    protected ArrowComponent arr_aliceDiffieHellmanArrow1;
+    protected ArrowComponent arr_aliceDiffieHellmanArrow2;
+    protected ArrowComponent arr_aliceRootChainArrow1;
+    protected ArrowComponent arr_aliceRootChainArrow2;
+    protected ArrowComponent arr_aliceSendingChainArrow1;
+    protected ArrowComponent arr_aliceSendingChainArrow2;
+    protected ArrowComponent arr_aliceSendingChainArrow3;
+    protected ArrowComponent arr_aliceSendingChainArrow4;
+    protected ArrowComponent arr_aliceReceivingChainArrow1;
+    protected ArrowComponent arr_aliceReceivingChainArrow2;
+    protected ArrowComponent arr_aliceReceivingChainArrow3;
+    protected ArrowComponent arr_aliceReceivingChainArrow4;
     
-    protected Arrow cmp_aliceArrowSpace1;
-    protected Arrow cmp_aliceArrowSpace2;
+    protected ArrowComponent cmp_aliceArrowSpace1;
+    protected ArrowComponent cmp_aliceArrowSpace2;
     
     protected ImageComponent draw_outgoingMailIcon;
 
@@ -165,13 +163,13 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildOperationNode();
 	    txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 	
-	    arr_aliceDiffieHellmanArrow1 = Arrow
+	    arr_aliceDiffieHellmanArrow1 = ArrowComponent
 	    	.from(txt_aliceDiffieHellman1).south()
 	    	.to(txt_aliceDiffieHellman2).north()
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	
-	    arr_aliceDiffieHellmanArrow2 = Arrow
+	    arr_aliceDiffieHellmanArrow2 = ArrowComponent
 	    	.from(txt_aliceDiffieHellman3).north()
 	    	.to(txt_aliceDiffieHellman2).south()
 	    	.on(cmp_aliceSendingAlgorithm)
@@ -211,13 +209,13 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
                 .buildValueNode();
         txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmLabels());
 
-        arr_aliceRootChainArrow1 = Arrow
+        arr_aliceRootChainArrow1 = ArrowComponent
         	.from(txt_aliceRootChain1).south()
         	.to(txt_aliceRootChain2).north()
         	.on(cmp_aliceSendingAlgorithm)
         	.withDefaults();
 
-        arr_aliceRootChainArrow2 = Arrow
+        arr_aliceRootChainArrow2 = ArrowComponent
         	.from(txt_aliceRootChain2).south()
         	.to(txt_aliceRootChain3).north()
         	.on(cmp_aliceSendingAlgorithm)
@@ -262,13 +260,13 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildOperationNode();
 	    txt_aliceSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
 	    
-	    arr_aliceSendingChainArrow1 = Arrow
+	    arr_aliceSendingChainArrow1 = ArrowComponent
 	    	.from(txt_aliceSendingChain2).east()
 	    	.to(txt_aliceSendingChain3).west()
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	
-	    arr_aliceSendingChainArrow2 = Arrow
+	    arr_aliceSendingChainArrow2 = ArrowComponent
 	    	.from(txt_aliceSendingChain1).south()
 	    	.to(txt_aliceSendingChain3).north()
 	    	.on(cmp_aliceSendingAlgorithm)
@@ -290,12 +288,12 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_aliceSendingChain5.setLayoutData(Layout.gd_algorithmLabels());
 	    
-	    arr_aliceSendingChainArrow3 = Arrow
+	    arr_aliceSendingChainArrow3 = ArrowComponent
 	    	.from(txt_aliceSendingChain3).south()
 	    	.to(txt_aliceSendingChain5).north()
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
-	    arr_aliceSendingChainArrow4 = Arrow.fromAnchors()
+	    arr_aliceSendingChainArrow4 = ArrowComponent.fromAnchors()
 	    	.fromAnchorX(txt_aliceSendingChain1, Side.SOUTH)
 	    	.fromAnchorY(txt_aliceSendingChain4, Side.WEST)
 	    	.outgoingDirection(Side.EAST)
@@ -361,20 +359,20 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	}
 	
 	private void createAliceArrowSpaces() {
-		cmp_aliceArrowSpace1 = Arrow
+		cmp_aliceArrowSpace1 = ArrowComponent
 				.from(grp_aliceDiffieHellman, txt_aliceDiffieHellman2).east()
 				.to(grp_aliceRootChain, txt_aliceRootChain1).west()
 				.on(cmp_aliceSendingAlgorithm)
 				.withDefaults();
 		
-		cmp_aliceArrowSpace2 = Arrow
+		cmp_aliceArrowSpace2 = ArrowComponent
 				.from(grp_aliceRootChain, txt_aliceRootChain2).east()
 				.to(txt_aliceSendingChain1, txt_aliceSendingChain1).west()
 				.on(cmp_aliceSendingAlgorithm)
 				.breakBetween()
 	    	    	.first(grp_aliceRootChain, Side.EAST)
 	    	    	.second(grp_aliceSendingChain, Side.WEST)
-	    	    	.at(CornerLocationBuilder.CENTER)
+	    	    	.at(ArrowComponent.BREAK_CENTER)
 	    	    .arrowId("cmp_aliceArrowSpace2")
 				.withDefaults();
 	}

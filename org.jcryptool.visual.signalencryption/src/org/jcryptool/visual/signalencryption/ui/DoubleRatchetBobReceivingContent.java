@@ -4,10 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.jcryptool.visual.signalencryption.graphics.Arrow;
+import org.jcryptool.visual.signalencryption.graphics.ArrowComponent;
 import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
-import org.jcryptool.visual.signalencryption.graphics.Arrow.CornerLocationBuilder;
-import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite.Side;
+import org.jcryptool.visual.signalencryption.graphics.Positioning.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
@@ -54,16 +53,16 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     private String bobReceivingChainLabel4 = Messages.SignalEncryption_bobReceivingChainLabel4;
     private String bobReceivingChainLabel5 = Messages.SignalEncryption_bobReceivingChainLabel5;
 
-    protected Arrow arr_bobReceivingChainArrow1;
-    protected Arrow arr_bobReceivingChainArrow2;
-    protected Arrow arr_bobReceivingChainArrow3;
-    protected Arrow arr_bobReceivingChainArrow4;
-    protected Arrow arr_bobDiffieHellmanArrow1;
-    protected Arrow arr_bobDiffieHellmanArrow2;
-    protected Arrow arr_bobRootChainArrow1;
-    protected Arrow arr_bobRootChainArrow2;
-    protected Arrow arr_bobSpace1;
-    protected Arrow arr_bobSpace2;
+    protected ArrowComponent arr_bobReceivingChainArrow1;
+    protected ArrowComponent arr_bobReceivingChainArrow2;
+    protected ArrowComponent arr_bobReceivingChainArrow3;
+    protected ArrowComponent arr_bobReceivingChainArrow4;
+    protected ArrowComponent arr_bobDiffieHellmanArrow1;
+    protected ArrowComponent arr_bobDiffieHellmanArrow2;
+    protected ArrowComponent arr_bobRootChainArrow1;
+    protected ArrowComponent arr_bobRootChainArrow2;
+    protected ArrowComponent arr_bobSpace1;
+    protected ArrowComponent arr_bobSpace2;
 
     Group grp_bobReceivingChain;
     Group grp_bobSpace2;
@@ -76,8 +75,8 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     ComponentDrawComposite cmp_bobReceivingAlgorithm;
     Composite cmp_bobDiffieHellman;
     Composite cmp_bobRootChain;
-    Arrow cmp_bobArrowSpace1;
-    Arrow cmp_bobArrowSpace2;
+    ArrowComponent cmp_bobArrowSpace1;
+    ArrowComponent cmp_bobArrowSpace2;
 
     private String MessageboxCipherText = "The Ciphertext";
     private String MessageboxDescription = Messages.SignalEncryption_MessageboxDescription;
@@ -179,13 +178,13 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	            .buildOperationNode();
 	    txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 	
-	    arr_bobDiffieHellmanArrow1 = Arrow
+	    arr_bobDiffieHellmanArrow1 = ArrowComponent
 	    	.from(txt_bobDiffieHellman1).south()
 	    	.to(txt_bobDiffieHellman2).north()
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
 	
-	    arr_bobDiffieHellmanArrow2 = Arrow
+	    arr_bobDiffieHellmanArrow2 = ArrowComponent
 	    	.from(txt_bobDiffieHellman3).north()
 	    	.to(txt_bobDiffieHellman2).south()
 	    	.on(cmp_bobReceivingAlgorithm)
@@ -225,13 +224,13 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	            .popupProvider(createShowValueFunction("DH key calculation", "0"))
 	            .buildOperationNode();
 	    txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
-	    arr_bobRootChainArrow1 = Arrow
+	    arr_bobRootChainArrow1 = ArrowComponent
 	    	.from(txt_bobRootChain1).south()
 	    	.to(txt_bobRootChain2).north()
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
 	
-	    arr_bobRootChainArrow2 = Arrow
+	    arr_bobRootChainArrow2 = ArrowComponent
 	    	.from(txt_bobRootChain2).south()
 	    	.to(txt_bobRootChain3).north()
 	    	.on(cmp_bobReceivingAlgorithm)
@@ -277,13 +276,13 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
         
-	    arr_bobReceivingChainArrow1 = Arrow
+	    arr_bobReceivingChainArrow1 = ArrowComponent
 	    	.from(txt_bobReceivingChain2).east()
 	    	.to(txt_bobReceivingChain3).west()
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
 	    
-	    arr_bobReceivingChainArrow2 = Arrow
+	    arr_bobReceivingChainArrow2 = ArrowComponent
 	    	.from(txt_bobReceivingChain1).south()
 	    	.to(txt_bobReceivingChain3).north()
 	    	.on(cmp_bobReceivingAlgorithm)
@@ -305,12 +304,12 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
         
-        arr_bobReceivingChainArrow3 = Arrow
+        arr_bobReceivingChainArrow3 = ArrowComponent
 	    	.from(txt_bobReceivingChain3).south()
 	    	.to(txt_bobReceivingChain5).north()
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
-	    arr_bobReceivingChainArrow4 = Arrow.fromAnchors()
+	    arr_bobReceivingChainArrow4 = ArrowComponent.fromAnchors()
 	    	.fromAnchorX(txt_bobReceivingChain1, Side.SOUTH)
 	    	.fromAnchorY(txt_bobReceivingChain4, Side.WEST)
 	    	.outgoingDirection(Side.EAST)
@@ -348,19 +347,19 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     }
 
 	private void createBobArrowSpaces() {
-		cmp_bobArrowSpace1 = Arrow
+		cmp_bobArrowSpace1 = ArrowComponent
 				.from(grp_bobDiffieHellman, txt_bobDiffieHellman2).east()
 				.to(grp_bobRootChain, txt_bobRootChain1).west()
 				.on(cmp_bobReceivingAlgorithm)
 				.withDefaults();
-		cmp_bobArrowSpace2 = Arrow
+		cmp_bobArrowSpace2 = ArrowComponent
 				.from(grp_bobRootChain, txt_bobRootChain2).east()
 				.to(txt_bobReceivingChain1, txt_bobReceivingChain1).west()
 				.on(cmp_bobReceivingAlgorithm)
 				.breakBetween()
 	    	    	.first(grp_bobRootChain, Side.EAST)
 	    	    	.second(grp_bobReceivingChain, Side.WEST)
-	    	    	.at(CornerLocationBuilder.CENTER)
+	    	    	.at(ArrowComponent.BREAK_CENTER)
 	    	    .arrowId("cmp_bobArrowSpace2")
 				.withDefaults();
     }

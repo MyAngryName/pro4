@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.visual.signalencryption.graphics.ArrowComponent;
 import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
+import org.jcryptool.visual.signalencryption.graphics.ImageComponent;
 import org.jcryptool.visual.signalencryption.graphics.Positioning.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
 import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
@@ -77,6 +78,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Composite cmp_bobRootChain;
     ArrowComponent cmp_bobArrowSpace1;
     ArrowComponent cmp_bobArrowSpace2;
+    ImageComponent drw_incomingMailIcon;
 
     private String MessageboxCipherText = "The Ciphertext";
     private String MessageboxDescription = Messages.SignalEncryption_MessageboxDescription;
@@ -118,6 +120,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         cmp_bobReceivingAlgorithm.setLayout(Layout.gl_algorithmGroup());
         cmp_bobReceivingAlgorithm.setLayoutData(Layout.gd_algorithmGroup());
         
+        createMessageIcon();
         grp_bobMessagebox = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobDiffieHellman = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobRootChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
@@ -132,6 +135,27 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         createBobArrowSpaces();
         return cmp_bobReceivingAlgorithm;
     }
+    
+    private void createMessageIcon() {
+    	UiUtils.insertSpacers(cmp_bobReceivingAlgorithm, 0, 0);
+    	drw_incomingMailIcon = ImageComponent.on(cmp_bobReceivingAlgorithm)
+	    	.xOffsetFromEast() // so we don't have to subtract the width of the image ourself as we draw to the left.
+	    	.offsetX(-ViewConstants.MAIL_ICON_X_OFFSET)
+	    	.setAnchorLater() // defer setting the location until the object is created
+	    	.incomingMail();
+	    
+	    // This one is a special spacer: it doesn't have any content but ensures that the image drawn
+	    // (which does NOT have a concept of layouting) has enough space to be drawn.
+	    // This is necessary because the icon is the last element of the view.
+    	// The x offset is taken twice, so we have even distance left and right
+	    var requiredWidth =  drw_incomingMailIcon.imageWidth()
+	    		+ (ViewConstants.MAIL_ICON_X_OFFSET * 2) - ViewConstants.ARROW_CANVAS_WIDTH;
+	    // TODO Investigate the resizing-bug regarding this control
+	    //   Note, I think the spacing comes from that I only adapted half of the composites.
+	    //   Since it's a stacked layout it still uses the largest underneath which is invisible.
+	    UiUtils.insertSpacers(cmp_bobReceivingAlgorithm, 1, requiredWidth - 5);
+
+    }
 
     private void createBobEncryptedMessagebox() {
 	    grp_bobMessagebox.setLayout(Layout.gl_messageboxGroup());
@@ -145,6 +169,10 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    txt_bobCipherText.setText(MessageboxCipherText);
 	    txt_bobCipherText.setLayoutData(Layout.gd_Messagebox());
 	    txt_bobCipherText.setEditable(false);
+	    
+	    // This has to live here, because the icon has to come into existance before the messagebox, but still needs
+	    // a reference to the messagebox to infer it's location.
+	    drw_incomingMailIcon.setRelativeTo(grp_bobMessagebox, Side.WEST);
 	}
     
     public void setEncryptedMessageBoxVisible(boolean visible) {
@@ -268,7 +296,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.ARROW_CANVAS_WIDTH);
+        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.CONSTANT_INLINE);
 
         txt_bobReceivingChain3 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel2)

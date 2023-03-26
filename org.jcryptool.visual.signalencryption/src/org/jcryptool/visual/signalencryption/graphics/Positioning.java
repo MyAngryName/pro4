@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Control;
 
 /** Data and util classes for specifying locations and anchors */
 public class Positioning {
-
+	
 	private Positioning() {
 		// prevent instantiation of this util class
 	}
@@ -28,6 +28,9 @@ public class Positioning {
 	 * </pre
 	 */
 	public static class Anchor {
+
+		public static final Anchor UNEDFINED = new Anchor(null, null);
+
 		Control control;
 		Side side;
 

@@ -86,8 +86,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     
     protected ArrowComponent cmp_aliceArrowSpace1;
     protected ArrowComponent cmp_aliceArrowSpace2;
-    
-    protected ImageComponent draw_outgoingMailIcon;
+    protected ImageComponent drw_outgoingMailIcon;
 
     @Override
     public Composite buildStepsContent(Composite parent, COMMUNICATION_STATE state) {
@@ -331,7 +330,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    txt_alicePlainText.setTextLimit(256);
 	    txt_alicePlainText.setEditable(true);
 	    
-	    draw_outgoingMailIcon = ImageComponent.on(cmp_aliceSendingAlgorithm)
+	    drw_outgoingMailIcon = ImageComponent.on(cmp_aliceSendingAlgorithm)
 	    	.relativeTo(txt_aliceCipherText, Side.EAST)
 	    	.offsetX(ViewConstants.MAIL_ICON_X_OFFSET)
 	    	.outgoingMail();
@@ -339,8 +338,10 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    // This one is a special spacer: it doesn't have any content but ensures that the image drawn
 	    // (which does NOT have a concept of layouting) has enough space to be drawn.
 	    // This is necessary because the icon is the last element of the view.
-	    var requiredWidth =  draw_outgoingMailIcon.imageWidth() + ViewConstants.MAIL_ICON_X_OFFSET - ViewConstants.ARROW_CANVAS_WIDTH;
+	    var requiredWidth =  drw_outgoingMailIcon.imageWidth() + ViewConstants.MAIL_ICON_X_OFFSET - ViewConstants.ARROW_CANVAS_WIDTH;
 	    // TODO Investigate the resizing-bug regarding this control
+	    //   Note, I think the spacing comes from that I only adapted half of the composites.
+	    //   Since it's a stacked layout it still uses the largest underneath which is invisible.
 	    UiUtils.insertSpacers(cmp_aliceSendingAlgorithm, 1, requiredWidth - 5);
 	}
 	
@@ -348,14 +349,14 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 		grp_aliceMessagebox.setVisible(visible);
 		txt_alicePlainText.setVisible(visible);
 		txt_aliceCipherText.setVisible(visible);
-		draw_outgoingMailIcon.setVisible(visible);
+		drw_outgoingMailIcon.setVisible(visible);
 	}
 	
 	public void showOnlyMessagePlaintext() {
 		setMessageBoxVisible(true);
 		txt_alicePlainText.setVisible(true);
 		txt_aliceCipherText.setVisible(false);
-		draw_outgoingMailIcon.setVisible(false);
+		drw_outgoingMailIcon.setVisible(false);
 	}
 	
 	private void createAliceArrowSpaces() {

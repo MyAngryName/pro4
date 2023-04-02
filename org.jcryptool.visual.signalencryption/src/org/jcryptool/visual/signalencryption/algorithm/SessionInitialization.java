@@ -29,7 +29,7 @@ public class SessionInitialization {
         this.remoteAddress = signalSession.getRemoteAddress();
     }
     
-    public SessionCipher buildSessionCipher() {
+    public SessionCipher buildSessionCipher(JCrypToolCapturer capturer) {
         
         session = signalSession.getSession();
         
@@ -43,7 +43,7 @@ public class SessionInitialization {
         preKeyStore.storePreKey(signalSession.getParameter().getPreKeyID(), signalSession.getPreKeyRecord());
         
         try {
-            session.process(remotePreKeyBundle);
+            session.process(remotePreKeyBundle, capturer);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
         } catch (UntrustedIdentityException e) {

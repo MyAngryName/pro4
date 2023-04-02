@@ -28,7 +28,7 @@ public class SessionManager {
     private SessionCipher bob;
     
     
-    public void createSessionBoth() {
+    public CapturePair createSessionBoth() {
         
         try {
             aliceParameter = new ParameterInitialization();
@@ -51,8 +51,11 @@ public class SessionManager {
         aliceSession = new SessionInitialization(aliceBuiltSession, bobBuiltSession.getPreKeyBundle());
         bobSession = new SessionInitialization(bobBuiltSession, aliceBuiltSession.getPreKeyBundle());
 
-        alice = aliceSession.buildSessionCipher();
-        bob = bobSession.buildSessionCipher();
+        var aliceCapturer = new JCrypToolCapturer();
+        var bobCapturer = new JCrypToolCapturer();
+        alice = aliceSession.buildSessionCipher(aliceCapturer);
+        bob = bobSession.buildSessionCipher(bobCapturer);
+        return new CapturePair(aliceCapturer, bobCapturer);
     }
     
     public void createSessionAlice() {
@@ -71,8 +74,10 @@ public class SessionManager {
         aliceSession = new SessionInitialization(aliceBuiltSession, bobBuiltSession.getPreKeyBundle());
         bobSession = new SessionInitialization(bobBuiltSession, aliceBuiltSession.getPreKeyBundle());
 
-        alice = aliceSession.buildSessionCipher();
-        bob = bobSession.buildSessionCipher();
+        var aliceCapturer = new JCrypToolCapturer();
+        var bobCapturer = new JCrypToolCapturer();
+        alice = aliceSession.buildSessionCipher(aliceCapturer);
+        bob = bobSession.buildSessionCipher(bobCapturer);
     }
     
     public void createSessionBob() {
@@ -90,8 +95,10 @@ public class SessionManager {
         aliceSession = new SessionInitialization(aliceBuiltSession, bobBuiltSession.getPreKeyBundle());
         bobSession = new SessionInitialization(bobBuiltSession, aliceBuiltSession.getPreKeyBundle());
 
-        alice = aliceSession.buildSessionCipher();
-        bob = bobSession.buildSessionCipher();
+        var aliceCapturer = new JCrypToolCapturer();
+        var bobCapturer = new JCrypToolCapturer();
+        alice = aliceSession.buildSessionCipher(aliceCapturer);
+        bob = bobSession.buildSessionCipher(bobCapturer);
     }
     
     public SessionCipher getAliceSessionCipher() {
@@ -119,4 +126,25 @@ public class SessionManager {
     public PreKeyBundle getBobPreKeyBundle() {
         return bobBuiltSession.getPreKeyBundle();
     }
+
+    public static class CapturePair {
+        private JCrypToolCapturer aliceCapture;
+        private JCrypToolCapturer bobCapture;
+
+        public CapturePair(JCrypToolCapturer aliceCapture, JCrypToolCapturer bobCapture) {
+            this.aliceCapture = aliceCapture;
+            this.bobCapture = bobCapture;
+        }
+
+        public JCrypToolCapturer getAliceCapture() {
+            return aliceCapture;
+        }
+
+        public JCrypToolCapturer getBobCapture() {
+            return bobCapture;
+        }
+    }
+
+
+
 }

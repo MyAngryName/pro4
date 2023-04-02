@@ -5,6 +5,7 @@
  */
 package org.whispersystems.libsignal.ratchet;
 
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.whispersystems.libsignal.InvalidKeyException;
 import org.whispersystems.libsignal.ecc.Curve;
 import org.whispersystems.libsignal.ecc.ECKeyPair;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 
 public class RatchetingSession {
 
-  public static void initializeSession(SessionState sessionState, SymmetricSignalProtocolParameters parameters)
+  public static void initializeSession(SessionState sessionState, SymmetricSignalProtocolParameters parameters, JCrypToolCapturer capturer)
       throws InvalidKeyException
   {
     if (isAlice(parameters.getOurBaseKey().getPublicKey(), parameters.getTheirBaseKey())) {
@@ -36,7 +37,7 @@ public class RatchetingSession {
                      .setTheirSignedPreKey(parameters.getTheirBaseKey())
                      .setTheirOneTimePreKey(Optional.<ECPublicKey>absent());
 
-      RatchetingSession.initializeSession(sessionState, aliceParameters.create());
+      RatchetingSession.initializeSession(sessionState, aliceParameters.create(), capturer);
     } else {
       BobSignalProtocolParameters.Builder bobParameters = BobSignalProtocolParameters.newBuilder();
 
@@ -47,11 +48,11 @@ public class RatchetingSession {
                    .setTheirBaseKey(parameters.getTheirBaseKey())
                    .setTheirIdentityKey(parameters.getTheirIdentityKey());
 
-      RatchetingSession.initializeSession(sessionState, bobParameters.create());
+      RatchetingSession.initializeSession(sessionState, bobParameters.create(), capturer);
     }
   }
 
-  public static void initializeSession(SessionState sessionState, AliceSignalProtocolParameters parameters)
+  public static void initializeSession(SessionState sessionState, AliceSignalProtocolParameters parameters, JCrypToolCapturer capturer)
       throws InvalidKeyException
   {
     try {
@@ -76,8 +77,8 @@ public class RatchetingSession {
                                                parameters.getOurBaseKey().getPrivateKey()));
       }
 
-      DerivedKeys             derivedKeys  = calculateDerivedKeys(secrets.toByteArray());
-      Pair<RootKey, ChainKey> sendingChain = derivedKeys.getRootKey().createChain(parameters.getTheirRatchetKey(), sendingRatchetKey);
+      DerivedKeys             derivedKeys  = calculateDerivedKeys(secrets.toByteArray(), capturer);
+      Pair<RootKey, ChainKey> sendingChain = derivedKeys.getRootKey().createChain(parameters.getTheirRatchetKey(), sendingRatchetKey, capturer, capturer.sendChain);
 
       sessionState.addReceiverChain(parameters.getTheirRatchetKey(), derivedKeys.getChainKey());
       sessionState.setSenderChain(sendingRatchetKey, sendingChain.second());
@@ -87,7 +88,7 @@ public class RatchetingSession {
     }
   }
 
-  public static void initializeSession(SessionState sessionState, BobSignalProtocolParameters parameters)
+  public static void initializeSession(SessionState sessionState, BobSignalProtocolParameters parameters, JCrypToolCapturer capturer)
       throws InvalidKeyException
   {
 
@@ -112,7 +113,7 @@ public class RatchetingSession {
                                                parameters.getOurOneTimePreKey().get().getPrivateKey()));
       }
 
-      DerivedKeys derivedKeys = calculateDerivedKeys(secrets.toByteArray());
+      DerivedKeys derivedKeys = calculateDerivedKeys(secrets.toByteArray(), capturer);
 
       sessionState.setSenderChain(parameters.getOurRatchetKey(), derivedKeys.getChainKey());
       sessionState.setRootKey(derivedKeys.getRootKey());
@@ -127,10 +128,14 @@ public class RatchetingSession {
     return discontinuity;
   }
 
-  private static DerivedKeys calculateDerivedKeys(byte[] masterSecret) {
+  private static DerivedKeys calculateDerivedKeys(byte[] masterSecret, JCrypToolCapturer capturer) {
     HKDF     kdf                = new HKDFv3();
     byte[]   derivedSecretBytes = kdf.deriveSecrets(masterSecret, "WhisperText".getBytes(), 64);
     byte[][] derivedSecrets     = ByteUtil.split(derivedSecretBytes, 32, 32);
+
+    capturer.rootChainKey = derivedSecrets[0];
+    capturer.sendChain.chainKey = derivedSecrets[1];
+    // capturer.rootChainConstantInput = "WhisperText".getBytes(); <-- wrong, this is the X3DH KDF
 
     return new DerivedKeys(new RootKey(kdf, derivedSecrets[0]),
                            new ChainKey(kdf, derivedSecrets[1], 0));

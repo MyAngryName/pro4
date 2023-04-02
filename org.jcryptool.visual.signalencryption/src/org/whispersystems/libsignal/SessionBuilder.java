@@ -6,6 +6,7 @@
 package org.whispersystems.libsignal;
 
 
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.whispersystems.libsignal.ecc.Curve;
 import org.whispersystems.libsignal.ecc.ECKeyPair;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
@@ -95,7 +96,7 @@ public class SessionBuilder {
    * @throws org.whispersystems.libsignal.InvalidKeyException when the message is formatted incorrectly.
    * @throws org.whispersystems.libsignal.UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
    */
-  /*package*/ Optional<Integer> process(SessionRecord sessionRecord, PreKeySignalMessage message)
+  /*package*/ Optional<Integer> process(SessionRecord sessionRecord, PreKeySignalMessage message, JCrypToolCapturer capturer)
       throws InvalidKeyIdException, InvalidKeyException, UntrustedIdentityException
   {
     IdentityKey theirIdentityKey = message.getIdentityKey();
@@ -104,14 +105,14 @@ public class SessionBuilder {
       throw new UntrustedIdentityException(remoteAddress.getName(), theirIdentityKey);
     }
 
-    Optional<Integer> unsignedPreKeyId = processV3(sessionRecord, message);
+    Optional<Integer> unsignedPreKeyId = processV3(sessionRecord, message, capturer);
 
     identityKeyStore.saveIdentity(remoteAddress, theirIdentityKey);
 
     return unsignedPreKeyId;
   }
 
-  private Optional<Integer> processV3(SessionRecord sessionRecord, PreKeySignalMessage message)
+  private Optional<Integer> processV3(SessionRecord sessionRecord, PreKeySignalMessage message, JCrypToolCapturer capturer)
       throws UntrustedIdentityException, InvalidKeyIdException, InvalidKeyException
   {
 
@@ -138,7 +139,7 @@ public class SessionBuilder {
 
     if (!sessionRecord.isFresh()) sessionRecord.archiveCurrentState();
 
-    RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create());
+    RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create(), capturer);
 
     sessionRecord.getSessionState().setLocalRegistrationId(identityKeyStore.getLocalRegistrationId());
     sessionRecord.getSessionState().setRemoteRegistrationId(message.getRegistrationId());
@@ -162,7 +163,7 @@ public class SessionBuilder {
    *                                                                  {@link IdentityKey} is not
    *                                                                  trusted.
    */
-  public void process(PreKeyBundle preKey) throws InvalidKeyException, UntrustedIdentityException {
+  public void process(PreKeyBundle preKey, JCrypToolCapturer capturer) throws InvalidKeyException, UntrustedIdentityException {
     synchronized (SessionCipher.SESSION_LOCK) {
       if (!identityKeyStore.isTrustedIdentity(remoteAddress, preKey.getIdentityKey(), IdentityKeyStore.Direction.SENDING)) {
         throw new UntrustedIdentityException(remoteAddress.getName(), preKey.getIdentityKey());
@@ -198,7 +199,7 @@ public class SessionBuilder {
 
       if (!sessionRecord.isFresh()) sessionRecord.archiveCurrentState();
 
-      RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create());
+      RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create(), capturer);
 
       sessionRecord.getSessionState().setUnacknowledgedPreKeyMessage(theirOneTimePreKeyId, preKey.getSignedPreKeyId(), ourBaseKey.getPublicKey());
       sessionRecord.getSessionState().setLocalRegistrationId(identityKeyStore.getLocalRegistrationId());

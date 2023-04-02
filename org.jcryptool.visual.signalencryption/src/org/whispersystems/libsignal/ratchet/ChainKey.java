@@ -6,6 +6,7 @@
 package org.whispersystems.libsignal.ratchet;
 
 
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.whispersystems.libsignal.kdf.DerivedMessageSecrets;
 import org.whispersystems.libsignal.kdf.HKDF;
 
@@ -43,12 +44,17 @@ public class ChainKey {
     return new ChainKey(kdf, nextKey, index + 1);
   }
 
-  public MessageKeys getMessageKeys() {
+  public MessageKeys getMessageKeys(JCrypToolCapturer capturer, JCrypToolCapturer.SendReceiveChain sendReceiveCapturer) {
     byte[]                inputKeyMaterial = getBaseMaterial(MESSAGE_KEY_SEED);
     byte[]                keyMaterialBytes = kdf.deriveSecrets(inputKeyMaterial, "WhisperMessageKeys".getBytes(), DerivedMessageSecrets.SIZE);
     DerivedMessageSecrets keyMaterial      = new DerivedMessageSecrets(keyMaterialBytes);
 
-    return new MessageKeys(keyMaterial.getCipherKey(), keyMaterial.getMacKey(), keyMaterial.getIv(), index);
+    var messageKey = new MessageKeys(keyMaterial.getCipherKey(), keyMaterial.getMacKey(), keyMaterial.getIv(), index);
+
+    sendReceiveCapturer.kdfOutput = keyMaterialBytes;
+    sendReceiveCapturer.chainConstantInput = "WhisperMessageKeys".getBytes();
+    capturer.messageKey = messageKey;
+    return messageKey;
   }
 
   private byte[] getBaseMaterial(byte[] seed) {

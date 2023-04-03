@@ -2,6 +2,7 @@ package org.jcryptool.visual.signalencryption.tests;
 
 import java.io.UnsupportedEncodingException;
 
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 //import org.junit.jupiter.api.Test;
 import org.whispersystems.libsignal.DuplicateMessageException;
@@ -44,33 +45,33 @@ public class SignalEncryptionTests {
         bob = sessionBuilder.getBobSessionCipher();
         
         
-        aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
+        aliceEncryptedMessage = alice.encrypt().doEncrypt("Hello world!".getBytes("UTF-8"));
         alicePreKeySignalMessage = new PreKeySignalMessage(aliceEncryptedMessage.serialize());
         
         System.out.println(aliceEncryptedMessage.serialize());
-        String string = new String(bob.decrypt(alicePreKeySignalMessage));
+        String string = new String(bob.decrypt(alicePreKeySignalMessage, new JCrypToolCapturer()));
         System.out.println(string);
         
         
-        encryptedMessageBob = bob.encrypt("Wie gehts?".getBytes("UTF-8"));
+        encryptedMessageBob = bob.encrypt().doEncrypt("Wie gehts?".getBytes("UTF-8"));
         preKeySignalMessageBob = new SignalMessage(encryptedMessageBob.serialize());
         
         
-        string = new String(alice.decrypt(preKeySignalMessageBob));
+        string = new String(alice.decrypt(preKeySignalMessageBob, new JCrypToolCapturer()));
         
-        aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
+        aliceEncryptedMessage = alice.encrypt().doEncrypt("Hello world!".getBytes("UTF-8"));
         preKeySignalMessageBob = new SignalMessage(aliceEncryptedMessage.serialize());
 
         System.out.println(aliceEncryptedMessage.serialize());
-        string = new String(bob.decrypt(preKeySignalMessageBob));
+        string = new String(bob.decrypt(preKeySignalMessageBob, new JCrypToolCapturer()));
         System.out.println(string);
         
-        aliceEncryptedMessage = alice.encrypt("Hello world!".getBytes("UTF-8"));
+        aliceEncryptedMessage = alice.encrypt().doEncrypt("Hello world!".getBytes("UTF-8"));
         preKeySignalMessageBob = new SignalMessage(aliceEncryptedMessage.serialize());
 
         System.out.println(aliceEncryptedMessage.serialize());
         System.out.println(aliceEncryptedMessage);
-        string = new String(bob.decrypt(preKeySignalMessageBob));
+        string = new String(bob.decrypt(preKeySignalMessageBob, new JCrypToolCapturer()));
         System.out.println(string);
         
     }

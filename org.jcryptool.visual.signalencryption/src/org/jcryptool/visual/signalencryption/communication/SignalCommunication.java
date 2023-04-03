@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jcryptool.visual.signalencryption.ui.EncryptionAlgorithm;
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
@@ -240,7 +241,7 @@ public class SignalCommunication {
 		byte[] ciphertextMessage;
 		String decryptedMessage;
 		try {
-			ciphertextMessage = encryptingCipher.encrypt(message).serialize();
+			ciphertextMessage = encryptingCipher.encrypt(new JCrypToolCapturer()).doEncrypt(message).serialize();
 
 			if (isPreKeyMessage) {
 				var preKeyMessage = new PreKeySignalMessage(ciphertextMessage);
@@ -248,7 +249,7 @@ public class SignalCommunication {
 
 				var sessionStore = algorithm.getSession().getBobSessionStore();
 				var remoteAddress = algorithm.getSession().getAliceAddress();
-				decryptedMessage = new String(decryptingCipher.decrypt(preKeyMessage));
+				decryptedMessage = new String(decryptingCipher.decrypt(preKeyMessage, new JCrypToolCapturer()));
 				/* BEGIN TODO: Try to get receiving chain key () */
 				// var sessionRecord = sessionStore.loadSession(remoteAddress);
 				// var sessionState2 = sessionRecord.getSessionState();
@@ -261,7 +262,7 @@ public class SignalCommunication {
 				// var senderRatchetKey = signalMessage.getSenderRatchetKey();
 				// var receivingChainKey = sessionState.getReceiverChainKey(senderRatchetKey);
 				/* END Try to get receiving chain key () */
-				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage));
+				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage, new JCrypToolCapturer()));
 				return new CipherTextContext(signalMessage, decryptedMessage);
 			}
 		} catch (UntrustedIdentityException | InvalidMessageException | InvalidVersionException

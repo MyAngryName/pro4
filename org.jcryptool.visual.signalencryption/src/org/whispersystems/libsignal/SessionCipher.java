@@ -460,4 +460,8 @@ public class SessionCipher {
             }
         }
     }
+
+	public EncryptCallbackHandler encrypt() {
+		return encrypt(new JCrypToolCapturer());
+	}
 }

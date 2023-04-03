@@ -22,6 +22,7 @@ public class DoubleRatchetAliceSendingLogic {
 			@Override
 			protected void switchState(DoubleRatchetView swtParent) {
 				swtParent.showAliceView();
+				updateSenderKeyDisplayInformation(swtParent);
 				var bobContent = swtParent.getBobReceivingContent();
 				var aliceContent = swtParent.getAliceSendingContent();
 				// Hide these Elements
@@ -495,10 +496,10 @@ public class DoubleRatchetAliceSendingLogic {
 		var aliceContent = view.getAliceSendingContent();
 		var ctx = AlgorithmState.get().getCommunication().current();
 		PopupUtil.updatePopupFor(aliceContent.txt_aliceSendingChain5, ctx.senderChainChainKey());
-		PopupUtil.updatePopupFor(aliceContent.txt_aliceSendingChain4, ctx.senderChainMessageKey());
+		// PopupUtil.updatePopupFor(aliceContent.txt_aliceSendingChain4, ctx.senderChainMessageKey());
 		PopupUtil.updatePopupFor(aliceContent.txt_aliceRootChain3, ctx.senderRootChainKey());
 		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman3, ctx.diffieHellmanSenderPrivateKey());
-		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman2, ctx.diffieHellmanSenderAgreedKey());
+		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman2, ctx.diffieHellmanSenderOutput());
 		PopupUtil.updatePopupFor(aliceContent.txt_aliceDiffieHellman2, ctx.diffieHellmanSenderPublicKey());
 		
 		var bobContent = view.getBobReceivingContent();
@@ -512,6 +513,6 @@ public class DoubleRatchetAliceSendingLogic {
 		var bobContent = view.getBobReceivingContent();
 		var ctx = AlgorithmState.get().getCommunication().current();
 		PopupUtil.updatePopupFor(bobContent.txt_bobReceivingChain5, ctx.receiverChainChainKey());
-		PopupUtil.updatePopupFor(bobContent.txt_bobReceivingChain4, ctx.receiverChainMessageKey());
+		//PopupUtil.updatePopupFor(bobContent.txt_bobReceivingChain4, ctx.receiverChainMessageKey());
 	}
 }

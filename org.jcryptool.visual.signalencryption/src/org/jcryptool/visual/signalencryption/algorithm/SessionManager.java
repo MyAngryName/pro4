@@ -28,7 +28,7 @@ public class SessionManager {
     private SessionCipher bob;
     
     
-    public CapturePair createSessionBoth() {
+    public Captures createSessionBoth() {
         
         try {
             aliceParameter = new ParameterInitialization();
@@ -55,10 +55,10 @@ public class SessionManager {
         var bobCapturer = new JCrypToolCapturer();
         alice = aliceSession.buildSessionCipher(aliceCapturer);
         bob = bobSession.buildSessionCipher(bobCapturer);
-        return new CapturePair(aliceCapturer, bobCapturer);
+        return new Captures(aliceCapturer, bobCapturer);
     }
     
-    public void createSessionAlice() {
+    public Captures createSessionAlice() {
         try {
             aliceParameter = new ParameterInitialization();
         } catch (InvalidKeyException e) {
@@ -78,9 +78,10 @@ public class SessionManager {
         var bobCapturer = new JCrypToolCapturer();
         alice = aliceSession.buildSessionCipher(aliceCapturer);
         bob = bobSession.buildSessionCipher(bobCapturer);
+        return new Captures(aliceCapturer, bobCapturer);
     }
     
-    public void createSessionBob() {
+    public Captures createSessionBob() {
         try {
             bobParameter = new ParameterInitialization();
         } catch (InvalidKeyException e) {
@@ -99,6 +100,7 @@ public class SessionManager {
         var bobCapturer = new JCrypToolCapturer();
         alice = aliceSession.buildSessionCipher(aliceCapturer);
         bob = bobSession.buildSessionCipher(bobCapturer);
+        return new Captures(aliceCapturer, bobCapturer);
     }
     
     public SessionCipher getAliceSessionCipher() {
@@ -127,11 +129,11 @@ public class SessionManager {
         return bobBuiltSession.getPreKeyBundle();
     }
 
-    public static class CapturePair {
+    public static class Captures {
         private JCrypToolCapturer aliceCapture;
         private JCrypToolCapturer bobCapture;
 
-        public CapturePair(JCrypToolCapturer aliceCapture, JCrypToolCapturer bobCapture) {
+        public Captures(JCrypToolCapturer aliceCapture, JCrypToolCapturer bobCapture) {
             this.aliceCapture = aliceCapture;
             this.bobCapture = bobCapture;
         }

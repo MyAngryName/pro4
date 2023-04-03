@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.jcryptool.visual.signalencryption.ui.EncryptionAlgorithm;
 import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
+import org.jcryptool.visual.signalencryption.algorithm.SessionManager.Captures;
 import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
@@ -15,6 +16,7 @@ import org.whispersystems.libsignal.InvalidVersionException;
 import org.whispersystems.libsignal.LegacyMessageException;
 import org.whispersystems.libsignal.NoSessionException;
 import org.whispersystems.libsignal.SessionCipher;
+import org.whispersystems.libsignal.SessionCipher.EncryptCallbackHandler;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.UntrustedIdentityException;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
@@ -45,7 +47,11 @@ public class SignalCommunication {
 		algorithm = new EncryptionAlgorithm();
 		messageContexts = new LinkedList<>();
 
-		messageContexts.add(newContextWithSender(CommunicationEntity.ALICE));
+		messageContexts.add(initialContextWithSender(
+				CommunicationEntity.ALICE,
+				algorithm.getInitializationCaptures().getAliceCapture(),
+				algorithm.getInitializationCaptures().getBobCapture()
+		));
 		i = 0;
 	}
 
@@ -167,36 +173,12 @@ public class SignalCommunication {
 			remoteAddress = algorithm.getSession().getBobAddress();
 		}
 
-		var sessionRecord = sessionStore.loadSession(remoteAddress);
-		var sessionState = sessionRecord.getSessionState();
 		// We encrypt and decrypt in the same go. The user doesn't know that and doesn't
-		// have to.
-		// In the end, it makes our lives easier.
-		var cipherTextContext = doEncryptionDecryption(encrypt, decrypt, message.getBytes(), isBeginning(),
-				sessionState);
-		current().setEncryptedMessageAndSeal(cipherTextContext.ciphertextMessage(),
-				cipherTextContext.decryptedMessage());
-
-		ECPublicKey senderRatchetKey;
-		if (isBeginning()) {
-			senderRatchetKey = cipherTextContext.getPreKeySignalMessage().get().getWhisperMessage()
-					.getSenderRatchetKey();
-			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
-		} else if (isBobsFirstMessage()) {
-			senderRatchetKey = cipherTextContext.getSignalMessage().get().getSenderRatchetKey();
-			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
-			// var x = sessionState.getReceiverChainKey(senderRatchetKey);
-			// x.getMessageKeys();
-		} else {
-			senderRatchetKey = cipherTextContext.getSignalMessage().get().getSenderRatchetKey();
-			current().setReceivingKeys(current().senderChainChainKey(), current().senderChainMessageKey());
-			// TODO: Get the actual receiving chain key (currently throws NullPointer)
-			// senderRatchetKey =
-			// cipherTextContext.getSignalMessage().get().getSenderRatchetKey();
-			// var receivingChainKey = sessionState.getReceiverChainKey(senderRatchetKey);
-			// var receiverMsgKeys = receivingChainKey.getMessageKeys();
-			// current().setReceivingKeys(receivingChainKey, receiverMsgKeys);
-		}
+		// have to. In the end, it makes our lives easier.
+		var cipherTextContext = doEncryptionDecryption(current(), decrypt, message.getBytes(), isBeginning());
+		current().setEncryptedMessageAndSeal(
+				cipherTextContext.ciphertextMessage(), cipherTextContext.decryptedMessage()
+		);
 	}
 
 	/**
@@ -236,33 +218,25 @@ public class SignalCommunication {
 	 *         message.
 	 * @throws SignalAlgorithmException if an algorithm error occurs.
 	 */
-	private CipherTextContext doEncryptionDecryption(SessionCipher encryptingCipher, SessionCipher decryptingCipher,
-			byte[] message, boolean isPreKeyMessage, SessionState sessionState) throws SignalAlgorithmException {
+	private CipherTextContext doEncryptionDecryption(
+			MessageContext context,
+			SessionCipher decryptingCipher,
+			byte[] message,
+			boolean isPreKeyMessage
+	) throws SignalAlgorithmException {
 		byte[] ciphertextMessage;
 		String decryptedMessage;
 		try {
-			ciphertextMessage = encryptingCipher.encrypt(new JCrypToolCapturer()).doEncrypt(message).serialize();
+			ciphertextMessage = context.getEncryptHandler().doEncrypt(message).serialize();
+			var receivingCapture = context.getReceivingCapture();
 
 			if (isPreKeyMessage) {
 				var preKeyMessage = new PreKeySignalMessage(ciphertextMessage);
-				var senderRatchetKey = preKeyMessage.getWhisperMessage().getSenderRatchetKey();
-
-				var sessionStore = algorithm.getSession().getBobSessionStore();
-				var remoteAddress = algorithm.getSession().getAliceAddress();
-				decryptedMessage = new String(decryptingCipher.decrypt(preKeyMessage, new JCrypToolCapturer()));
-				/* BEGIN TODO: Try to get receiving chain key () */
-				// var sessionRecord = sessionStore.loadSession(remoteAddress);
-				// var sessionState2 = sessionRecord.getSessionState();
-				// var receivingChainKey = sessionState2.getReceiverChainKey(senderRatchetKey);
-				/* END Try to get receiving chain key () */
+				decryptedMessage = new String(decryptingCipher.decrypt(preKeyMessage, receivingCapture));
 				return new CipherTextContext(preKeyMessage, decryptedMessage);
 			} else {
 				var signalMessage = new SignalMessage(ciphertextMessage);
-				/* BEGIN TODO: Try to get receiving chain key () */
-				// var senderRatchetKey = signalMessage.getSenderRatchetKey();
-				// var receivingChainKey = sessionState.getReceiverChainKey(senderRatchetKey);
-				/* END Try to get receiving chain key () */
-				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage, new JCrypToolCapturer()));
+				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage, receivingCapture));
 				return new CipherTextContext(signalMessage, decryptedMessage);
 			}
 		} catch (UntrustedIdentityException | InvalidMessageException | InvalidVersionException
@@ -274,8 +248,24 @@ public class SignalCommunication {
 	}
 
 	private MessageContext newContextWithSender(CommunicationEntity sendingEntity) {
-		return MessageContext.createWithKeysFromSessionStore(algorithm.getSession(), algorithm.getAliceAddress(),
-				algorithm.getBobAddress(), sendingEntity);
+		return new MessageContext.Builder(sendingEntity).sendingCapture(new JCrypToolCapturer()).build() ;
+	}
+	
+	private MessageContext initialContextWithSender(
+			CommunicationEntity sendingEntity, JCrypToolCapturer sendingCapture, JCrypToolCapturer receivingCapture
+	) {
+		// Some explanation why we call encrypt here without message.
+		// This call to encrypt more or less runs through the whole algorithm
+		// calculating all values and ending up with the symmetric key.
+		// It does however, not apply the final symmetric key but returns
+		// a handler. This allows us to use the values already before
+		// actually encrypting anything. The callback is set in the context
+		// and can be accessed and used to get the cipher-text.
+		return new MessageContext.Builder(sendingEntity)
+				.sendingCapture(sendingCapture)
+				.receivingCapture(receivingCapture)
+				.encryptHandler(algorithm.getAliceSessionCipher().encrypt(sendingCapture))
+				.build();
 	}
 
 	/**

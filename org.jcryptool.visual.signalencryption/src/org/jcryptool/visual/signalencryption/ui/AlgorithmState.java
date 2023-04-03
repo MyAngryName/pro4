@@ -5,6 +5,7 @@ import org.jcryptool.visual.signalencryption.util.ToHex;
 import java.util.Optional;
 
 import org.jcryptool.core.logging.utils.LogUtil;
+import org.jcryptool.visual.signalencryption.algorithm.SessionManager.Captures;
 import org.jcryptool.visual.signalencryption.communication.MessageContext;
 import org.jcryptool.visual.signalencryption.communication.SignalCommunication;
 
@@ -36,8 +37,7 @@ public class AlgorithmState {
 	}
 
 	public void generateBothPartiesKeys() {
-		generateAliceKeys();
-		generateBobKeys();
+		signalEncryptionAlgorithm.generateBoth(currentState);
 	}
 
 	public void generateAliceKeys() {
@@ -53,7 +53,7 @@ public class AlgorithmState {
 			// TODO Set keys in UI
 		}
 	}
-
+	
 	public EncryptionAlgorithm getSignalEncryptionAlgorithm() {
 		return signalEncryptionAlgorithm;
 	}

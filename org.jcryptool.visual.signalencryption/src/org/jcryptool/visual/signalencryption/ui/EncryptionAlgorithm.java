@@ -2,11 +2,11 @@ package org.jcryptool.visual.signalencryption.ui;
 
 
 import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
+import org.jcryptool.visual.signalencryption.algorithm.SessionManager.Captures;
 import org.jcryptool.visual.signalencryption.ui.AlgorithmState.STATE;
 import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.state.PreKeyBundle;
-import org.whispersystems.libsignal.state.SessionStore;
 
 
 public class EncryptionAlgorithm {
@@ -15,13 +15,14 @@ public class EncryptionAlgorithm {
     
     private SessionCipher bobSessionCipher;
     private SessionCipher aliceSessionCipher;
+	private Captures currentInitializationCaptures;
 
     private SignalProtocolAddress aliceAddress;
     private SignalProtocolAddress bobAddress;
     
     public EncryptionAlgorithm() {
         this.session = new SessionManager();
-        session.createSessionBoth();
+        this.currentInitializationCaptures = session.createSessionBoth();
         this.bobSessionCipher = session.getBobSessionCipher();
         this.aliceSessionCipher = session.getAliceSessionCipher();
         
@@ -76,6 +77,8 @@ public class EncryptionAlgorithm {
         bobAddress = session.getBobAddress();
     }
     
-    
+	public Captures getInitializationCaptures() {
+		return currentInitializationCaptures;
+	}
 
 }

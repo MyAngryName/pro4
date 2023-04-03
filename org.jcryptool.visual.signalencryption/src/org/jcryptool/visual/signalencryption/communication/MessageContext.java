@@ -1,11 +1,13 @@
 package org.jcryptool.visual.signalencryption.communication;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 import org.jcryptool.visual.signalencryption.ui.Messages;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.SessionCipher.EncryptCallbackHandler;
 import org.whispersystems.libsignal.ecc.ECPrivateKey;
 import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.ratchet.ChainKey;
@@ -14,6 +16,7 @@ import org.whispersystems.libsignal.ratchet.RootKey;
 
 import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.ALICE;
 import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.BOB;
+import static org.jcryptool.visual.signalencryption.util.ToHex.toHex;
 import static org.jcryptool.visual.signalencryption.util.ToHex.toHexString;
 
 /**
@@ -29,17 +32,14 @@ public class MessageContext {
 	private static final String UNKNOWN = "Unknown";
 
 	private final CommunicationEntity sendingEntity;
+	private final EncryptCallbackHandler encryptHandler;
+
 	private String message;
 	private String decryptedMessage;
 	private byte[] ciphertextMessage;
-
-	private final DiffieHellmanRatchetKeys aliceDiffieHellmanKeys;
-	private final RootChainKeys aliceRootChain;
-	private final SendReceiveChainKeys aliceSendReceiveChain;
 	
-	private final DiffieHellmanRatchetKeys bobDiffieHellmanKeys;
-	private final RootChainKeys bobRootChain;
-	private final SendReceiveChainKeys bobSendReceiveChain;
+	private final JCrypToolCapturer sendingCapture;
+	private final JCrypToolCapturer receivingCapture;
 
 	/**
 	 * Dataclass for Double-Ratchet value, key and message information for one message exchange.
@@ -59,52 +59,27 @@ public class MessageContext {
 	private MessageContext(
 			CommunicationEntity sendingEntity,
 			String message,
-			DiffieHellmanRatchetKeys aliceDiffieHellmanKeys,
-			DiffieHellmanRatchetKeys bobDiffieHellmanKeys,
-			RootChainKeys aliceRootChain,
-			RootChainKeys bobRootChain,
-			SendReceiveChainKeys aliceSendReceiveChain,
-			SendReceiveChainKeys bobSendReceiveChain
+			JCrypToolCapturer sendingCapture,
+			JCrypToolCapturer receivingCapture,
+			EncryptCallbackHandler encryptHandler
 	) {
 		this.sendingEntity = sendingEntity;
 		this.message = message;
-		this.aliceDiffieHellmanKeys = aliceDiffieHellmanKeys;
-		this.bobDiffieHellmanKeys = bobDiffieHellmanKeys;
-		this.aliceRootChain = aliceRootChain;
-		this.bobRootChain = bobRootChain;
-		this.aliceSendReceiveChain = aliceSendReceiveChain;
-		this.bobSendReceiveChain = bobSendReceiveChain;
+		this.sendingCapture = sendingCapture;
+		this.receivingCapture = receivingCapture;
+		this.encryptHandler = encryptHandler;
 	}
 
-	public static MessageContext createWithKeysFromSessionStore(SessionManager sessionManager,
-			SignalProtocolAddress aliceAddress, SignalProtocolAddress bobAddress, CommunicationEntity sendingEntity) {
-		var aliceSessionRecord = sessionManager.getAliceSessionStore().loadSession(bobAddress);
-		var aliceSessionState = aliceSessionRecord.getSessionState();
-		var aliceRootKey = aliceSessionState.getRootKey();
-		var aliceRatchetPublicKey = aliceSessionState.getSenderRatchetKey();
-		var aliceRatchetPrivateKey = aliceSessionState.getSenderRatchetKeyPair().getPrivateKey();
-
-		var bobSessionRecord = sessionManager.getBobSessionStore().loadSession(aliceAddress);
-		var bobSessionState = bobSessionRecord.getSessionState();
-		var bobRootKey = bobSessionState.getRootKey();
-		var bobRatchetPublicKey = bobSessionState.getSenderRatchetKey();
-		var bobRatchetPrivateKey = bobSessionState.getSenderRatchetKeyPair().getPrivateKey();
-
-		ChainKey sendingChainKey;
-
-		if (sendingEntity == ALICE) {
-			sendingChainKey = aliceSessionState.getSenderChainKey();
-		} else {
-			sendingChainKey = bobSessionState.getSenderChainKey();
-		}
-		var capturer = new JCrypToolCapturer();
-		MessageKeys sendingMsgKeys = sendingChainKey.getMessageKeys(capturer, capturer.sendChain);
-
-		return new MessageContext.Builder(sendingEntity).aliceRatchetPublicKey(aliceRatchetPublicKey)
-				.aliceRatchetPrivateKey(aliceRatchetPrivateKey).aliceRootKey(aliceRootKey)
-				.bobRatchetPublicKey(bobRatchetPublicKey).bobRatchetPrivateKey(bobRatchetPrivateKey)
-				.bobRootKey(bobRootKey).sendingChainKey(sendingChainKey).senderMsgKey(sendingMsgKeys).build();
-
+	public static MessageContext createWithKeysFromSessionStore(
+			SessionManager sessionManager,
+			SignalProtocolAddress aliceAddress,
+			SignalProtocolAddress bobAddress,
+			CommunicationEntity sendingEntity,
+			JCrypToolCapturer sendingCapture
+		) {
+		return new MessageContext.Builder(sendingEntity)
+				.sendingCapture(sendingCapture)
+				.build();
 	}
 
 	public boolean isAlreadyEncrypted() {
@@ -117,6 +92,14 @@ public class MessageContext {
 
 	public boolean isBobSending() {
 		return sendingEntity == BOB;
+	}
+	
+	public EncryptCallbackHandler getEncryptHandler() {
+		return encryptHandler;
+	}
+	
+	public JCrypToolCapturer getReceivingCapture() {
+		return receivingCapture;
 	}
 
 	/**
@@ -169,23 +152,6 @@ public class MessageContext {
 		this.decryptedMessage = decryptedMessage;
 	}
 
-	public void setReceivingKeys(ChainKey receivingChainKey, MessageKeys receiverMsgKeys) {
-		 setReceivingKeys(
-				 toHexString(receivingChainKey.getNextChainKey().getKey()),
-				 toHexString(receiverMsgKeys.getCipherKey().getEncoded())
-		);
-	}
-
-	public void setReceivingKeys(String receivingChainKey, String receiverMsgKeys) {
-		if (sendingEntity == ALICE) {
-		 bobSendReceiveChain.chainKey = receivingChainKey;
-		 bobSendReceiveChain.output = receiverMsgKeys;
-		} else {
-		 aliceSendReceiveChain.chainKey = receivingChainKey;
-		 aliceSendReceiveChain.output = receiverMsgKeys;
-		}
-	}
-
 	public Optional<String> getDecryptedMessage() {
 		return Optional.of(decryptedMessage);
 	}
@@ -195,90 +161,106 @@ public class MessageContext {
 	// Diffie-Hellman Getters
 	/////////////////////////
 	public String diffieHellmanSenderPublicKey() {
-		return sendingEntity == ALICE ? aliceDiffieHellmanKeys.theirPublicKey : bobDiffieHellmanKeys.theirPublicKey;
+		return toHex(sendingCapture.publicDiffieHellmanRatchetKey.serialize());
 	}
 	
-	public String diffieHellmanSenderAgreedKey() {
-		return sendingEntity == ALICE ? aliceDiffieHellmanKeys.agreedKey: bobDiffieHellmanKeys.agreedKey;
+	public String diffieHellmanSenderOutput() {
+		return toHex(sendingCapture.diffieHellmanRatchetOutput);
 	}
 
 	public String diffieHellmanSenderPrivateKey() {
-		return sendingEntity == ALICE ? aliceDiffieHellmanKeys.agreedKey: bobDiffieHellmanKeys.agreedKey;
+		return toHex(sendingCapture.privateDiffieHellmanRatchetKey.serialize());
 	}
 	public String diffieHellmanReceiverPublicKey() {
-		return sendingEntity == BOB ? aliceDiffieHellmanKeys.theirPublicKey : bobDiffieHellmanKeys.theirPublicKey;
+		return toHex(receivingCapture.publicDiffieHellmanRatchetKey.serialize());
 	}
 	
 	public String diffieHellmanReceiverAgreedKey() {
-		return sendingEntity == BOB ? aliceDiffieHellmanKeys.agreedKey: bobDiffieHellmanKeys.agreedKey;
+		return toHex(receivingCapture.diffieHellmanRatchetOutput);
 	}
 
 	public String diffieHellmanReceiverPrivateKey() {
-		return sendingEntity == BOB ? aliceDiffieHellmanKeys.agreedKey: bobDiffieHellmanKeys.agreedKey;
+		return toHex(receivingCapture.publicDiffieHellmanRatchetKey.serialize());
 	}
 	
 	/////////////////////////
 	// RootChain Getters
 	/////////////////////////
 	public String senderRootChainKey() {
-		return sendingEntity == ALICE ? aliceRootChain.rootKey: bobRootChain.rootKey;
+		return toHex(sendingCapture.rootChainKey);
 	}
 	
-	public String senderRootInput() {
-		return sendingEntity == ALICE ? aliceRootChain.input: bobRootChain.input;
+	public String senderRootConstantInput() {
+		return toHex(sendingCapture.rootChainConstantInput);
 	}
 
-	public String senderRootOutput() {
-		return sendingEntity == ALICE ? aliceRootChain.output: bobRootChain.output;
+	public Map<String, String> senderRootOutput() {
+		return Map.of(
+				"New Root-Key", toHex(sendingCapture.rootKdfOutput.getRootKey()),
+				"Chain-Key", toHex(sendingCapture.rootKdfOutput.getChainKey())
+		);
 	}
 	
 	public String senderRootNewRootChainKey() {
-		return sendingEntity == ALICE ? aliceRootChain.newRootKey: bobRootChain.newRootKey;
+		return toHex(sendingCapture.newRootChain);
 	}
 	
 	public String receiverRootChainKey() {
-		return sendingEntity == BOB ? aliceRootChain.rootKey: bobRootChain.rootKey;
+		return toHex(receivingCapture.rootChainKey);
 	}
 	
 	public String receiverRootInput() {
-		return sendingEntity == BOB ? aliceRootChain.input: bobRootChain.input;
+		return toHex(receivingCapture.rootChainConstantInput);
 	}
 
-	public String receiverRootOutput() {
-		return sendingEntity == BOB ? aliceRootChain.output: bobRootChain.output;
+	public Map<String, String> receiverRootOutput() {
+		return Map.of(
+				"New Root-Key", toHex(receivingCapture.rootKdfOutput.getRootKey()),
+				"Chain-Key", toHex(receivingCapture.rootKdfOutput.getChainKey())
+		);
 	}
+	
 	public String receiverRootNewRootChainKey() {
-		return sendingEntity == BOB ? aliceRootChain.newRootKey: bobRootChain.newRootKey;
+		return toHex(receivingCapture.newRootChain);
 	}
 	
 	/////////////////////////
 	// SendReceiveChain Getters
 	/////////////////////////
 	public String senderChainChainKey() {
-		return sendingEntity == ALICE ? aliceSendReceiveChain.chainKey : bobSendReceiveChain.chainKey;
+		return toHex(sendingCapture.sendChain.chainKey);
 	}
-	public String senderChainInput() {
-		return sendingEntity == ALICE ? aliceSendReceiveChain.input : bobSendReceiveChain.input;
+	public String senderChainConstantInput() {
+		return toHex(sendingCapture.sendChain.chainConstantInput);
 	}
-	public String senderChainMessageKey() {
-		return sendingEntity == ALICE ? aliceSendReceiveChain.output: bobSendReceiveChain.output;
+	public Map<String, String> senderChainMessageKey() {
+		return resolveMessageKey(sendingCapture.sendChain.messageKey);
 	}
 	public String senderChainNewChainKey() {
-		return sendingEntity == ALICE ? aliceSendReceiveChain.newChainKey: bobSendReceiveChain.newChainKey;
+		return toHex(sendingCapture.sendChain.newChainKey);
 	}
 	public String receiverChainChainKey() {
-		return sendingEntity == BOB ? aliceSendReceiveChain.chainKey : bobSendReceiveChain.chainKey;
+		return toHex(receivingCapture.receiveChain.chainKey);
 	}
-	public String receiverChainInput() {
-		return sendingEntity == BOB ? aliceSendReceiveChain.input : bobSendReceiveChain.input;
+	public String receiverChainConstantInput() {
+		return toHex(receivingCapture.receiveChain.chainConstantInput);
 	}
-	public String receiverChainMessageKey() {
-		return sendingEntity == BOB ? aliceSendReceiveChain.output: bobSendReceiveChain.output;
+	public Map<String, String> receiverChainMessageKey() {
+		return resolveMessageKey(receivingCapture.receiveChain.messageKey);
 	}
 	public String receiverChainNewChainKey() {
-		return sendingEntity == BOB ? aliceSendReceiveChain.newChainKey: bobSendReceiveChain.newChainKey;
+		return toHex(receivingCapture.receiveChain.newChainKey);
 	}
 
+	private Map<String, String> resolveMessageKey(MessageKeys key) {
+		return Map.of(
+				"AES-128", toHex(key.getCipherKey().getEncoded()),
+				"Counter", Integer.toString(key.getCounter()),
+				"IV", toHex(key.getIv().getIV()),
+				"macKey", toHex(key.getMacKey().getEncoded())
+		);
+
+	}
 	
 
 	public String getMessage() {
@@ -288,14 +270,9 @@ public class MessageContext {
 	public static class Builder {
 		private CommunicationEntity sendingEntity = ALICE;
 		private String message = Messages.SignalEncryption_aliceDefaultMessage;
-		private String aliceRatchetPrivateKey = MESSAGE_NO_SESSION;
-		private String aliceRatchetPublicKey = MESSAGE_NO_SESSION;
-		private String aliceRootKey = MESSAGE_NO_SESSION;
-		private String bobRatchetPrivateKey = MESSAGE_NO_SESSION;
-		private String bobRatchetPublicKey = MESSAGE_NO_SESSION;
-		private String bobRootKey = MESSAGE_NO_SESSION;
-		private String sendingChainKey = MESSAGE_NO_SESSION;
-		private String senderMsgKey = MESSAGE_NO_SESSION;
+		private JCrypToolCapturer sendingCapture;
+		private JCrypToolCapturer receivingCapture = new JCrypToolCapturer();
+		private EncryptCallbackHandler encryptHandler;
 
 		private static final String DEFAULT_MESSAGE_ALICE = Messages.SignalEncryption_aliceDefaultMessage;
 		private static final String DEFAULT_MESSAGE_BOB = Messages.SignalEncryption_bobDefaultMessage;
@@ -304,58 +281,25 @@ public class MessageContext {
 			this.sendingEntity = sendingEntity;
 			this.message = sendingEntity == ALICE ? DEFAULT_MESSAGE_ALICE : DEFAULT_MESSAGE_BOB;
 		}
-
-		public Builder aliceRatchetPrivateKey(ECPrivateKey key) {
-			this.aliceRatchetPrivateKey = toHexString(key.serialize());
+		
+		public Builder sendingCapture(JCrypToolCapturer sendingCapture) {
+			this.sendingCapture = sendingCapture;
 			return this;
 		}
-
-		public Builder aliceRatchetPublicKey(ECPublicKey key) {
-			this.aliceRatchetPrivateKey = toHexString(key.serialize());
+		
+		public Builder receivingCapture(JCrypToolCapturer receivingCapture) {
+			this.receivingCapture = receivingCapture;
 			return this;
 		}
-
-		public Builder aliceRootKey(RootKey key) {
-			this.aliceRootKey = toHexString(key.getKeyBytes());
-			return this;
-		}
-
-		public Builder bobRatchetPrivateKey(ECPrivateKey key) {
-			this.bobRatchetPrivateKey = toHexString(key.serialize());
-			return this;
-		}
-
-		public Builder bobRatchetPublicKey(ECPublicKey key) {
-			this.bobRatchetPublicKey = toHexString(key.serialize());
-			return this;
-		}
-
-		public Builder bobRootKey(RootKey key) {
-			this.bobRootKey = toHexString(key.getKeyBytes());
-			return this;
-		}
-
-		public Builder sendingChainKey(ChainKey key) {
-			this.sendingChainKey = toHexString(key.getNextChainKey().getKey());
-			return this;
-		}
-
-		public Builder senderMsgKey(MessageKeys key) {
-			this.senderMsgKey = toHexString(key.getCipherKey().getEncoded());
+		
+		public Builder encryptHandler(EncryptCallbackHandler encryptHandler) {
+			this.encryptHandler = encryptHandler;
 			return this;
 		}
 
 		public MessageContext build() {
-			return new MessageContext(
-					sendingEntity,
-					message,
-					new DiffieHellmanRatchetKeys(aliceRatchetPublicKey, UNKNOWN, aliceRatchetPrivateKey),
-					new DiffieHellmanRatchetKeys(bobRatchetPublicKey, UNKNOWN, bobRatchetPrivateKey),
-					new RootChainKeys(aliceRootKey, UNKNOWN, UNKNOWN, UNKNOWN),
-					new RootChainKeys(bobRootKey, UNKNOWN, UNKNOWN, UNKNOWN),
-					new SendReceiveChainKeys(sendingChainKey, UNKNOWN, senderMsgKey, UNKNOWN),
-					new SendReceiveChainKeys(UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN)
-			);
+			assert sendingCapture != null && encryptHandler != null; // Don't write calls that not set these values
+			return new MessageContext(sendingEntity, message, sendingCapture, receivingCapture, encryptHandler);
 		}
 
 	}

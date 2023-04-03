@@ -28,10 +28,19 @@ public class Layout {
         arrowSpaceLayout.verticalSpacing = 0;
         return arrowSpaceLayout;
     }
-
+    
     public static GridLayout gl_sendingReceivingChainComposite(int alignment) {
-        var gl_sendingReceivingChainComposite = new GridLayout(4, false);
+    	return gl_genericChainComposite(alignment, 3);
+    }
+    
+    public static GridLayout gl_rootChainComposite(int alignment) {
+    	return gl_genericChainComposite(alignment, 2);
+    }
+
+    public static GridLayout gl_genericChainComposite(int alignment, int numColumns) {
+        var gl_sendingReceivingChainComposite = new GridLayout(numColumns, false);
         gl_sendingReceivingChainComposite.marginWidth = 0;
+        gl_sendingReceivingChainComposite.horizontalSpacing = 25;
         if (alignment == SWT.LEFT) {
             gl_sendingReceivingChainComposite.marginRight = ViewConstants.HORIZONTAL_SPACING;
             gl_sendingReceivingChainComposite.marginLeft = 0;
@@ -44,10 +53,6 @@ public class Layout {
                     + "nothing else.");
         }
         return gl_sendingReceivingChainComposite;
-    }
-
-    public static GridLayout gl_rootChainComposite() {
-    	return gl_diffieHellmanComposite();
     }
 
     public static GridLayout gl_diffieHellmanComposite() {

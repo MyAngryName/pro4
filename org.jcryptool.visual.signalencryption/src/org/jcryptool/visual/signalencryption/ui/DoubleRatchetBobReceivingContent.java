@@ -228,7 +228,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
 	private void createBobRootChain() {
 	    grp_bobRootChain.setText(RootChainDescription);
-	    grp_bobRootChain.setLayout(Layout.gl_rootChainComposite());
+	    grp_bobRootChain.setLayout(Layout.gl_rootChainComposite(SWT.LEFT));
 	    grp_bobRootChain.setLayoutData(Layout.gd_rootChainComposite());
 	
 	    txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)

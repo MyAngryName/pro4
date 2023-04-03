@@ -253,7 +253,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
     private void createAliceRootChain() {
         grp_aliceRootChain.setText(RootChainDescription);
-        grp_aliceRootChain.setLayout(Layout.gl_rootChainComposite());
+        grp_aliceRootChain.setLayout(Layout.gl_rootChainComposite(SWT.RIGHT));
         grp_aliceRootChain.setLayoutData(Layout.gd_rootChainComposite());
 
         txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)

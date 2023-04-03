@@ -2,6 +2,7 @@ package org.jcryptool.visual.signalencryption.communication;
 
 import java.util.Optional;
 
+import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 import org.jcryptool.visual.signalencryption.ui.Messages;
 import org.whispersystems.libsignal.SignalProtocolAddress;
@@ -96,7 +97,8 @@ public class MessageContext {
 		} else {
 			sendingChainKey = bobSessionState.getSenderChainKey();
 		}
-		MessageKeys sendingMsgKeys = sendingChainKey.getMessageKeys();
+		var capturer = new JCrypToolCapturer();
+		MessageKeys sendingMsgKeys = sendingChainKey.getMessageKeys(capturer, capturer.sendChain);
 
 		return new MessageContext.Builder(sendingEntity).aliceRatchetPublicKey(aliceRatchetPublicKey)
 				.aliceRatchetPrivateKey(aliceRatchetPrivateKey).aliceRootKey(aliceRootKey)

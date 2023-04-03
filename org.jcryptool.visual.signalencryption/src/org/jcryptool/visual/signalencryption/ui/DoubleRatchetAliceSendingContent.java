@@ -23,6 +23,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     FlowChartNode txt_aliceDiffieHellman1;
     FlowChartNode txt_aliceDiffieHellman2;
     FlowChartNode txt_aliceDiffieHellman3;
+	FlowChartNode txt_aliceRootChain0;
     FlowChartNode txt_aliceRootChain1;
     FlowChartNode txt_aliceRootChain2;
     FlowChartNode txt_aliceRootChain3;
@@ -183,8 +184,14 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 
 	private void createAliceRootChain() {
         grp_aliceRootChain.setText(RootChainDescription);
-        grp_aliceRootChain.setLayout(Layout.gl_rootChainComposite());
+        grp_aliceRootChain.setLayout(Layout.gl_rootChainComposite(SWT.LEFT));
         grp_aliceRootChain.setLayoutData(Layout.gd_rootChainComposite());
+        
+        txt_aliceRootChain0 = new FlowChartNode.Builder(grp_aliceRootChain)
+        		.title(aliceSendingChainLabel2)
+        		.popupProvider(createShowValueFunction("Root Chain constant", "WhisperChain"))
+        		.buildValueNode();
+        txt_aliceRootChain0.setLayoutData(Layout.gd_algorithmLabels());
 
         txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel1)
@@ -192,7 +199,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
                 .buildValueNode();
         txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmLabels());
         
-        UiUtils.insertSpacers(grp_aliceRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_aliceRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 
         txt_aliceRootChain2 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel2)
@@ -200,7 +207,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
                 .buildOperationNode();
         txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmLabels());
         
-        UiUtils.insertSpacers(grp_aliceRootChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+        UiUtils.insertSpacers(grp_aliceRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 
         txt_aliceRootChain3 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel3)
@@ -233,25 +240,19 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    grp_aliceSendingChain.setLayoutData(Layout.gd_sendingReceivingChainComposite());
 	    grp_aliceSendingChain.setText(SendingChainDescription);
 	
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 2);
-	
+	    txt_aliceSendingChain2 = new FlowChartNode.Builder(grp_aliceSendingChain)
+	            .title(aliceSendingChainLabel2)
+	            .popupProvider(createShowValueFunction("Konstanter Wert", "8 (konstant)"))
+	            .buildValueNode();
+	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
+
 	    txt_aliceSendingChain1 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel1)
 	            .popupProvider(createShowValueFunction("Sending Chain Key", "7"))
 	            .buildValueNode();
 	    txt_aliceSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
 	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 2, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.CONSTANT_INLINE);
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 2, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-	
-	    txt_aliceSendingChain2 = new FlowChartNode.Builder(grp_aliceSendingChain)
-	            .title(aliceSendingChainLabel2)
-	            .popupProvider(createShowValueFunction("Konstanter Wert", "8 (konstant)"))
-	            .buildValueNode();
-	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
-	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.CONSTANT_INLINE);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 5, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 	
 	    txt_aliceSendingChain3 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel3)
@@ -261,7 +262,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    
 	    arr_aliceSendingChainArrow1 = ArrowComponent
 	    	.from(txt_aliceSendingChain2).east()
-	    	.to(txt_aliceSendingChain3).west()
+	    	.to(txt_aliceSendingChain1).west()
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	
@@ -271,7 +272,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 4);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 3);
 	
 	    txt_aliceSendingChain4 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel4)
@@ -279,7 +280,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_aliceSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
 	
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 2);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 1);
 	
 	    txt_aliceSendingChain5 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel5)
@@ -362,18 +363,19 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	private void createAliceArrowSpaces() {
 		cmp_aliceArrowSpace1 = ArrowComponent
 				.from(grp_aliceDiffieHellman, txt_aliceDiffieHellman2).east()
-				.to(grp_aliceRootChain, txt_aliceRootChain1).west()
+				.to(txt_aliceRootChain2, txt_aliceRootChain2).west()
 				.on(cmp_aliceSendingAlgorithm)
 				.withDefaults();
 		
 		cmp_aliceArrowSpace2 = ArrowComponent
 				.from(grp_aliceRootChain, txt_aliceRootChain2).east()
-				.to(txt_aliceSendingChain1, txt_aliceSendingChain1).west()
+				.to(txt_aliceSendingChain3, txt_aliceSendingChain3).west()
 				.on(cmp_aliceSendingAlgorithm)
+				// Check bug for off-by-one position
 				.breakBetween()
 	    	    	.first(grp_aliceRootChain, Side.EAST)
 	    	    	.second(grp_aliceSendingChain, Side.WEST)
-	    	    	.at(ArrowComponent.BREAK_CENTER)
+	    	    	.at(0.0)
 	    	    .arrowId("cmp_aliceArrowSpace2")
 				.withDefaults();
 	}

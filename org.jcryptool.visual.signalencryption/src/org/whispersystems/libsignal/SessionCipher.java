@@ -93,14 +93,14 @@ public class SessionCipher {
             SessionRecord sessionRecord = sessionStore.loadSession(remoteAddress);
             SessionState sessionState = sessionRecord.getSessionState();
             ChainKey chainKey = sessionState.getSenderChainKey();
-            MessageKeys messageKeys = chainKey.getMessageKeys(capturer, capturer.sendChain);
+            MessageKeys messageKeys = chainKey.getMessageKeys(capturer.sendChain);
             ECPublicKey senderEphemeral = sessionState.getSenderRatchetKey();
             int previousCounter = sessionState.getPreviousCounter();
             int sessionVersion = sessionState.getSessionVersion();
 
             ChainKey nextChainKey = chainKey.getNextChainKey();
-            capturer.messageKey = messageKeys;
-            capturer.sendChain.newChainKey = nextChainKey;
+            capturer.sendChain.messageKey = messageKeys;
+            capturer.sendChain.newChainKey = nextChainKey.getKey();
             return new EncryptCallbackHandler(sessionRecord, sessionState, messageKeys, chainKey, senderEphemeral, previousCounter, sessionVersion, SESSION_LOCK, nextChainKey);
         }
     }
@@ -349,13 +349,13 @@ public class SessionCipher {
         }
 
         while (chainKey.getIndex() < counter) {
-            MessageKeys messageKeys = chainKey.getMessageKeys(capturer, capturer.receiveChain);
+            MessageKeys messageKeys = chainKey.getMessageKeys(capturer.receiveChain);
             sessionState.setMessageKeys(theirEphemeral, messageKeys);
             chainKey = chainKey.getNextChainKey();
         }
 
         sessionState.setReceiverChainKey(theirEphemeral, chainKey.getNextChainKey());
-        return chainKey.getMessageKeys(capturer, capturer.receiveChain);
+        return chainKey.getMessageKeys(capturer.receiveChain);
     }
 
     private byte[] getCiphertext(MessageKeys messageKeys, byte[] plaintext) {

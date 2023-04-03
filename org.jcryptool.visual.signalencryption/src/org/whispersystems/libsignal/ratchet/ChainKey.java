@@ -44,7 +44,7 @@ public class ChainKey {
     return new ChainKey(kdf, nextKey, index + 1);
   }
 
-  public MessageKeys getMessageKeys(JCrypToolCapturer capturer, JCrypToolCapturer.SendReceiveChain sendReceiveCapturer) {
+  public MessageKeys getMessageKeys(JCrypToolCapturer.SendReceiveChain sendReceiveCapturer) {
     byte[]                inputKeyMaterial = getBaseMaterial(MESSAGE_KEY_SEED);
     byte[]                keyMaterialBytes = kdf.deriveSecrets(inputKeyMaterial, "WhisperMessageKeys".getBytes(), DerivedMessageSecrets.SIZE);
     DerivedMessageSecrets keyMaterial      = new DerivedMessageSecrets(keyMaterialBytes);
@@ -53,7 +53,7 @@ public class ChainKey {
 
     sendReceiveCapturer.kdfOutput = keyMaterialBytes;
     sendReceiveCapturer.chainConstantInput = "WhisperMessageKeys".getBytes();
-    capturer.messageKey = messageKey;
+    sendReceiveCapturer.messageKey = messageKey;
     return messageKey;
   }
 

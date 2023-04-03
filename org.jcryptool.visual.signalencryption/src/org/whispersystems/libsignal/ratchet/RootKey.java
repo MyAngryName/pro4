@@ -51,7 +51,7 @@ public class RootKey {
     // There are variables called newRootKey and newChainKey. However, in the observer context,
     // the newRootKey is the output of the first root-chain ratcheting step, while
     // newChainKey is the initial value for the Send/Receive chain
-    capturer.newRootChain = newRootKey;
+    capturer.newRootChain = newRootKey.getKeyBytes();
     sendReceiveCapturer.chainKey = derivedSecrets.getChainKey();
 
     return new Pair<>(newRootKey, newChainKey);

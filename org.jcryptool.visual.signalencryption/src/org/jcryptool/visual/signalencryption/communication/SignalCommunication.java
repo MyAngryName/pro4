@@ -2,11 +2,8 @@ package org.jcryptool.visual.signalencryption.communication;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-
 import org.jcryptool.visual.signalencryption.ui.EncryptionAlgorithm;
 import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
-import org.jcryptool.visual.signalencryption.algorithm.SessionManager.Captures;
 import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
 import org.whispersystems.libsignal.DuplicateMessageException;
 import org.whispersystems.libsignal.InvalidKeyException;
@@ -16,14 +13,9 @@ import org.whispersystems.libsignal.InvalidVersionException;
 import org.whispersystems.libsignal.LegacyMessageException;
 import org.whispersystems.libsignal.NoSessionException;
 import org.whispersystems.libsignal.SessionCipher;
-import org.whispersystems.libsignal.SessionCipher.EncryptCallbackHandler;
-import org.whispersystems.libsignal.SignalProtocolAddress;
 import org.whispersystems.libsignal.UntrustedIdentityException;
-import org.whispersystems.libsignal.ecc.ECPublicKey;
 import org.whispersystems.libsignal.protocol.PreKeySignalMessage;
 import org.whispersystems.libsignal.protocol.SignalMessage;
-import org.whispersystems.libsignal.state.SessionState;
-import org.whispersystems.libsignal.state.SessionStore;
 
 /**
  * Interface between UI "frontend" and algorithm "backend".
@@ -35,6 +27,7 @@ public class SignalCommunication {
 
 	private List<MessageContext> messageContexts;
 	private EncryptionAlgorithm algorithm;
+	private JCrypToolCapturer preInitializedCapturer;
 	private int i;
 
 	/**
@@ -53,6 +46,7 @@ public class SignalCommunication {
 				algorithm.getInitializationCaptures().getBobCapture()
 		));
 		i = 0;
+		newPreInitializedCapturer();
 	}
 
 	/**
@@ -92,12 +86,13 @@ public class SignalCommunication {
 			// If next is not created yet, do so.
 			if (current().isAliceSending()) {
 				// If in the previous context Alice was sending, let Bob do the next one.
-				messageContexts.add(newContextWithSender(CommunicationEntity.BOB));
+				messageContexts.add(newContextWithSender(CommunicationEntity.BOB, getPreInitializedCapturer()));
 			} else {
 				// If in the previous context Bob was sending, Alice is next.
-				messageContexts.add(newContextWithSender(CommunicationEntity.ALICE));
+				messageContexts.add(newContextWithSender(CommunicationEntity.ALICE, getPreInitializedCapturer()));
 			}
 		}
+		newPreInitializedCapturer();
 		i++;
 		return current();
 	}
@@ -160,22 +155,13 @@ public class SignalCommunication {
 		checkInvalidEncryptionState();
 		var message = current().getMessage();
 		var alice = current().isAliceSending();
-		var encrypt = alice ? algorithm.getAliceSessionCipher() : algorithm.getBobSessionCipher();
 		var decrypt = alice ? algorithm.getBobSessionCipher() : algorithm.getAliceSessionCipher();
-
-		SessionStore sessionStore;
-		SignalProtocolAddress remoteAddress;
-		if (alice) {
-			sessionStore = algorithm.getSession().getBobSessionStore();
-			remoteAddress = algorithm.getSession().getAliceAddress();
-		} else {
-			sessionStore = algorithm.getSession().getAliceSessionStore();
-			remoteAddress = algorithm.getSession().getBobAddress();
-		}
 
 		// We encrypt and decrypt in the same go. The user doesn't know that and doesn't
 		// have to. In the end, it makes our lives easier.
-		var cipherTextContext = doEncryptionDecryption(current(), decrypt, message.getBytes(), isBeginning());
+		var cipherTextContext = doEncryptionDecryption(
+				current(), decrypt, message.getBytes(), isBeginning(), getPreInitializedCapturer()
+		);
 		current().setEncryptedMessageAndSeal(
 				cipherTextContext.ciphertextMessage(), cipherTextContext.decryptedMessage()
 		);
@@ -222,7 +208,8 @@ public class SignalCommunication {
 			MessageContext context,
 			SessionCipher decryptingCipher,
 			byte[] message,
-			boolean isPreKeyMessage
+			boolean isPreKeyMessage,
+			JCrypToolCapturer nextSendCapturer
 	) throws SignalAlgorithmException {
 		byte[] ciphertextMessage;
 		String decryptedMessage;
@@ -232,11 +219,13 @@ public class SignalCommunication {
 
 			if (isPreKeyMessage) {
 				var preKeyMessage = new PreKeySignalMessage(ciphertextMessage);
-				decryptedMessage = new String(decryptingCipher.decrypt(preKeyMessage, receivingCapture));
+				decryptedMessage = new String(
+						decryptingCipher.decrypt(preKeyMessage, receivingCapture, nextSendCapturer)
+				);
 				return new CipherTextContext(preKeyMessage, decryptedMessage);
 			} else {
 				var signalMessage = new SignalMessage(ciphertextMessage);
-				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage, receivingCapture));
+				decryptedMessage = new String(decryptingCipher.decrypt(signalMessage, receivingCapture, nextSendCapturer));
 				return new CipherTextContext(signalMessage, decryptedMessage);
 			}
 		} catch (UntrustedIdentityException | InvalidMessageException | InvalidVersionException
@@ -246,9 +235,19 @@ public class SignalCommunication {
 		}
 
 	}
+	
+	private JCrypToolCapturer getPreInitializedCapturer() {
+		return preInitializedCapturer;
+	}
+	
+	private void newPreInitializedCapturer() {
+		this.preInitializedCapturer = new JCrypToolCapturer();
+	}
 
-	private MessageContext newContextWithSender(CommunicationEntity sendingEntity) {
-		return new MessageContext.Builder(sendingEntity).sendingCapture(new JCrypToolCapturer()).build() ;
+	private MessageContext newContextWithSender(
+			CommunicationEntity sendingEntity, JCrypToolCapturer preInitializedSendingCapturer
+	) {
+		return new MessageContext.Builder(sendingEntity).sendingCapture(preInitializedSendingCapturer).build();
 	}
 	
 	private MessageContext initialContextWithSender(
@@ -264,7 +263,8 @@ public class SignalCommunication {
 		return new MessageContext.Builder(sendingEntity)
 				.sendingCapture(sendingCapture)
 				.receivingCapture(receivingCapture)
-				.encryptHandler(algorithm.getAliceSessionCipher().encrypt(sendingCapture))
+				.aliceSessionCipher(algorithm.getAliceSessionCipher())
+				.bobSessionCipher(algorithm.getBobSessionCipher())
 				.build();
 	}
 
@@ -292,14 +292,6 @@ public class SignalCommunication {
 
 		public byte[] ciphertextMessage() {
 			return ciphertextMessage;
-		}
-
-		public Optional<PreKeySignalMessage> getPreKeySignalMessage() {
-			return Optional.of(preKeySignalMessage);
-		}
-
-		public Optional<SignalMessage> getSignalMessage() {
-			return Optional.of(signalMessage);
 		}
 
 		public String decryptedMessage() {

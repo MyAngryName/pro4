@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014-2016 Open Whisper Systems
- *
+ * <p>
  * Licensed according to the LICENSE file in this repository.
  */
 package org.whispersystems.libsignal;
@@ -43,7 +43,7 @@ import static org.whispersystems.libsignal.state.SessionState.UnacknowledgedPreK
 
 /**
  * The main entry point for Signal Protocol encrypt/decrypt operations.
- *
+ * <p>
  * Once a session has been established with {@link SessionBuilder},
  * this class can be used for all encrypt/decrypt operations within
  * that session.
@@ -120,10 +120,10 @@ public class SessionCipher {
      * @throws InvalidKeyException        when the message is formatted incorrectly.
      * @throws UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
      */
-    public byte[] decrypt(PreKeySignalMessage ciphertext, JCrypToolCapturer capturer)
+    public byte[] decrypt(PreKeySignalMessage ciphertext, JCrypToolCapturer receiveCapturer, JCrypToolCapturer nextSendCapturer)
             throws DuplicateMessageException, LegacyMessageException, InvalidMessageException,
             InvalidKeyIdException, InvalidKeyException, UntrustedIdentityException {
-        return decrypt(ciphertext, new NullDecryptionCallback(), capturer);
+        return decrypt(ciphertext, new NullDecryptionCallback(), receiveCapturer, nextSendCapturer);
     }
 
     /**
@@ -146,13 +146,13 @@ public class SessionCipher {
      * @throws InvalidKeyException        when the message is formatted incorrectly.
      * @throws UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
      */
-    public byte[] decrypt(PreKeySignalMessage ciphertext, DecryptionCallback callback, JCrypToolCapturer capturer)
+    public byte[] decrypt(PreKeySignalMessage ciphertext, DecryptionCallback callback, JCrypToolCapturer receiveCapturer, JCrypToolCapturer nextSendCapturer)
             throws DuplicateMessageException, LegacyMessageException, InvalidMessageException,
             InvalidKeyIdException, InvalidKeyException, UntrustedIdentityException {
         synchronized (SESSION_LOCK) {
             SessionRecord sessionRecord = sessionStore.loadSession(remoteAddress);
-            Optional<Integer> unsignedPreKeyId = sessionBuilder.process(sessionRecord, ciphertext, capturer);
-            byte[] plaintext = decrypt(sessionRecord, ciphertext.getWhisperMessage(), capturer);
+            Optional<Integer> unsignedPreKeyId = sessionBuilder.process(sessionRecord, ciphertext, receiveCapturer);
+            byte[] plaintext = decrypt(sessionRecord, ciphertext.getWhisperMessage(), receiveCapturer, nextSendCapturer);
 
             callback.handlePlaintext(plaintext);
 
@@ -177,10 +177,12 @@ public class SessionCipher {
      *                                   is no longer supported.
      * @throws NoSessionException        if there is no established session for this contact.
      */
-    public byte[] decrypt(SignalMessage ciphertext, JCrypToolCapturer capturer)
+    public byte[] decrypt(
+            SignalMessage ciphertext, JCrypToolCapturer receiveCapturer, JCrypToolCapturer nextSendCapturer
+    )
             throws InvalidMessageException, DuplicateMessageException, LegacyMessageException,
             NoSessionException, UntrustedIdentityException {
-        return decrypt(ciphertext, new NullDecryptionCallback(), capturer);
+        return decrypt(ciphertext, new NullDecryptionCallback(), receiveCapturer, nextSendCapturer);
     }
 
     /**
@@ -200,7 +202,7 @@ public class SessionCipher {
      *                                   is no longer supported.
      * @throws NoSessionException        if there is no established session for this contact.
      */
-    public byte[] decrypt(SignalMessage ciphertext, DecryptionCallback callback, JCrypToolCapturer capturer)
+    public byte[] decrypt(SignalMessage ciphertext, DecryptionCallback callback, JCrypToolCapturer receiveCapturer, JCrypToolCapturer nextSendCapturer)
             throws InvalidMessageException, DuplicateMessageException, LegacyMessageException,
             NoSessionException, UntrustedIdentityException {
         synchronized (SESSION_LOCK) {
@@ -210,7 +212,7 @@ public class SessionCipher {
             }
 
             SessionRecord sessionRecord = sessionStore.loadSession(remoteAddress);
-            byte[] plaintext = decrypt(sessionRecord, ciphertext, capturer);
+            byte[] plaintext = decrypt(sessionRecord, ciphertext, receiveCapturer, nextSendCapturer);
 
             if (!identityKeyStore.isTrustedIdentity(remoteAddress, sessionRecord.getSessionState().getRemoteIdentityKey(), IdentityKeyStore.Direction.RECEIVING)) {
                 throw new UntrustedIdentityException(remoteAddress.getName(), sessionRecord.getSessionState().getRemoteIdentityKey());
@@ -226,7 +228,7 @@ public class SessionCipher {
         }
     }
 
-    private byte[] decrypt(SessionRecord sessionRecord, SignalMessage ciphertext, JCrypToolCapturer capturer)
+    private byte[] decrypt(SessionRecord sessionRecord, SignalMessage ciphertext, JCrypToolCapturer receiveCapturer, JCrypToolCapturer nextSendCapturer)
             throws DuplicateMessageException, LegacyMessageException, InvalidMessageException {
         synchronized (SESSION_LOCK) {
             Iterator<SessionState> previousStates = sessionRecord.getPreviousSessionStates().iterator();
@@ -234,7 +236,7 @@ public class SessionCipher {
 
             try {
                 SessionState sessionState = new SessionState(sessionRecord.getSessionState());
-                byte[] plaintext = decrypt(sessionState, ciphertext, capturer);
+                byte[] plaintext = decrypt(sessionState, ciphertext, receiveCapturer, nextSendCapturer);
 
                 sessionRecord.setState(sessionState);
                 return plaintext;
@@ -245,7 +247,7 @@ public class SessionCipher {
             while (previousStates.hasNext()) {
                 try {
                     SessionState promotedState = new SessionState(previousStates.next());
-                    byte[] plaintext = decrypt(promotedState, ciphertext, capturer);
+                    byte[] plaintext = decrypt(promotedState, ciphertext, receiveCapturer, nextSendCapturer);
 
                     previousStates.remove();
                     sessionRecord.promoteState(promotedState);
@@ -260,7 +262,12 @@ public class SessionCipher {
         }
     }
 
-    private byte[] decrypt(SessionState sessionState, SignalMessage ciphertextMessage, JCrypToolCapturer capturer)
+    private byte[] decrypt(
+            SessionState sessionState,
+            SignalMessage ciphertextMessage,
+            JCrypToolCapturer receiveCapturer,
+            JCrypToolCapturer nextSendCapturer
+    )
             throws InvalidMessageException, DuplicateMessageException, LegacyMessageException {
         if (!sessionState.hasSenderChain()) {
             throw new InvalidMessageException("Uninitialized session!");
@@ -274,9 +281,10 @@ public class SessionCipher {
 
         ECPublicKey theirEphemeral = ciphertextMessage.getSenderRatchetKey();
         int counter = ciphertextMessage.getCounter();
-        ChainKey chainKey = getOrCreateChainKey(sessionState, theirEphemeral, capturer);
-        MessageKeys messageKeys = getOrCreateMessageKeys(sessionState, theirEphemeral,
-                chainKey, counter, capturer);
+        ChainKey chainKey = getOrCreateChainKey(sessionState, theirEphemeral, receiveCapturer, nextSendCapturer);
+        MessageKeys messageKeys = getOrCreateMessageKeys(
+                sessionState, theirEphemeral, chainKey, counter, receiveCapturer
+        );
 
         ciphertextMessage.verifyMac(sessionState.getRemoteIdentityKey(),
                 sessionState.getLocalIdentityKey(),
@@ -307,7 +315,12 @@ public class SessionCipher {
         }
     }
 
-    private ChainKey getOrCreateChainKey(SessionState sessionState, ECPublicKey theirEphemeral, JCrypToolCapturer capturer)
+    private ChainKey getOrCreateChainKey(
+            SessionState sessionState,
+            ECPublicKey theirEphemeral,
+            JCrypToolCapturer receiveCapturer,
+            JCrypToolCapturer nextSendCapturer
+    )
             throws InvalidMessageException {
         try {
             if (sessionState.hasReceiverChain(theirEphemeral)) {
@@ -315,9 +328,9 @@ public class SessionCipher {
             } else {
                 RootKey rootKey = sessionState.getRootKey();
                 ECKeyPair ourEphemeral = sessionState.getSenderRatchetKeyPair();
-                Pair<RootKey, ChainKey> receiverChain = rootKey.createChain(theirEphemeral, ourEphemeral, capturer, capturer.receiveChain);
+                Pair<RootKey, ChainKey> receiverChain = rootKey.createChain(theirEphemeral, ourEphemeral, receiveCapturer, receiveCapturer.receiveChain);
                 ECKeyPair ourNewEphemeral = Curve.generateKeyPair();
-                Pair<RootKey, ChainKey> senderChain = receiverChain.first().createChain(theirEphemeral, ourNewEphemeral, new JCrypToolCapturer(), new JCrypToolCapturer().sendChain);
+                Pair<RootKey, ChainKey> senderChain = receiverChain.first().createChain(theirEphemeral, ourNewEphemeral, nextSendCapturer, nextSendCapturer.sendChain);
 
                 sessionState.setRootKey(senderChain.first());
                 sessionState.addReceiverChain(theirEphemeral, receiverChain.second());
@@ -461,8 +474,4 @@ public class SessionCipher {
             }
         }
     }
-
-	public EncryptCallbackHandler encrypt() {
-		return encrypt(new JCrypToolCapturer());
-	}
 }

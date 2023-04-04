@@ -7,17 +7,13 @@ import org.jcryptool.visual.signalencryption.algorithm.JCrypToolCapturer;
 import org.jcryptool.visual.signalencryption.algorithm.SessionManager;
 import org.jcryptool.visual.signalencryption.ui.Messages;
 import org.whispersystems.libsignal.SignalProtocolAddress;
+import org.whispersystems.libsignal.SessionCipher;
 import org.whispersystems.libsignal.SessionCipher.EncryptCallbackHandler;
-import org.whispersystems.libsignal.ecc.ECPrivateKey;
-import org.whispersystems.libsignal.ecc.ECPublicKey;
-import org.whispersystems.libsignal.ratchet.ChainKey;
 import org.whispersystems.libsignal.ratchet.MessageKeys;
-import org.whispersystems.libsignal.ratchet.RootKey;
 
 import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.ALICE;
 import static org.jcryptool.visual.signalencryption.communication.CommunicationEntity.BOB;
 import static org.jcryptool.visual.signalencryption.util.ToHex.toHex;
-import static org.jcryptool.visual.signalencryption.util.ToHex.toHexString;
 
 /**
  * Dataclass for Double-Ratchet and message information for one message
@@ -175,7 +171,7 @@ public class MessageContext {
 		return toHex(receivingCapture.publicDiffieHellmanRatchetKey.serialize());
 	}
 	
-	public String diffieHellmanReceiverAgreedKey() {
+	public String diffieHellmanReceiverOutput() {
 		return toHex(receivingCapture.diffieHellmanRatchetOutput);
 	}
 
@@ -209,7 +205,7 @@ public class MessageContext {
 		return toHex(receivingCapture.rootChainKey);
 	}
 	
-	public String receiverRootInput() {
+	public String receiverRootConstantInput() {
 		return toHex(receivingCapture.rootChainConstantInput);
 	}
 
@@ -233,6 +229,9 @@ public class MessageContext {
 	public String senderChainConstantInput() {
 		return toHex(sendingCapture.sendChain.chainConstantInput);
 	}
+	public String senderChainOutput() {
+		return toHex(sendingCapture.sendChain.kdfOutput);
+	}
 	public Map<String, String> senderChainMessageKey() {
 		return resolveMessageKey(sendingCapture.sendChain.messageKey);
 	}
@@ -245,6 +244,11 @@ public class MessageContext {
 	public String receiverChainConstantInput() {
 		return toHex(receivingCapture.receiveChain.chainConstantInput);
 	}
+	
+	public String receiverChainOutput() {
+		return toHex(receivingCapture.receiveChain.kdfOutput);
+	}
+
 	public Map<String, String> receiverChainMessageKey() {
 		return resolveMessageKey(receivingCapture.receiveChain.messageKey);
 	}
@@ -270,6 +274,8 @@ public class MessageContext {
 	public static class Builder {
 		private CommunicationEntity sendingEntity = ALICE;
 		private String message = Messages.SignalEncryption_aliceDefaultMessage;
+		private SessionCipher aliceCipher;
+		private SessionCipher bobCipher;
 		private JCrypToolCapturer sendingCapture;
 		private JCrypToolCapturer receivingCapture = new JCrypToolCapturer();
 		private EncryptCallbackHandler encryptHandler;
@@ -292,13 +298,32 @@ public class MessageContext {
 			return this;
 		}
 		
-		public Builder encryptHandler(EncryptCallbackHandler encryptHandler) {
-			this.encryptHandler = encryptHandler;
+		public Builder aliceSessionCipher(SessionCipher aliceSessionCipher) {
+			this.aliceCipher = aliceSessionCipher;
 			return this;
 		}
+		
+		public Builder bobSessionCipher(SessionCipher bobSessionCipher) {
+			this.bobCipher = bobSessionCipher;
+			return this;
+		}
+		
+		// public Builder encryptHandler(EncryptCallbackHandler encryptHandler) {
+		// 	this.encryptHandler = encryptHandler;
+		// 	return this;
+		// }
 
 		public MessageContext build() {
-			assert sendingCapture != null && encryptHandler != null; // Don't write calls that not set these values
+			// Don't call build() without setting these values
+			assert sendingCapture != null && aliceCipher != null && bobCipher != null;
+			
+			EncryptCallbackHandler encryptHandler;
+			if (sendingEntity == ALICE) {
+				encryptHandler = aliceCipher.encrypt(sendingCapture);
+			} else {
+				encryptHandler = bobCipher.encrypt(sendingCapture);
+			}
+			
 			return new MessageContext(sendingEntity, message, sendingCapture, receivingCapture, encryptHandler);
 		}
 

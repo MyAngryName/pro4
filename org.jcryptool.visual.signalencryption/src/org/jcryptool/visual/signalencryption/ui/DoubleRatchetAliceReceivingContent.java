@@ -9,7 +9,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
-import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
 public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityContent {
     
@@ -148,7 +147,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceReceivingChain1 = new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -191,7 +190,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceReceivingChain2 = new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -214,13 +213,13 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceReceivingChain3 = new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
 
         txt_aliceReceivingChain4 = new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel4)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -245,7 +244,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceReceivingChain5 =new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel5)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -258,7 +257,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -281,7 +280,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceRootChain2 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -304,7 +303,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceRootChain3 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -317,7 +316,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceDiffieHellman1 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
                 .title(aliceDiffieHellmanLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -340,7 +339,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceDiffieHellman2 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
                 .title(aliceDiffieHellmanLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -363,7 +362,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
 
         txt_aliceDiffieHellman3 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
                 .title(aliceDiffieHellmanLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 

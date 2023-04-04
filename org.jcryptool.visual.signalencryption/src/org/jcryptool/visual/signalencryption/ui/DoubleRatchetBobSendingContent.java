@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
-import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
 public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityContent {
     
@@ -147,7 +146,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobSendingChain1 = new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -191,7 +190,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         
         txt_bobSendingChain3 =  new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
         
@@ -214,13 +213,13 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
         
         txt_bobSendingChain2 =  new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
         txt_bobSendingChain4 =  new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel4)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -247,7 +246,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobSendingChain5 =  new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel5)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobSendingChain5.setLayoutData(Layout.gd_algorithmLabels());
     }
@@ -260,7 +259,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
                 .title(bobRootChainLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -283,7 +282,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
                 .title(bobRootChainLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -306,7 +305,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
                 .title(bobRootChainLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -319,7 +318,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobDiffieHellman1 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
                 .title(bobDiffieHellmanLabel1)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -342,7 +341,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
                 .title(bobDiffieHellmanLabel2)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -365,7 +364,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
 
         txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
                 .title(bobDiffieHellmanLabel3)
-                .popupProvider(createShowValueFunction("DH key calculation", "0"))
+                .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
         txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 

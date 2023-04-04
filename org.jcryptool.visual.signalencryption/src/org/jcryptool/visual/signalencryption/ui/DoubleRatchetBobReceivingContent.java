@@ -9,9 +9,8 @@ import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
 import org.jcryptool.visual.signalencryption.graphics.ImageComponent;
 import org.jcryptool.visual.signalencryption.graphics.Positioning.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
-import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
-import java.util.List;
+import java.util.Map;
 
 public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityContent {
     
@@ -189,7 +188,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	
 	    txt_bobDiffieHellman1 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel1)
-	            .popupProvider(createShowValueFunction("Alice DH Public Key from message", "EC Public Key", "0"))
+	            .popupProvider(FlowChartNodePopup.create("EC Public Key", "0"))
 	            .buildOperationNode();
 	    txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
 	    
@@ -197,7 +196,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	
 	    txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel2)
-	            .popupProvider(createShowValueFunction("DH key calculation", "Shared Secret", "1"))
+	            .popupProvider(FlowChartNodePopup.create("Shared Secret", "1"))
 	            .buildOperationNode();
 	    txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
 	
@@ -205,7 +204,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	
 	    txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel3)
-	            .popupProvider(createShowValueFunction("Bob DH Private Key", "EC Private Key", "2"))
+	            .popupProvider(FlowChartNodePopup.create("EC Private Key", "2"))
 	            .buildOperationNode();
 	    txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 	
@@ -236,13 +235,13 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    
 	    txt_bobRootChain0 = new FlowChartNode.Builder(grp_bobRootChain)
         		.title(bobReceivingChainLabel2)
-        		.popupProvider(createShowValueFunction("Root Chain constant", "Constant", "WhisperChain"))
+        		.popupProvider(FlowChartNodePopup.create("Constant", "WhisperChain"))
         		.buildValueNode();
         txt_bobRootChain0.setLayoutData(Layout.gd_algorithmLabels());
 
 	    txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel1)
-                .popupProvider(createShowValueFunction("Root chain key", "Root-Key", "4"))
+                .popupProvider(FlowChartNodePopup.create("Root-Key", "4"))
 	            .buildOperationNode();
 	    txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
 	    
@@ -250,7 +249,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	
 	    txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel2)
-                .popupProvider(createShowValueFunction("Key Derivation Function", List.of("Chain key", "New Root-Key"), List.of("5", "6")))
+                .popupProvider(FlowChartNodePopup.create(Map.of("Chain key", "5", "New Root-Key", "6")))
 	            .buildOperationNode();
 	    txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
 	
@@ -258,7 +257,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    
 	    txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel3)
-                .popupProvider(createShowValueFunction("New root chain key", "Root-Key", "5"))
+                .popupProvider(FlowChartNodePopup.create("Root-Key", "5"))
 	            .buildOperationNode();
 	    txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
 	    arr_bobRootChainArrow1 = ArrowComponent
@@ -289,7 +288,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         
         txt_bobReceivingChain1 = new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel1)
-	            .popupProvider(createShowValueFunction("Konstanter Wert", "Constant", "WhisperMessage"))
+	            .popupProvider(FlowChartNodePopup.create("Constant", "WhisperMessage"))
                 .buildOperationNode();
         txt_bobReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -297,13 +296,13 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         
         txt_bobReceivingChain2 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel3)
-	            .popupProvider(createShowValueFunction("Sending Chain Key", "Chain-Key", "7"))
+	            .popupProvider(FlowChartNodePopup.create("Chain-Key", "7"))
                 .buildOperationNode();
         txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
         txt_bobReceivingChain3 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel2)
-	            .popupProvider(createShowValueFunction("KDF", List.of("Message Key", "New Chain Key"), List.of("9", "10")))
+	            .popupProvider(FlowChartNodePopup.create(Map.of("Message Key", "9", "New Chain Key", "10")))
                 .buildOperationNode();
         txt_bobReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
         
@@ -323,7 +322,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
         txt_bobReceivingChain4 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel4)
-	            .popupProvider(createShowValueFunction("Neuer Sending Chain Key", "Chain Key", "10"))
+	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
                 .buildOperationNode();
         txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
         
@@ -331,7 +330,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 
         txt_bobReceivingChain5 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel5)
-	            .popupProvider(createShowValueFunction("Message Key", "Message-Key", "9"))
+	            .popupProvider(FlowChartNodePopup.create("Message-Key", "9"))
                 .buildOperationNode();
         txt_bobReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
         

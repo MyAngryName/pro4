@@ -9,9 +9,9 @@ import org.jcryptool.visual.signalencryption.graphics.ComponentDrawComposite;
 import org.jcryptool.visual.signalencryption.graphics.ImageComponent;
 import org.jcryptool.visual.signalencryption.graphics.Positioning.Side;
 import org.jcryptool.visual.signalencryption.util.UiUtils;
-import static org.jcryptool.visual.signalencryption.ui.PopupUtil.createShowValueFunction;
 
 import java.util.List;
+import java.util.Map;
 
 public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityContent {
     
@@ -144,7 +144,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceDiffieHellman1 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
 	            .title(aliceDiffieHellmanLabel1)
-	            .popupProvider(createShowValueFunction("Bob Diffie Hellman Key", "EC Public Key", "1"))
+	            .popupProvider(FlowChartNodePopup.create("EC Public Key", "1"))
 	            .buildValueNode();
 	    
 	    txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
@@ -153,7 +153,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceDiffieHellman2 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
 	            .title(aliceDiffieHellmanLabel2)
-	            .popupProvider(createShowValueFunction("DH key calculation", "Output", "2"))
+	            .popupProvider(FlowChartNodePopup.create("Output", "2"))
 	            .buildOperationNode();
 	    txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
 	    
@@ -161,7 +161,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceDiffieHellman3 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
 	            .title(aliceDiffieHellmanLabel3)
-	            .popupProvider(createShowValueFunction("Alice private Key", "EC Private key", "3"))
+	            .popupProvider(FlowChartNodePopup.create("EC Private key", "3"))
 	            .buildOperationNode();
 	    txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
 	
@@ -191,13 +191,13 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
         
         txt_aliceRootChain0 = new FlowChartNode.Builder(grp_aliceRootChain)
         		.title(aliceSendingChainLabel2)
-        		.popupProvider(createShowValueFunction("Root Chain constant", "Constant", "WhisperChain"))
+        		.popupProvider(FlowChartNodePopup.create("Constant", "WhisperChain"))
         		.buildValueNode();
         txt_aliceRootChain0.setLayoutData(Layout.gd_algorithmLabels());
 
         txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel1)
-                .popupProvider(createShowValueFunction("Root chain key", "Root-Key", "4"))
+                .popupProvider(FlowChartNodePopup.create("Root-Key", "4"))
                 .buildValueNode();
         txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmLabels());
         
@@ -205,7 +205,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 
         txt_aliceRootChain2 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel2)
-                .popupProvider(createShowValueFunction("Key Derivation Function", List.of("Chain key", "New Root-Key"), List.of("5", "6")))
+                .popupProvider(FlowChartNodePopup.create(Map.of("Chain key", "5", "New Root-Key", "6")))
                 .buildOperationNode();
         txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmLabels());
         
@@ -213,7 +213,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 
         txt_aliceRootChain3 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel3)
-                .popupProvider(createShowValueFunction("New root chain key", "Root-Key", "5"))
+                .popupProvider(FlowChartNodePopup.create("Root-Key", "5"))
                 .buildValueNode();
         txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmLabels());
 
@@ -244,13 +244,13 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceSendingChain2 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel2)
-	            .popupProvider(createShowValueFunction("Konstanter Wert", "Constant", "WhisperMessage"))
+	            .popupProvider(FlowChartNodePopup.create("Constant", "WhisperMessage"))
 	            .buildValueNode();
 	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
 
 	    txt_aliceSendingChain1 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel1)
-	            .popupProvider(createShowValueFunction("Sending Chain Key", "Chain-Key", "7"))
+	            .popupProvider(FlowChartNodePopup.create("Chain-Key", "7"))
 	            .buildValueNode();
 	    txt_aliceSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
 	    
@@ -258,7 +258,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceSendingChain3 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel3)
-	            .popupProvider(createShowValueFunction("KDF", List.of("Message Key", "New Chain Key"), List.of("9", "10")))
+	            .popupProvider(FlowChartNodePopup.create(Map.of("Message Key", "9", "New Chain Key", "10")))
 	            .buildOperationNode();
 	    txt_aliceSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
 	    
@@ -278,7 +278,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceSendingChain4 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel4)
-	            .popupProvider(createShowValueFunction("Neuer Sending Chain Key", "Chain Key", "10"))
+	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
 	            .buildValueNode();
 	    txt_aliceSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
 	
@@ -286,7 +286,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	
 	    txt_aliceSendingChain5 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel5)
-	            .popupProvider(createShowValueFunction("Message Key", "Message-Key", "9"))
+	            .popupProvider(FlowChartNodePopup.create("Message-Key", "9"))
 	            .buildValueNode();
 	    txt_aliceSendingChain5.setLayoutData(Layout.gd_algorithmLabels());
 	    

@@ -35,13 +35,13 @@ public class FlowChartNode extends Composite {
 	private final String title;
 	private boolean showing;
 	private Shell popup;
-	private BiFunction<Composite, Integer, Composite> popupProvider;
+	private FlowChartNodePopup popupProvider;
 
 	private static String lock = "";
 	private boolean buttonEnabled;
 
 	private FlowChartNode(Composite parent, int style, String title, String actionName, Type type,
-			BiFunction<Composite, Integer, Composite> popupProvider) {
+			FlowChartNodePopup popupProvider) {
 		super(parent, style);
 		this.popupProvider = popupProvider;
 		this.parentShell = getShell();
@@ -75,8 +75,8 @@ public class FlowChartNode extends Composite {
 		};
 	}
 
-	public void setPopupProvider(BiFunction<Composite, Integer, Composite> popupProvider) {
-		this.popupProvider = popupProvider;
+	public FlowChartNodePopup getPopupProvider() {
+		return this.popupProvider;
 	}
 
 	public String getTitle() {
@@ -199,13 +199,7 @@ public class FlowChartNode extends Composite {
 		private int style = SWT.BORDER;
 		private String title = "NO TITLE";
 		private String actionName = "";
-		private BiFunction<Composite, Integer, Composite> popupProvider = (shell, style) -> {
-			var composite = new Composite(shell, style);
-			var text = new Text(composite, SWT.NONE);
-			text.setText("no content");
-			return composite;
-		};
-
+		private FlowChartNodePopup popupProvider = FlowChartNodePopup.empty();
 		public Builder style(int style) {
 			this.style = style;
 			return this;
@@ -221,7 +215,7 @@ public class FlowChartNode extends Composite {
 			return this;
 		}
 
-		public Builder popupProvider(BiFunction<Composite, Integer, Composite> popupProvider) {
+		public Builder popupProvider(FlowChartNodePopup popupProvider) {
 			this.popupProvider = popupProvider;
 			return this;
 		}

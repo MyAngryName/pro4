@@ -317,7 +317,7 @@ public class SessionCipher {
                 ECKeyPair ourEphemeral = sessionState.getSenderRatchetKeyPair();
                 Pair<RootKey, ChainKey> receiverChain = rootKey.createChain(theirEphemeral, ourEphemeral, capturer, capturer.receiveChain);
                 ECKeyPair ourNewEphemeral = Curve.generateKeyPair();
-                Pair<RootKey, ChainKey> senderChain = receiverChain.first().createChain(theirEphemeral, ourNewEphemeral, capturer, capturer.sendChain);
+                Pair<RootKey, ChainKey> senderChain = receiverChain.first().createChain(theirEphemeral, ourNewEphemeral, new JCrypToolCapturer(), new JCrypToolCapturer().sendChain);
 
                 sessionState.setRootKey(senderChain.first());
                 sessionState.addReceiverChain(theirEphemeral, receiverChain.second());
@@ -355,6 +355,7 @@ public class SessionCipher {
         }
 
         sessionState.setReceiverChainKey(theirEphemeral, chainKey.getNextChainKey());
+        capturer.receiveChain.newChainKey = chainKey.getNextChainKey().getKey();
         return chainKey.getMessageKeys(capturer.receiveChain);
     }
 

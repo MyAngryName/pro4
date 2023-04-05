@@ -54,7 +54,7 @@ public class EncryptionAlgorithm {
         return bobAddress;
     }
     
-    public void generateBoth(STATE state) {
+    public void generateBoth() {
         session.createSessionBoth();
         bobSessionCipher = session.getBobSessionCipher();
         aliceSessionCipher = session.getAliceSessionCipher();
@@ -63,14 +63,14 @@ public class EncryptionAlgorithm {
         bobAddress = session.getBobAddress();
     }
     
-    public void generateAlice(STATE currentState) {
+    public void generateAlice() {
         session.createSessionAlice();
         
         aliceSessionCipher = session.getAliceSessionCipher();
         aliceAddress = session.getAliceAddress();
     }
     
-    public void generateBob(STATE state) {
+    public void generateBob() {
         session.createSessionBob();
         
         bobSessionCipher = session.getBobSessionCipher();

@@ -26,9 +26,10 @@ import org.whispersystems.libsignal.protocol.SignalMessage;
 public class SignalCommunication {
 
 	private List<MessageContext> messageContexts;
-	private EncryptionAlgorithm algorithm;
 	private JCrypToolCapturer preInitializedCapturer;
+	private boolean inProgress = false;
 	private int i;
+	private EncryptionAlgorithm algorithm;
 
 	/**
 	 * Interface between UI "frontend" and algorithm "backend".
@@ -36,8 +37,8 @@ public class SignalCommunication {
 	 * Handle multiple messages and the keys used to encryt/decrypt them. Provide as
 	 * a simple-to-use class with methods similar to an iterator.
 	 */
-	public SignalCommunication() {
-		algorithm = new EncryptionAlgorithm();
+	public SignalCommunication(EncryptionAlgorithm algorithm) {
+		this.algorithm = algorithm;
 		messageContexts = new LinkedList<>();
 
 		messageContexts.add(initialContextWithSender(
@@ -138,6 +139,14 @@ public class SignalCommunication {
 	public boolean isEnd() {
 		return i == messageContexts.size() - 1;
 	}
+	
+	public boolean inProgress() {
+		return inProgress;
+	}
+
+	public void setInProgress() {
+		inProgress = true;
+	}
 
 	/**
 	 * Encrypt the message set in the current {@link MessageContext} and update it.
@@ -231,7 +240,7 @@ public class SignalCommunication {
 		} catch (UntrustedIdentityException | InvalidMessageException | InvalidVersionException
 				| DuplicateMessageException | LegacyMessageException | InvalidKeyIdException | InvalidKeyException
 				| NoSessionException e) {
-			throw new SignalAlgorithmException();
+			throw new SignalAlgorithmException(e);
 		}
 
 	}

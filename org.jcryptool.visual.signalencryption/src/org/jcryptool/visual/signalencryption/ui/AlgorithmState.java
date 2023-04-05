@@ -14,11 +14,12 @@ public class AlgorithmState {
 	private static AlgorithmState instance;
 	private STATE currentState = STATE.INITIALIZING;
 
-	private EncryptionAlgorithm signalEncryptionAlgorithm;
 	private SignalCommunication communication;
+	private EncryptionAlgorithm signalEncryptionAlgorithm;
 
 	private AlgorithmState() {
-		communication = new SignalCommunication();
+		signalEncryptionAlgorithm = new EncryptionAlgorithm();
+		communication = new SignalCommunication(signalEncryptionAlgorithm);
 	}
 
 	public static AlgorithmState get() {
@@ -36,24 +37,6 @@ public class AlgorithmState {
 		INITIALIZING, PRE_KEY_SIGNAL_MESSAGE, BOB_SEND_MSG, ALICE_SEND_MSG;
 	}
 
-	public void generateBothPartiesKeys() {
-		signalEncryptionAlgorithm.generateBoth(currentState);
-	}
-
-	public void generateAliceKeys() {
-		if (currentState == STATE.INITIALIZING) {
-			signalEncryptionAlgorithm.generateAlice(currentState);
-			// TODO Set keys in UI
-		}
-	}
-
-	public void generateBobKeys() {
-		if (currentState == STATE.INITIALIZING) {
-			signalEncryptionAlgorithm.generateBob(currentState);
-			// TODO Set keys in UI
-		}
-	}
-	
 	public EncryptionAlgorithm getSignalEncryptionAlgorithm() {
 		return signalEncryptionAlgorithm;
 	}
@@ -74,5 +57,9 @@ public class AlgorithmState {
 	public SignalCommunication getCommunication() {
 		return communication;
 	}
-
+	
+	public void resetCommunication() {
+		communication = new SignalCommunication(signalEncryptionAlgorithm);
+	}
+	
 }

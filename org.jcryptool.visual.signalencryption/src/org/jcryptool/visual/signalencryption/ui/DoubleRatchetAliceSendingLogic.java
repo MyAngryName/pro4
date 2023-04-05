@@ -94,6 +94,9 @@ public class DoubleRatchetAliceSendingLogic {
 
 				// Pick up user input text
 				aliceContent.txt_aliceCipherText.setText(AlgorithmState.get().getAliceEncryptedMessage());
+				
+				// Notify the UI that the user has already progressed and viewed values in this tab
+				AlgorithmState.get().getCommunication().setInProgress();
 			}
 
 			@Override

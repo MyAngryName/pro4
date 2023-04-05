@@ -307,6 +307,8 @@ public class DoubleRatchetView extends Composite {
     }
 
     public void resetAll() {
+    	showAliceSending();
+    	AlgorithmState.get().resetCommunication();
         signalEncryptionUiState.reset(this);
     }
     

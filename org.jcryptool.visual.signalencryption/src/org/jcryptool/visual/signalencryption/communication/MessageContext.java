@@ -24,8 +24,7 @@ import static org.jcryptool.visual.signalencryption.util.ToHex.toHex;
  */
 public class MessageContext {
 
-	private static final String MESSAGE_NO_SESSION = "Keine Sitzung begonnen";
-	private static final String UNKNOWN = "Unknown";
+	private static final int EC_PUBLIC_KEY_SIZE = 32;
 
 	private final CommunicationEntity sendingEntity;
 	private final EncryptCallbackHandler encryptHandler;
@@ -157,7 +156,8 @@ public class MessageContext {
 	// Diffie-Hellman Getters
 	/////////////////////////
 	public String diffieHellmanSenderPublicKey() {
-		return toHex(sendingCapture.publicDiffieHellmanRatchetKey.serialize());
+		// For some reason Signal preprends a 05 for this key (33) bytes, so we ignore that here.
+		return toHex(sendingCapture.publicDiffieHellmanRatchetKey.serialize(), 1, EC_PUBLIC_KEY_SIZE);
 	}
 	
 	public String diffieHellmanSenderOutput() {
@@ -168,7 +168,8 @@ public class MessageContext {
 		return toHex(sendingCapture.privateDiffieHellmanRatchetKey.serialize());
 	}
 	public String diffieHellmanReceiverPublicKey() {
-		return toHex(receivingCapture.publicDiffieHellmanRatchetKey.serialize());
+		// For some reason Signal preprends a 05 for this key (33) bytes, so we ignore that here.
+		return toHex(receivingCapture.publicDiffieHellmanRatchetKey.serialize(), 1, EC_PUBLIC_KEY_SIZE);
 	}
 	
 	public String diffieHellmanReceiverOutput() {

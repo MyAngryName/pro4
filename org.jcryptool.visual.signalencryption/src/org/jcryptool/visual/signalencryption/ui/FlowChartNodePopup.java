@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.custom.StyledText;
 import org.jcryptool.core.logging.utils.LogUtil;
+import org.jcryptool.core.util.fonts.FontService;
 import org.jcryptool.core.util.ui.layout.GridDataBuilder;
 
 /**
@@ -79,6 +80,7 @@ public class FlowChartNodePopup implements BiFunction<Composite, Integer, Compos
 				label.setText(keyValuePair.getKey());
 				label.setLayoutData(GridDataBuilder.with(SWT.FILL, SWT.TOP, false, false).get());
 				txt.setLayoutData(GridDataBuilder.with(SWT.FILL, SWT.TOP, true, false).get());
+				txt.setFont(FontService.getNormalMonospacedFont());
 				txt.setText(keyValuePair.getValue());
 			}
 			return composite;

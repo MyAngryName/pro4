@@ -67,7 +67,7 @@ public class AlgorithmState {
 		if (currentState == STATE.INITIALIZING) {
 			return "Nothing here";
 		} else {
-			return ToHex.toHexString(communication.current().getCiphertextMessage().orElse(new byte[] {}));
+			return ToHex.toHex(communication.current().getCiphertextMessage().orElse(new byte[] {}));
 		}
 	}
 

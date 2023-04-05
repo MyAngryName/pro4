@@ -263,7 +263,7 @@ public class DoubleRatchetAliceSendingLogic {
 				var communication = AlgorithmState.get().getCommunication();
 				var ciphertextOptional = communication.current().getCiphertextMessage();
 				var ciphertextAsBytes = ciphertextOptional.orElse("An error occured".getBytes());
-				var ciphertextAsString = ToHex.toHexString(ciphertextAsBytes);
+				var ciphertextAsString = ToHex.toHex(ciphertextAsBytes);
 				aliceContent.txt_aliceCipherText.setText(ciphertextAsString);
 				bobContent.txt_bobCipherText.setText(ciphertextAsString);
 

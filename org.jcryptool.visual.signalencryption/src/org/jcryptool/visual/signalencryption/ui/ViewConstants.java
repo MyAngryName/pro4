@@ -25,18 +25,18 @@ public class ViewConstants {
      * This is the width hint of the algorithm boxes, a major part of the plugin's
      * flow elements.
      */
-    public static final int BOX_WIDTH = 165;
+    public static final int BOX_WIDTH = 175;
     
     /**
      * This is the width hint of the (slim) algorithm boxes, a major part of the plugin's
      * flow elements.
      */
-    public static final int BOX_WIDTH_SLIM = 100;
+    public static final int BOX_WIDTH_SLIM = 90;
 
     /**
      * Any chain's horizontal spacing
      */
-    public static final int CHAIN_HORIZONTAL_SPACE = 25;
+    public static final int CHAIN_HORIZONTAL_SPACE = 15;
 
     /**
      * This is the height hint of the algorithm boxes, a major part of the plugin's
@@ -67,12 +67,6 @@ public class ViewConstants {
      */
     public static final int MAIL_ICON_X_OFFSET = 35;
     
-    /**
-     * The distance from the constant node to the send/receive node
-     */
-    public static final int CONSTANT_INLINE = BOX_WIDTH / 4;
-    
-
     /**
      * Arrow line thickness
      */

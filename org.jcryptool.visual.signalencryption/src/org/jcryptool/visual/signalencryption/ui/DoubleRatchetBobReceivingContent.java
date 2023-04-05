@@ -57,6 +57,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     private String bobReceivingChainLabel4 = Messages.SignalEncryption_bobReceivingChainLabel4;
     private String bobReceivingChainLabel5 = Messages.SignalEncryption_bobReceivingChainLabel5;
 
+	protected ArrowComponent arr_bobMessagePublicKey;
     protected ArrowComponent arr_bobReceivingChainArrow1;
     protected ArrowComponent arr_bobReceivingChainArrow2;
     protected ArrowComponent arr_bobReceivingChainArrow3;
@@ -75,7 +76,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Group grp_bobSpace1;
     Group grp_bobDiffieHellman;
     Group grp_bobMessagebox;
-    Composite cmp_bobDecryptedMessage;
+    Group grp_bobDecryptedMessage;
     
     ComponentDrawComposite cmp_bobReceivingAlgorithm;
     Composite cmp_bobDiffieHellman;
@@ -129,7 +130,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         grp_bobDiffieHellman = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobRootChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobReceivingChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
-        cmp_bobDecryptedMessage = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        grp_bobDecryptedMessage = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         
         createBobEncryptedMessagebox();
         createBobDiffieHellmanChain();
@@ -195,6 +196,17 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmNodes());
 	    
+	    arr_bobMessagePublicKey = ArrowComponent
+	    		.fromAnchors()
+	    		.fromAnchorX(grp_bobMessagebox, Side.EAST)
+	    		.fromAnchorY(txt_bobDiffieHellman1, Side.WEST)
+	    		.outgoingDirection(Side.EAST)
+	    		.toAnchorX(grp_bobDiffieHellman, Side.WEST)
+	    		.toAnchorY(txt_bobDiffieHellman1, Side.WEST)
+	    		.incomingDirection(Side.WEST)
+	    		.on(cmp_bobReceivingAlgorithm)
+	    		.create();
+	    
 	    txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel2)
 	            .popupProvider(FlowChartNodePopup.create("Shared Secret", "1"))
@@ -223,6 +235,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	
     public void setDiffieHellmanChainVisible(boolean visible) {
     	grp_bobDiffieHellman.setVisible(visible);
+    	arr_bobMessagePublicKey.setVisible(visible);
     	arr_bobDiffieHellmanArrow1.setVisible(visible);
     	arr_bobDiffieHellmanArrow2.setVisible(visible);
     }
@@ -345,11 +358,10 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 		arr_bobReceivingChainArrow1.setVisible(visible);
 		arr_bobReceivingChainArrow2.setVisible(visible);
 		arr_bobReceivingChainArrow3.setVisible(visible);
-		arr_bobReceivingChainArrow4.setVisible(visible);
     }
 	
     private void createBobDecryptedMessagebox() {
-    	txt_bobReceivingChain4 =  new FlowChartNode.Builder(cmp_bobDecryptedMessage)
+    	txt_bobReceivingChain4 =  new FlowChartNode.Builder(grp_bobDecryptedMessage)
                 .title(bobReceivingChainLabel4)
 	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
                 .buildValueNode();
@@ -358,17 +370,17 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	.fromAnchorX(txt_bobReceivingChain3, Side.EAST)
 	    	.fromAnchorY(txt_bobReceivingChain3, Side.EAST)
 	    	.outgoingDirection(Side.EAST)
-	    	.toAnchorX(cmp_bobDecryptedMessage, Side.WEST)
+	    	.toAnchorX(grp_bobDecryptedMessage, Side.WEST)
 	    	.toAnchorY(txt_bobReceivingChain4, Side.WEST)
 	    	.incomingDirection(Side.WEST)
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
 
-	    cmp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
-	    cmp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
-	    // cmp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
+	    grp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
+	    grp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
+	    grp_bobDecryptedMessage.setText("Nachricht entschlüsseln");
 	    txt_bobPlainText = new Text(
-	            cmp_bobDecryptedMessage,
+	            grp_bobDecryptedMessage,
 	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
 	    );
 	    txt_bobPlainText.setText(MessageboxPlainText);
@@ -377,7 +389,8 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	}
     
     public void setDecryptedMessageboxVisible(boolean visible) {
-    	cmp_bobDecryptedMessage.setVisible(visible);
+		arr_bobReceivingChainArrow4.setVisible(visible);
+    	grp_bobDecryptedMessage.setVisible(visible);
     }
 
 	private void createBobArrowSpaces() {

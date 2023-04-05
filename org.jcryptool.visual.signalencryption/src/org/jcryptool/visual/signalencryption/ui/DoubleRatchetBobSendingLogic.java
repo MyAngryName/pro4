@@ -1,5 +1,7 @@
 package org.jcryptool.visual.signalencryption.ui;
 
+import static org.jcryptool.visual.signalencryption.util.ToHex.toHex;
+
 import org.jcryptool.core.logging.utils.LogUtil;
 import org.jcryptool.visual.signalencryption.SignalEncryptionPlugin;
 import org.jcryptool.visual.signalencryption.exceptions.SignalAlgorithmException;
@@ -327,7 +329,7 @@ public class DoubleRatchetBobSendingLogic {
                 var communication = AlgorithmState.get().getCommunication();
                 var ciphertextOptional = communication.current().getCiphertextMessage();
                 var ciphertextAsBytes = ciphertextOptional.orElse("An error occured".getBytes());
-                var ciphertextAsString = ToHex.toHexString(ciphertextAsBytes);
+                var ciphertextAsString = toHex(ciphertextAsBytes);
                 aliceContent.txt_aliceCipherText.setText(ciphertextAsString);
                 bobContent.txt_bobCipherText.setText(ciphertextAsString);
                 

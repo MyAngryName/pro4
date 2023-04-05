@@ -33,6 +33,10 @@ public class ViewConstants {
      */
     public static final int BOX_WIDTH_SLIM = 100;
 
+    /**
+     * Any chain's horizontal spacing
+     */
+    public static final int CHAIN_HORIZONTAL_SPACE = 25;
 
     /**
      * This is the height hint of the algorithm boxes, a major part of the plugin's

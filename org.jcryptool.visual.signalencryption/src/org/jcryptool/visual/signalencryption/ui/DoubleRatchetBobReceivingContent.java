@@ -75,7 +75,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     Group grp_bobSpace1;
     Group grp_bobDiffieHellman;
     Group grp_bobMessagebox;
-    Group grp_bobDecryptedMessage;
+    Composite cmp_bobDecryptedMessage;
     
     ComponentDrawComposite cmp_bobReceivingAlgorithm;
     Composite cmp_bobDiffieHellman;
@@ -129,7 +129,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         grp_bobDiffieHellman = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobRootChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         grp_bobReceivingChain = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
-        grp_bobDecryptedMessage = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
+        cmp_bobDecryptedMessage = new Group(cmp_bobReceivingAlgorithm, SWT.NONE);
         
         createBobEncryptedMessagebox();
         createBobDiffieHellmanChain();
@@ -195,15 +195,11 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmNodes());
 	    
-	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-	
 	    txt_bobDiffieHellman2 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel2)
 	            .popupProvider(FlowChartNodePopup.create("Shared Secret", "1"))
 	            .buildOperationNode();
 	    txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmNodes());
-	
-	    UiUtils.insertSpacers(grp_bobDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
 	
 	    txt_bobDiffieHellman3 =  new FlowChartNode.Builder(grp_bobDiffieHellman)
 	            .title(bobDiffieHellmanLabel3)
@@ -240,7 +236,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
         		.title(bobReceivingChainLabel2)
         		.popupProvider(FlowChartNodePopup.create("Constant", "WhisperChain"))
         		.buildValueNode();
-        txt_bobRootChain0.setLayoutData(Layout.gd_algorithmNodes());
+        txt_bobRootChain0.setLayoutData(Layout.gd_algorithmNodesSlim());
 
 	    txt_bobRootChain1 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel1)
@@ -248,7 +244,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_bobRootChain1.setLayoutData(Layout.gd_algorithmNodes());
 	    
-	    UiUtils.insertSpacers(grp_bobRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_bobRootChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 	
 	    txt_bobRootChain2 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel2)
@@ -262,8 +258,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    		.on(cmp_bobReceivingAlgorithm)
 	    		.create();
 	
-	
-	    UiUtils.insertSpacers(grp_bobRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_bobRootChain, 1);
 	    
 	    txt_bobRootChain3 =  new FlowChartNode.Builder(grp_bobRootChain)
 	            .title(bobRootChainLabel3)
@@ -309,10 +304,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
                 .buildValueNode();
         txt_bobReceivingChain2.setLayoutData(Layout.gd_algorithmNodes());
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.BOX_WIDTH_SLIM, ViewConstants.BOX_HEIGHT);
-        UiUtils.insertSpacers(grp_bobReceivingChain, 2, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.BOX_WIDTH_SLIM, ViewConstants.BOX_HEIGHT);
+        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 
         txt_bobReceivingChain3 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel2)
@@ -332,17 +324,9 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
 
-        UiUtils.insertSpacers(grp_bobReceivingChain, 3);
+        UiUtils.insertSpacers(grp_bobReceivingChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 
-        txt_bobReceivingChain4 =  new FlowChartNode.Builder(grp_bobReceivingChain)
-                .title(bobReceivingChainLabel4)
-	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
-                .buildValueNode();
-        txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmNodes());
-
-        UiUtils.insertSpacers(grp_bobReceivingChain, 1);
-        
-        txt_bobReceivingChain5 =  new FlowChartNode.Builder(grp_bobReceivingChain)
+                txt_bobReceivingChain5 =  new FlowChartNode.Builder(grp_bobReceivingChain)
                 .title(bobReceivingChainLabel5)
 	            .popupProvider(FlowChartNodePopup.create("Message-Key", "9"))
                 .buildValueNode();
@@ -353,16 +337,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	    	.to(txt_bobReceivingChain5).north()
 	    	.on(cmp_bobReceivingAlgorithm)
 	    	.withDefaults();
-	    arr_bobReceivingChainArrow4 = ArrowComponent.fromAnchors()
-	    	.fromAnchorX(txt_bobReceivingChain3, Side.SOUTH)
-	    	.fromAnchorY(txt_bobReceivingChain4, Side.WEST)
-	    	.outgoingDirection(Side.EAST)
-	    	.toAnchorX(txt_bobReceivingChain4, Side.WEST)
-	    	.toAnchorY(txt_bobReceivingChain4, Side.WEST)
-	    	.incomingDirection(Side.WEST)
-	    	.on(cmp_bobReceivingAlgorithm)
-	    	.withDefaults();
-    }
+	        }
 
 	public void setReceivingChainVisible(boolean visible) {
 		cmp_bobArrowSpace2.setVisible(visible);
@@ -374,11 +349,26 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
     }
 	
     private void createBobDecryptedMessagebox() {
-	    grp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
-	    grp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
-	    grp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
+    	txt_bobReceivingChain4 =  new FlowChartNode.Builder(cmp_bobDecryptedMessage)
+                .title(bobReceivingChainLabel4)
+	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
+                .buildValueNode();
+        txt_bobReceivingChain4.setLayoutData(Layout.gd_algorithmNodes());
+        arr_bobReceivingChainArrow4 = ArrowComponent.fromAnchors()
+	    	.fromAnchorX(txt_bobReceivingChain3, Side.EAST)
+	    	.fromAnchorY(txt_bobReceivingChain3, Side.EAST)
+	    	.outgoingDirection(Side.EAST)
+	    	.toAnchorX(cmp_bobDecryptedMessage, Side.WEST)
+	    	.toAnchorY(txt_bobReceivingChain4, Side.WEST)
+	    	.incomingDirection(Side.WEST)
+	    	.on(cmp_bobReceivingAlgorithm)
+	    	.withDefaults();
+
+	    cmp_bobDecryptedMessage.setLayout(Layout.gl_messageboxGroup());
+	    cmp_bobDecryptedMessage.setLayoutData(Layout.gd_messageboxComposite());
+	    // cmp_bobDecryptedMessage.setText("Entschlüsselte Nachricht");
 	    txt_bobPlainText = new Text(
-	            grp_bobDecryptedMessage,
+	            cmp_bobDecryptedMessage,
 	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY
 	    );
 	    txt_bobPlainText.setText(MessageboxPlainText);
@@ -387,7 +377,7 @@ public class DoubleRatchetBobReceivingContent implements DoubleRatchetEntityCont
 	}
     
     public void setDecryptedMessageboxVisible(boolean visible) {
-    	grp_bobDecryptedMessage.setVisible(visible);
+    	cmp_bobDecryptedMessage.setVisible(visible);
     }
 
 	private void createBobArrowSpaces() {

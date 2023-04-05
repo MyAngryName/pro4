@@ -7,7 +7,7 @@ import org.eclipse.swt.layout.GridLayout;
 
 public class Layout {
 
-    private Layout() {
+	private Layout() {
         // Private constructor to prevent instantiation of this class with only static methods.
     }
 
@@ -30,7 +30,7 @@ public class Layout {
     }
     
     public static GridLayout gl_sendingReceivingChainComposite(int alignment) {
-    	return gl_genericChainComposite(alignment, 3);
+    	return gl_genericChainComposite(alignment, 2);
     }
     
     public static GridLayout gl_rootChainComposite(int alignment) {
@@ -39,24 +39,26 @@ public class Layout {
 
     public static GridLayout gl_genericChainComposite(int alignment, int numColumns) {
         var gl_sendingReceivingChainComposite = new GridLayout(numColumns, false);
-        gl_sendingReceivingChainComposite.marginWidth = 0;
-        gl_sendingReceivingChainComposite.horizontalSpacing = 25;
-        if (alignment == SWT.LEFT) {
-            gl_sendingReceivingChainComposite.marginRight = ViewConstants.HORIZONTAL_SPACING;
-            gl_sendingReceivingChainComposite.marginLeft = 0;
-        } else if (alignment == SWT.RIGHT) {
-            gl_sendingReceivingChainComposite.marginRight = 0;
-            gl_sendingReceivingChainComposite.marginLeft = ViewConstants.HORIZONTAL_SPACING;
-        } else {
-            throw new NoSuchElementException(
-                    "PROGRAMMING ERROR: This method takes SWT.LEFT or SWT.RIGHT as argument, "
-                    + "nothing else.");
-        }
+        gl_sendingReceivingChainComposite.horizontalSpacing = ViewConstants.CHAIN_HORIZONTAL_SPACE;
+        gl_sendingReceivingChainComposite.verticalSpacing = ViewConstants.BOX_HEIGHT;
+        // if (alignment == SWT.LEFT) {
+        //     gl_sendingReceivingChainComposite.marginRight = ViewConstants.HORIZONTAL_SPACING;
+        //     gl_sendingReceivingChainComposite.marginLeft = 0;
+        // } else if (alignment == SWT.RIGHT) {
+        //     gl_sendingReceivingChainComposite.marginRight = 0;
+        //     gl_sendingReceivingChainComposite.marginLeft = ViewConstants.HORIZONTAL_SPACING;
+        // } else {
+        //     throw new NoSuchElementException(
+        //             "PROGRAMMING ERROR: This method takes SWT.LEFT or SWT.RIGHT as argument, "
+        //             + "nothing else.");
+        // }
         return gl_sendingReceivingChainComposite;
     }
 
     public static GridLayout gl_diffieHellmanComposite() {
-    	return new GridLayout(1, false);
+    	var layout = new GridLayout(1, true);
+    	layout.verticalSpacing = ViewConstants.BOX_HEIGHT;
+    	return layout;
     }
 
     public static GridLayout gl_messageboxGroup() {
@@ -81,8 +83,8 @@ public class Layout {
 
     public static GridData gd_Messagebox() {
         var gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        gridData.minimumHeight = 150;
-        gridData.widthHint = 180;
+        gridData.widthHint = 250;
+        gridData.heightHint = ViewConstants.BOX_HEIGHT * 2;
         return gridData;
     }
 
@@ -107,8 +109,6 @@ public class Layout {
     private static GridData gd_algorithmNodes(int boxWidth) {
         var gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gd_algorithmLabels.widthHint = boxWidth;
-        //gd_algorithmLabels.heightHint = ViewConstants.BOX_HEIGHT;
-        gd_algorithmLabels.horizontalIndent = ViewConstants.HORIZONTAL_SPACING;
         return gd_algorithmLabels;
     }
 

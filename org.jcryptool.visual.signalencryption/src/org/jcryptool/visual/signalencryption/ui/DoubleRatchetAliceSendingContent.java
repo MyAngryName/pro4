@@ -1,6 +1,7 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -44,12 +45,10 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
     Composite cmp_aliceRootChain;
     Composite cmp_aliceSteps;
     Composite cmp_aliceMessagebox;
-    Composite cmp_bobMessagebox;
 
     Group grp_aliceDiffieHellman;
     Group grp_aliceRootChain;
     Group grp_aliceSendingChain;
-    Group grp_aliceMessagebox;
     
     private String msg_aliceSendingStep0 = Messages.SignalEncryption_aliceDescriptionText0;
     private String msg_aliceSendingStep1 = Messages.SignalEncryption_stepText1;
@@ -128,7 +127,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
         grp_aliceDiffieHellman = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         grp_aliceRootChain = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
         grp_aliceSendingChain = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
-        grp_aliceMessagebox = new Group(cmp_aliceSendingAlgorithm, SWT.NONE);
+        cmp_aliceMessagebox = new Canvas(cmp_aliceSendingAlgorithm, SWT.NONE);
         
         createAliceDiffieHellmanChain();
         createAliceRootChain();
@@ -151,16 +150,12 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    
 	    txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmNodes());
 	    
-	    UiUtils.insertSpacers(grp_aliceDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-	
 	    txt_aliceDiffieHellman2 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
 	            .title(aliceDiffieHellmanLabel2)
 	            .popupProvider(FlowChartNodePopup.create("Output", "2"))
 	            .buildOperationNode();
 	    txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmNodes());
 	    
-	    UiUtils.insertSpacers(grp_aliceDiffieHellman, 1, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
-	
 	    txt_aliceDiffieHellman3 = new FlowChartNode.Builder(grp_aliceDiffieHellman)
 	            .title(aliceDiffieHellmanLabel3)
 	            .popupProvider(FlowChartNodePopup.create("EC Private key", "3"))
@@ -195,7 +190,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
         		.title(aliceSendingChainLabel2)
         		.popupProvider(FlowChartNodePopup.create("Constant", "WhisperChain"))
         		.buildValueNode();
-        txt_aliceRootChain0.setLayoutData(Layout.gd_algorithmNodes());
+        txt_aliceRootChain0.setLayoutData(Layout.gd_algorithmNodesSlim());
 
         txt_aliceRootChain1 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel1)
@@ -203,7 +198,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
                 .buildValueNode();
         txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmNodes());
         
-	    UiUtils.insertSpacers(grp_aliceRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_aliceRootChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 
         txt_aliceRootChain2 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel2)
@@ -217,7 +212,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
         	.on(cmp_aliceSendingAlgorithm)
         	.create();
         
-        UiUtils.insertSpacers(grp_aliceRootChain, 3, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+        UiUtils.insertSpacers(grp_aliceRootChain, 1);
 
         txt_aliceRootChain3 = new FlowChartNode.Builder(grp_aliceRootChain)
                 .title(aliceRootChainLabel3)
@@ -255,7 +250,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .title(aliceSendingChainLabel2)
 	            .popupProvider(FlowChartNodePopup.create("Constant", "WhisperMessage"))
 	            .buildValueNode();
-	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmNodes());
+	    txt_aliceSendingChain2.setLayoutData(Layout.gd_algorithmNodesSlim());
 
 	    txt_aliceSendingChain1 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel1)
@@ -263,7 +258,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	            .buildValueNode();
 	    txt_aliceSendingChain1.setLayoutData(Layout.gd_algorithmNodes());
 	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 5, ViewConstants.BOX_WIDTH, ViewConstants.BOX_HEIGHT);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 	
 	    txt_aliceSendingChain3 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel3)
@@ -283,15 +278,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
 	    
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 3);
-	
-	    txt_aliceSendingChain4 = new FlowChartNode.Builder(grp_aliceSendingChain)
-	            .title(aliceSendingChainLabel4)
-	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
-	            .buildValueNode();
-	    txt_aliceSendingChain4.setLayoutData(Layout.gd_algorithmNodes());
-	
-	    UiUtils.insertSpacers(grp_aliceSendingChain, 1);
+	    UiUtils.insertSpacers(grp_aliceSendingChain, 1, ViewConstants.BOX_WIDTH_SLIM);
 	
 	    txt_aliceSendingChain5 = new FlowChartNode.Builder(grp_aliceSendingChain)
 	            .title(aliceSendingChainLabel5)
@@ -304,16 +291,7 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	    	.to(txt_aliceSendingChain5).north()
 	    	.on(cmp_aliceSendingAlgorithm)
 	    	.withDefaults();
-	    arr_aliceSendingChainArrow4 = ArrowComponent.fromAnchors()
-	    	.fromAnchorX(txt_aliceSendingChain1, Side.SOUTH)
-	    	.fromAnchorY(txt_aliceSendingChain4, Side.WEST)
-	    	.outgoingDirection(Side.EAST)
-	    	.toAnchorX(txt_aliceSendingChain4, Side.WEST)
-	    	.toAnchorY(txt_aliceSendingChain4, Side.WEST)
-	    	.incomingDirection(Side.WEST)
-	    	.on(cmp_aliceSendingAlgorithm)
-	    	.withDefaults();
-	}
+	    	}
 
     public void setSendingChainVisible(boolean visible) {
 		cmp_aliceArrowSpace2.setVisible(visible);
@@ -322,19 +300,40 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 		arr_aliceSendingChainArrow2.setVisible(visible);
 		arr_aliceSendingChainArrow3.setVisible(visible);
 		arr_aliceSendingChainArrow4.setVisible(visible);
+		// Part of what we consider the chain is already part in the
+		// Messagebox composite
+		cmp_aliceMessagebox.setVisible(visible);
+		txt_aliceSendingChain4.setVisible(visible);
+		txt_alicePlainText.setVisible(!visible);
+		txt_aliceCipherText.setVisible(!visible);
     }
 
 	private void createAliceMessagebox() {
-	    grp_aliceMessagebox.setLayout(Layout.gl_messageboxGroup());
+	    cmp_aliceMessagebox.setLayout(Layout.gl_messageboxGroup());
 	
-	    grp_aliceMessagebox.setLayoutData(Layout.gd_messageboxComposite());
-	    grp_aliceMessagebox.setText(MessageboxDescription);
+	    cmp_aliceMessagebox.setLayoutData(Layout.gd_messageboxComposite());
 	
-	    txt_alicePlainText = new Text(grp_aliceMessagebox,
+	    txt_alicePlainText = new Text(cmp_aliceMessagebox,
 	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 	    txt_alicePlainText.setLayoutData(Layout.gd_Messagebox());
-	
-	    txt_aliceCipherText = new Text(grp_aliceMessagebox,
+	    
+	    txt_aliceSendingChain4 = new FlowChartNode.Builder(cmp_aliceMessagebox)
+	            .title(aliceSendingChainLabel4)
+	            .popupProvider(FlowChartNodePopup.create("Chain Key", "10"))
+	            .buildValueNode();
+	    txt_aliceSendingChain4.setLayoutData(Layout.gd_algorithmNodes());
+	    
+	    arr_aliceSendingChainArrow4 = ArrowComponent.fromAnchors()
+	    	.fromAnchorX(txt_aliceSendingChain3, Side.EAST)
+	    	.fromAnchorY(txt_aliceSendingChain3, Side.EAST)
+	    	.outgoingDirection(Side.EAST)
+	    	.toAnchorX(cmp_aliceMessagebox, Side.WEST)
+	    	.toAnchorY(txt_aliceSendingChain3, Side.WEST)
+	    	.incomingDirection(Side.WEST)
+	    	.on(cmp_aliceSendingAlgorithm)
+	    	.withDefaults();
+
+	    txt_aliceCipherText = new Text(cmp_aliceMessagebox,
 	            SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
 	    txt_aliceCipherText.setLayoutData(Layout.gd_Messagebox());
 	
@@ -359,14 +358,14 @@ public class DoubleRatchetAliceSendingContent implements DoubleRatchetEntityCont
 	}
 	
 	public void setMessageBoxVisible(boolean visible) {
-		grp_aliceMessagebox.setVisible(visible);
+		//cmp_aliceMessagebox.setVisible(visible);
 		txt_alicePlainText.setVisible(visible);
 		txt_aliceCipherText.setVisible(visible);
 		drw_outgoingMailIcon.setVisible(visible);
 	}
 	
 	public void showOnlyMessagePlaintext() {
-		setMessageBoxVisible(true);
+		//setMessageBoxVisible(true);
 		txt_alicePlainText.setVisible(true);
 		txt_aliceCipherText.setVisible(false);
 		drw_outgoingMailIcon.setVisible(false);

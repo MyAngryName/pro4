@@ -1,7 +1,6 @@
 package org.jcryptool.visual.signalencryption.ui;
 
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -16,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jcryptool.core.util.colors.ColorService;
@@ -25,44 +25,79 @@ import org.jcryptool.core.util.ui.layout.GridDataBuilder;
 public class FlowChartNode extends Composite {
 
 	private static final int POPUP_STYLE = SWT.MODELESS | SWT.SHADOW_ETCHED_OUT | SWT.BORDER;
-	private static final Image buttonImage = ImageService.getImage(SignalEncryptionView.ID, "icons/searchIcon.png");
+	private static final Image BUTTON_IMAGE = ImageService.getImage(SignalEncryptionView.ID, "icons/searchIcon.png");
+	private static final Image OPERATION_IMAGE = ImageService.getImage(SignalEncryptionView.ID, "icons/gear.png");
 	/** How long to keep the button disabled when the window is closing */
 	private static final long BUTTON_DISABLE_TIME = 250;
 
-	private final Text txt_title;
-	private final Button btn_action;
 	private final Shell parentShell;
 	private final String title;
+	private Text txt_title;
+	private Button btn_action;
 	private boolean showing;
 	private Shell popup;
 	private FlowChartNodePopup popupProvider;
 
 	private static String lock = "";
 	private boolean buttonEnabled;
-
-	private FlowChartNode(Composite parent, int style, String title, String actionName, Type type,
-			FlowChartNodePopup popupProvider) {
+	
+	
+	private FlowChartNode(
+			Composite parent,
+			int style,
+			String title,
+			String actionName,
+			FlowChartNodePopup popupProvider,
+			Type type
+	) {
 		super(parent, style);
 		this.popupProvider = popupProvider;
 		this.parentShell = getShell();
 		this.setBackground(ColorService.getColor(SWT.COLOR_LIST_BACKGROUND));
-
-		setLayout(new GridLayout(1, true));
-
-		txt_title = new Text(this, SWT.NONE);
-		txt_title.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		txt_title.setText(title);
 		this.title = title;
 
-		btn_action = new Button(this, SWT.TOGGLE);
-		btn_action.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
-		btn_action.setImage(buttonImage);
 
+		if (type == Type.VALUE) {
+			createValueBody();
+		} else {
+			createOperationBody();
+		}
+		
 		if (!Objects.isNull(actionName) && !actionName.isEmpty()) {
 			btn_action.setText(actionName);
 		}
 
 		btn_action.addSelectionListener(showPopupListener());
+	}
+	
+	private void createValueBody() {
+		setLayout(new GridLayout(1, true));
+		txt_title = new Text(this, SWT.NONE);
+		txt_title.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		txt_title.setText(title);
+
+		btn_action = new Button(this, SWT.TOGGLE);
+		btn_action.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		btn_action.setImage(BUTTON_IMAGE);
+	}
+	
+	private void createOperationBody() {
+		var layout = new GridLayout(2, true);
+		layout.horizontalSpacing = 20;
+		setLayout(layout);
+		txt_title = new Text(this, SWT.NONE);
+		txt_title.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
+		txt_title.setText(title);
+		
+		var lbl_gears = new Label(this, SWT.NONE);
+		lbl_gears.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
+		lbl_gears.setImage(OPERATION_IMAGE);
+		
+
+		btn_action = new Button(this, SWT.TOGGLE);
+		btn_action.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		btn_action.setImage(BUTTON_IMAGE);
+
 	}
 
 	public FocusListener closeOnFocusLose() {
@@ -221,11 +256,11 @@ public class FlowChartNode extends Composite {
 		}
 
 		public FlowChartNode buildOperationNode() {
-			return new FlowChartNode(parent, style, title, actionName, Type.OPERATION, popupProvider);
+			return new FlowChartNode(parent, style, title, actionName, popupProvider,Type.OPERATION);
 		}
 
 		public FlowChartNode buildValueNode() {
-			return new FlowChartNode(parent, style, title, actionName, Type.VALUE, popupProvider);
+			return new FlowChartNode(parent, style, title, actionName, popupProvider, Type.VALUE);
 		}
 
 	}

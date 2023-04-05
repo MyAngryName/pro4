@@ -10,6 +10,7 @@ Original image sources:
 
 * https://www.svgrepo.com/svg/478148/mail-material-4
 * https://www.svgrepo.com/svg/478260/mail-material-2
+* https://www.svgrepo.com/svg/479234/gear-10
 
 Author: Icooon Mono
 License CC0 Public Domain (https://creativecommons.org/share-your-work/public-domain/cc0/)

@@ -107,16 +107,50 @@ public class ArrowComponent implements Component {
 	}
 
 	public static Path createPath(ArrowProperties props) {
-		checkSideValidity(props.startSide, props.endSide);
-
 		Point start = calculateStartPoint(props);
 		Point end = calculateEndPoint(props);
 
-		if (isHorizontalOrVertical(start, end)) {
+		if (isStraight(start, end)) {
 			return drawStraightArrow(props, start, end);
+		} else if (isEastWestWithCorner(props.startSide, props.endSide)) {
+			return drawEastWestKinkedArrow(props, start, end);
 		} else {
-			return drawKinkedArrow(props, start, end);
+			return drawCornerArrow(props, start, end);
 		}
+	}
+
+	private static Path drawCornerArrow(ArrowProperties props, Point start, Point end) {
+		var resultPath = new Path(props.canvas.getDisplay());
+		var cornerPoint = calculateCornerPoint(props);
+		
+		int width;
+		int height;
+		
+		width = getWidth(props, start, cornerPoint);
+		height = getHeight(props, start, cornerPoint);
+		resultPath.addRectangle(start.x, start.y, width, height);
+		
+		width = getWidth(props, cornerPoint, end);
+		height = getHeight(props, cornerPoint, end);
+		resultPath.addRectangle(cornerPoint.x, cornerPoint.y, width, height);
+		return drawArrowHead(resultPath, props, centerEnd(props, end));
+	}
+	
+	private static Point calculateCornerPoint(ArrowProperties props) {
+		var startX = props.xStart.resolve(props.canvas);
+		var startY = props.yStart.resolve(props.canvas);
+		var endX = props.yEnd.resolve(props.canvas);
+		var endY = props.yEnd.resolve(props.canvas);
+		if (props.startSide == Side.WEST || props.startSide == Side.EAST) {
+			return new Point(endX.x, startY.y);
+		} else {
+			return new Point(startX.x, endY.y);
+		}
+	}
+
+	private static boolean isEastWestWithCorner(Side outgoingEnd, Side incomingEnd) {
+		return outgoingEnd == Side.EAST && incomingEnd == Side.WEST
+				|| outgoingEnd == Side.WEST && incomingEnd == Side.EAST;
 	}
 
 	/**
@@ -180,7 +214,7 @@ public class ArrowComponent implements Component {
 	 * The place for the kink can be configured via
 	 * {@link ArrowProperties#cornerPosition}
 	 */
-	static Path drawKinkedArrow(ArrowProperties props, Point start, Point end) {
+	static Path drawEastWestKinkedArrow(ArrowProperties props, Point start, Point end) {
 
 		if (!attachesHorizontally(props)) {
 			throw new UnsupportedOperationException("This arrow-type only supports horizontally offset arrows");
@@ -213,7 +247,7 @@ public class ArrowComponent implements Component {
 		return height == 0 ? props.lineWidth : height;
 	}
 
-	static boolean isHorizontalOrVertical(Point start, Point end) {
+	static boolean isStraight(Point start, Point end) {
 		return isStraightHorizontal(start, end) || isStraightVertical(start, end);
 	}
 
@@ -270,16 +304,6 @@ public class ArrowComponent implements Component {
 
 	static int margin(ArrowProperties props) {
 		return props.headSize + ViewConstants.TARGET_MARGIN;
-	}
-
-	/**
-	 * This implementation only supports directly facing sides - throw an error if
-	 * this is not the case.
-	 */
-	static void checkSideValidity(Positioning.Side start, Positioning.Side end) {
-		if (!start.faces(end)) {
-			throw new UnsupportedOperationException("This impl only allows facing arrows (e.g. South to North)");
-		}
 	}
 
 	/**

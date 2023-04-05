@@ -82,7 +82,7 @@ public class Layout {
     public static GridData gd_Messagebox() {
         var gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         gridData.minimumHeight = 150;
-        gridData.widthHint = 250;
+        gridData.widthHint = 180;
         return gridData;
     }
 
@@ -93,11 +93,20 @@ public class Layout {
         return gd_shortDescriptionTexts;
 
     }
+    
+    // style data for the labels within the algorithm
+    public static GridData gd_algorithmNodesSlim() {
+    	return gd_algorithmNodes(ViewConstants.BOX_WIDTH_SLIM);
+    }
+    
+    public static GridData gd_algorithmNodes() {
+    	return gd_algorithmNodes(ViewConstants.BOX_WIDTH);
+    }
 
     // style data for the labels within the algorithm
-    public static GridData gd_algorithmLabels() {
+    private static GridData gd_algorithmNodes(int boxWidth) {
         var gd_algorithmLabels = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-        gd_algorithmLabels.widthHint = ViewConstants.BOX_WIDTH;
+        gd_algorithmLabels.widthHint = boxWidth;
         //gd_algorithmLabels.heightHint = ViewConstants.BOX_HEIGHT;
         gd_algorithmLabels.horizontalIndent = ViewConstants.HORIZONTAL_SPACING;
         return gd_algorithmLabels;

@@ -149,7 +149,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceReceivingChainLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceReceivingChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceReceivingChain1.setLayoutData(Layout.gd_algorithmNodes());
 
         arr_aliceReceivingChainArrow4 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
         arr_aliceReceivingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
@@ -192,7 +192,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceReceivingChainLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceReceivingChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceReceivingChain2.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow left
         arr_aliceReceivingChainArrow2 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -215,13 +215,13 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceReceivingChainLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceReceivingChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceReceivingChain3.setLayoutData(Layout.gd_algorithmNodes());
 
         txt_aliceReceivingChain4 = new FlowChartNode.Builder(grp_aliceReceivingChain)
                 .title(aliceReceivingChainLabel4)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceReceivingChain4.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceReceivingChain4.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow left
         arr_aliceReceivingChainArrow3 = new Canvas(grp_aliceReceivingChain, SWT.DOUBLE_BUFFERED);
@@ -246,7 +246,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceReceivingChainLabel5)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceReceivingChain5.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceReceivingChain5.setLayoutData(Layout.gd_algorithmNodes());
 
     }
 
@@ -259,7 +259,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceRootChainLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceRootChain1.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_aliceRootChainArrow1 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
@@ -282,7 +282,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceRootChainLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceRootChain2.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_aliceRootChainArrow2 = new Canvas(grp_aliceRootChain, SWT.DOUBLE_BUFFERED);
@@ -305,7 +305,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceRootChainLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceRootChain3.setLayoutData(Layout.gd_algorithmNodes());
 
     }
 
@@ -318,7 +318,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceDiffieHellmanLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceDiffieHellman1.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_aliceDiffieHellmanArrow1 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -341,7 +341,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceDiffieHellmanLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceDiffieHellman2.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow up
         arr_aliceDiffieHellmanArrow2 = new Canvas(grp_aliceDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -364,7 +364,7 @@ public class DoubleRatchetAliceReceivingContent implements DoubleRatchetEntityCo
                 .title(aliceDiffieHellmanLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_aliceDiffieHellman3.setLayoutData(Layout.gd_algorithmNodes());
 
     }
         private void createAliceArrowSpaces() {

@@ -14,7 +14,7 @@ public class ToHex {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < length; i++) {
             appendHexChar(buf, bytes[offset + i]);
-            if (i % 2 == 0) {
+            if (i % 2 == 1) {
                 buf.append(" ");
             }
         }

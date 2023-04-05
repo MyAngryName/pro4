@@ -25,7 +25,14 @@ public class ViewConstants {
      * This is the width hint of the algorithm boxes, a major part of the plugin's
      * flow elements.
      */
-    public static final int BOX_WIDTH = 150;
+    public static final int BOX_WIDTH = 165;
+    
+    /**
+     * This is the width hint of the (slim) algorithm boxes, a major part of the plugin's
+     * flow elements.
+     */
+    public static final int BOX_WIDTH_SLIM = 100;
+
 
     /**
      * This is the height hint of the algorithm boxes, a major part of the plugin's

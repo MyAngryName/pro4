@@ -148,7 +148,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobSendingChainLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain1.setLayoutData(Layout.gd_algorithmNodes());
 
         arr_bobSendingChainArrow4 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
         arr_bobSendingChainArrow4.setLayoutData(ArrowCanvas.canvasData(
@@ -192,7 +192,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobSendingChainLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain3.setLayoutData(Layout.gd_algorithmNodes());
         
         // arrow right
         arr_bobSendingChainArrow2 = new Canvas(grp_bobSendingChain, SWT.DOUBLE_BUFFERED);
@@ -215,13 +215,13 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobSendingChainLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain2.setLayoutData(Layout.gd_algorithmNodes());
 
         txt_bobSendingChain4 =  new FlowChartNode.Builder(grp_bobSendingChain)
                 .title(bobSendingChainLabel4)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain4.setLayoutData(Layout.gd_algorithmNodes());
 
         
         // arrow down
@@ -248,7 +248,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobSendingChainLabel5)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobSendingChain5.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobSendingChain5.setLayoutData(Layout.gd_algorithmNodes());
     }
 
 
@@ -261,7 +261,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobRootChainLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobRootChain1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobRootChain1.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_bobRootChainArrow1 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
@@ -284,7 +284,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobRootChainLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobRootChain2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobRootChain2.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_bobRootChainArrow2 = new Canvas(grp_bobRootChain, SWT.DOUBLE_BUFFERED);
@@ -307,7 +307,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobRootChainLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobRootChain3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobRootChain3.setLayoutData(Layout.gd_algorithmNodes());
 
     }
 
@@ -320,7 +320,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobDiffieHellmanLabel1)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobDiffieHellman1.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow down
         arr_bobDiffieHellmanArrow1 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -343,7 +343,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobDiffieHellmanLabel2)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobDiffieHellman2.setLayoutData(Layout.gd_algorithmNodes());
 
         // arrow up
         arr_bobDiffieHellmanArrow2 = new Canvas(grp_bobDiffieHellman, SWT.DOUBLE_BUFFERED);
@@ -366,7 +366,7 @@ public class DoubleRatchetBobSendingContent implements DoubleRatchetEntityConten
                 .title(bobDiffieHellmanLabel3)
                 .popupProvider(FlowChartNodePopup.create("DH key calculation", "0"))
                 .buildOperationNode();
-        txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmLabels());
+        txt_bobDiffieHellman3.setLayoutData(Layout.gd_algorithmNodes());
 
     }
     
